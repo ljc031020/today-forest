@@ -50,7 +50,8 @@ def call(prompt, max_tokens=200):
     if DRY:
         return None
     body = json.dumps({
-        'model': MODEL, 'max_tokens': max_tokens,
+        'model': MODEL, 'max_tokens': max_tokens + 3000,  # 생각하는 토큰도 이 한도에 포함된다
+        'output_config': {'effort': os.environ.get('EFFORT', 'low')},
         'messages': [{'role': 'user', 'content': [
             {'type': 'image', 'source': {'type': 'base64', 'media_type': 'image/png', 'data': ATLAS_B64}},
             {'type': 'text', 'text': prompt}]}],
@@ -62,7 +63,8 @@ def call(prompt, max_tokens=200):
         try:
             with urllib.request.urlopen(req, timeout=90) as r:
                 out = json.loads(r.read())
-                return ''.join(b.get('text', '') for b in out['content'])
+                text = ''.join(b.get('text', '') for b in out['content'] if b.get('type') == 'text')
+                return text or f"[empty: stop_reason={out.get('stop_reason')}]"
         except urllib.error.HTTPError as e:
             msg = e.read().decode(errors='ignore')[:300]
             if e.code in (429, 500, 502, 503, 529):
