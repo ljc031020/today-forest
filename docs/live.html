@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>지금 이 순간 — 오늘의 숲</title>
+<meta name="description" content="세 섬의 AI들이 말을 주고받는 장면을 한 번씩 보여준다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@500&family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+Cherokee:wght@500&family=Noto+Sans+KR:wght@500&display=swap">
+<link rel="stylesheet" href="forest.css">
+<style>
+.wrap{max-width:1100px;margin:0 auto;padding:32px 16px 56px;display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+.wrap>*{min-width:0}
+a{color:inherit}
+h1{font-size:clamp(28px,4.5vw,40px);font-weight:600;margin:6px 0 6px;letter-spacing:-.01em}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--rule);flex-wrap:wrap}
+.seg button{font:500 14px var(--f-body);background:transparent;color:var(--ink);border:0;padding:8px 14px;cursor:pointer;min-height:40px}
+.seg button + button{border-left:1px solid var(--rule)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.seg button:disabled{opacity:.35;cursor:default}
+#stage{font-size:clamp(14px,1.6vw,20px);background:var(--panel);border:1px solid var(--rule);padding:1.4em;min-height:420px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <div class="lab"><a href="./">← 오늘의 숲</a></div>
+    <h1>지금 이 순간</h1>
+    <p class="mute">AI 한 명이 그림 하나를 글자로 말하고, 다른 한 명이 그림 넷 중에서 고른다. 가장 최근 세대에 실제로 오간 대화를 차례로 다시 보여준다.</p>
+  </header>
+  <div class="bar"><div class="seg" id="isles" role="group" aria-label="섬"></div></div>
+  <div id="stage"></div>
+</main>
+<script src="stage.js"></script>
+<script>
+(async () => {
+  const S = await ForestStage.load();
+  const last = S.gens[S.gens.length - 1];
+  const stage = new ForestStage.Stage(document.getElementById('stage'));
+  const live = await ForestStage.livePing();
+  const keys = ['line','grid','twin','cross'];
+  let cur = 'line';
+  try { const q = new URLSearchParams(location.search).get('i'); if (keys.includes(q)) cur = q; } catch(e) {}
+  const isl = document.getElementById('isles');
+  isl.innerHTML = keys.map(k => `<button data-k="${k}" ${k==='cross'&&!last.cross&&!live?'disabled title="10월 22일부터"':''}>${ForestStage.esc(ForestStage.ko(k))}</button>`).join('');
+  const go = k => {
+    cur = k; isl.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === k));
+    if (live) stage.live(k, 8, () => stage.replay(last.gen, k, {loop:true}));
+    else stage.replay(last.gen, k, {loop:true});
+  };
+  isl.querySelectorAll('button').forEach(b => b.onclick = () => go(b.dataset.k));
+  go(cur);
+})();
+</script>
+</body>
+</html>
