@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오늘의 숲</title>
+<meta name="description" content="AI들이 세 섬에서 매일 말을 만든다. '숲'을 부르는 말이 날마다 닳아 간다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@500&family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+Cherokee:wght@500&family=Noto+Sans+KR:wght@500&display=swap">
+<style>
+:root{
+  --bg:#F2F3F1; --panel:#FBFBFA; --ink:#17191B; --mute:#666C70; --rule:#D5D8D4; --tint:#E7E9E5;
+  --f-body:"IBM Plex Sans KR",system-ui,sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+  --f-glyph:"Noto Sans","Noto Sans Arabic","Noto Sans Georgian","Noto Sans Armenian","Noto Sans Runic","Noto Sans Cherokee","Noto Sans KR",sans-serif;
+  --greek:#B5730B; --georgian:#9A5526; --cherokee:#5E7F1E; --arabic:#1E8272; --armenian:#357F42; --runic:#7A5BA6; --hangul:#B2463A; --digit:#7C4A3A;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121416; --panel:#1A1D20; --ink:#E5E7E4; --mute:#9AA0A3; --rule:#2E3337; --tint:#202427;
+  --greek:#E8B24F; --georgian:#E29C66; --cherokee:#A8C86C; --arabic:#5EC6B4; --armenian:#7ACB89; --runic:#B49DE2; --hangul:#E88878; --digit:#D9A08C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121416; --panel:#1A1D20; --ink:#E5E7E4; --mute:#9AA0A3; --rule:#2E3337; --tint:#202427;
+  --greek:#E8B24F; --georgian:#E29C66; --cherokee:#A8C86C; --arabic:#5EC6B4; --armenian:#7ACB89; --runic:#B49DE2; --hangul:#E88878; --digit:#D9A08C; color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.65 var(--f-body);margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 16px 72px;display:grid;grid-template-columns:minmax(0,1fr);gap:64px}
+.wrap>*{min-width:0}
+.lab{font:500 11px/1.4 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+h2{font-size:20px;font-weight:600;margin:0 0 6px}
+p{margin:0;max-width:66ch}
+.mute{color:var(--mute)}
+.g{font-family:var(--f-glyph);font-weight:500;unicode-bidi:isolate;direction:ltr;display:inline-flex;gap:.04em;white-space:nowrap}
+.g span{display:inline-block}
+.s-greek{color:var(--greek)}.s-georgian{color:var(--georgian)}.s-cherokee{color:var(--cherokee)}.s-arabic{color:var(--arabic)}
+.s-armenian{color:var(--armenian)}.s-runic{color:var(--runic)}.s-hangul{color:var(--hangul)}.s-digit{color:var(--digit)}
+.grid3{display:inline-grid;grid-template-columns:repeat(3,1em);grid-auto-rows:1em;border:1px solid var(--rule);font-family:var(--f-glyph);font-weight:500;direction:ltr;line-height:1}
+.grid3 i{font-style:normal;display:grid;place-items:center;border:1px solid var(--tint);font-size:.62em}
+
+/* hero */
+header{display:grid;gap:28px}
+.title{font-size:clamp(34px,6vw,64px);font-weight:600;line-height:1.05;letter-spacing:-.02em;margin:0}
+.lede{color:var(--mute);max-width:56ch}
+.hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+.isle{padding:22px 20px 26px 0;display:grid;gap:14px;align-content:start;min-width:0}
+.isle + .isle{padding-left:20px;border-left:1px solid var(--rule)}
+.word{font-size:clamp(48px,7vw,84px);line-height:1.1;min-height:1.2em;display:flex;align-items:center;overflow:hidden}
+.word .grid3{font-size:clamp(60px,7vw,84px)}
+.isle .meta{font-size:14px;color:var(--mute)}
+.isle .was{font-size:14px;color:var(--mute);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.isle .was .g{font-size:18px}
+.isle .was .grid3{font-size:26px}
+
+/* strip */
+.strip{display:grid;gap:18px}
+.row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:center}
+.row .who{font-size:13px;color:var(--mute)}
+.cells{display:flex;gap:0;overflow-x:auto;scrollbar-width:thin;border-left:1px solid var(--rule)}
+.cell{flex:0 0 auto;min-width:64px;padding:8px 10px;border-right:1px solid var(--rule);display:grid;gap:4px;justify-items:center}
+.cell .n{font:500 10px var(--f-mono);color:var(--mute)}
+.cell .g{font-size:20px}
+.cell .grid3{font-size:24px}
+.cell.same .g,.cell.same .grid3{opacity:.45}
+.cell.today{background:var(--panel);outline:1px solid var(--ink);outline-offset:-1px}
+
+/* dictionary */
+table{border-collapse:collapse;width:100%}
+.dict-wrap{overflow-x:auto}
+.dict th,.dict td{border-bottom:1px solid var(--rule);padding:10px 12px;text-align:left;vertical-align:middle}
+.dict th{font:500 12px var(--f-mono);color:var(--mute);font-weight:500}
+.dict td.pic{width:72px}
+.dict td.pic img{width:56px;height:56px;display:block;border:1px solid var(--rule);background:#FAFAF8}
+.dict .g{font-size:22px}
+.dict .grid3{font-size:32px}
+.dict .none{color:var(--mute);font-size:13px}
+.dict .tried{opacity:.45}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin-top:10px}
+
+.how ol{margin:0;padding-left:20px;display:grid;gap:8px;max-width:70ch}
+.wait{padding:40px 0;color:var(--mute)}
+footer{font-size:13px;color:var(--mute);border-top:1px solid var(--rule);padding-top:16px}
+@media (max-width:560px){ .isle + .isle{padding-left:0;border-left:0;border-top:1px solid var(--rule)} .row{grid-template-columns:minmax(0,1fr)} .dict .freq{display:none} .dict th,.dict td{padding:8px 6px} }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <div style="display:grid;gap:10px">
+      <div class="lab" id="stamp">오늘의 숲</div>
+      <h1 class="title">오늘의 숲</h1>
+      <p class="lede">말을 모르는 AI들이 세 섬에서 매일 그림을 두고 말을 주고받는다. 통한 말만 살아남고, 새로 태어난 AI는 그 말을 절반만 물려받는다. 아래는 오늘 각 섬에서 이 그림, <img src="img/r9.png" alt="숲 그림" style="width:1.6em;height:1.6em;vertical-align:-.45em;border:1px solid var(--rule);background:#FAFAF8">을 부르는 말이다.</p>
+    </div>
+    <div class="hero" id="hero"><div class="wait">첫 세대를 기다리는 중이다.</div></div>
+  </header>
+
+  <section class="strip" id="strip-sec" hidden>
+    <div><h2>'숲' 띠</h2><p class="mute">한 칸이 한 세대다. 흐린 칸은 전 세대와 같은 말이다.</p></div>
+    <div id="strip" class="strip"></div>
+  </section>
+
+  <section id="dict-sec" hidden>
+    <h2>오늘의 사전</h2>
+    <p class="mute">그림마다 오늘 가장 많이 통한 말. 사람이 만든 사전이 아니라, 대화 기록에서 세어 낸 것이다.</p>
+    <div class="dict-wrap" style="margin-top:16px"><table class="dict" id="dict"></table></div>
+    <div class="legend"><span>흐린 글자: 오늘 통하지는 않았지만 가장 많이 쓴 말</span><span>—: 오늘 아무도 이 그림을 말하지 않음</span></div>
+  </section>
+
+  <section class="how">
+    <h2>어떻게 돌아가나</h2>
+    <ol>
+      <li><b>말하기.</b> 섬마다 AI 넷이 산다. 한 명이 그림 하나를 골라 글자로 말하고, 다른 한 명이 그림 넷 중에서 맞힌다. 하루에 32번.</li>
+      <li><b>남기기.</b> 각자 최근 대화 30개만 기억한다. 사전은 어디에도 없다.</li>
+      <li><b>물려주기.</b> 하루가 끝나면 가장 오래된 AI 둘이 떠나고, 새 AI 둘이 최근 대화 64개 중 30개만 물려받는다. 베낄 때 글자 5%가 비슷한 글자로 바뀐다.</li>
+    </ol>
+    <p class="mute" style="margin-top:12px">글자 섬은 한 줄로 쓰고 같은 글자를 두 번 쓰지 못한다. 그림 섬은 3×3 칸에 글자를 놓는다. 비교 섬은 글자 섬과 조건이 똑같고, 끝까지 아무도 만나지 않는다.</p>
+  </section>
+
+  <footer id="foot">하루 두 번, 아침 7시와 저녁 7시에 한 세대씩 넘어간다.</footer>
+</main>
+
+<script>
+const ORDER=['line','grid','twin'];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let SCRIPT={};
+function glyphs(w,body){
+  if(w==null) return '<span class="none">—</span>';
+  if(body==='grid'){
+    return '<span class="grid3">'+[...w].map(c=>c==='.'?'<i></i>':`<i class="s-${SCRIPT[c]||''}">${esc(c)}</i>`).join('')+'</span>';
+  }
+  return '<span class="g">'+[...w].map(c=>`<span class="s-${SCRIPT[c]||''}">${esc(c)}</span>`).join('')+'</span>';
+}
+function fmtDate(iso){
+  try{return new Date(iso).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',month:'long',day:'numeric',hour:'numeric',minute:'2-digit'})}catch(e){return ''}
+}
+async function main(){
+  let S;
+  try{ S=await (await fetch('data/summary.json',{cache:'no-store'})).json(); }catch(e){ return; }
+  if(!S.gens||!S.gens.length) return;
+  const M=S.meta, FOREST=M.scenes.forest, G=S.gens, last=G[G.length-1];
+  for(const k of ORDER) for(const [c,s] of M.islands[k].chars) SCRIPT[c]=s;
+  const body=k=>M.islands[k].body;
+  document.getElementById('stamp').textContent=`${last.gen}세대 · ${fmtDate(last.at)}`;
+  const lw=last.islands.line.words[FOREST];
+  if(lw) document.title=lw+' — 오늘의 숲';
+
+  // hero
+  document.getElementById('hero').innerHTML=ORDER.map(k=>{
+    const I=last.islands[k], w=I.words[FOREST];
+    const first=G.find(g=>g.islands[k].words[FOREST]);
+    const fw=first&&first.islands[k].words[FOREST];
+    return `<div class="isle"><div class="lab">${esc(M.islands[k].ko)}</div>
+      <div class="word">${glyphs(w,body(k))}</div>
+      <div class="meta">오늘 대화 ${I.talks}번 중 ${I.ok}번 통함</div>
+      ${fw&&first.gen!==last.gen?`<div class="was">${first.gen}세대에는 ${glyphs(fw,body(k))}</div>`:''}</div>`;
+  }).join('');
+
+  // strip
+  document.getElementById('strip').innerHTML=ORDER.map(k=>{
+    let prev=null;
+    const cells=G.map((g,i)=>{const w=g.islands[k].words[FOREST]; const same=w&&w===prev; prev=w;
+      return `<div class="cell${same?' same':''}${i===G.length-1?' today':''}"><span class="n">${g.gen}</span>${glyphs(w,body(k))}</div>`}).join('');
+    return `<div class="row"><div class="who">${esc(M.islands[k].ko)}</div><div class="cells">${cells}</div></div>`;
+  }).join('');
+  document.querySelectorAll('.cells').forEach(el=>el.scrollLeft=el.scrollWidth);
+  document.getElementById('strip-sec').hidden=false;
+
+  // dictionary
+  const names=Object.keys(M.scenes).sort((a,b)=>M.tier[b]-M.tier[a]);
+  const tierKo={3:'자주',2:'보통',1:'드묾'};
+  let h='<tr><th>그림</th><th class="freq">빈도</th>'+ORDER.map(k=>`<th>${esc(M.islands[k].ko)}</th>`).join('')+'</tr>';
+  for(const n of names){
+    const id=M.scenes[n];
+    h+=`<tr><td class="pic"><img src="img/${id}.png" alt="" loading="lazy"></td><td class="mute freq" style="font-size:13px">${tierKo[M.tier[n]]}</td>`+
+      ORDER.map(k=>{const I=last.islands[k]; const w=I.words[id]; const src=(I.src||{})[id];
+        return `<td class="${src==='tried'?'tried':''}">${glyphs(w,body(k))}</td>`}).join('')+'</tr>';
+  }
+  document.getElementById('dict').innerHTML=h;
+  document.getElementById('dict-sec').hidden=false;
+}
+main();
+</script>
+</body>
+</html>
