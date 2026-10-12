@@ -432,6 +432,21 @@ def one_gen(st, summary):
         + (f", 섬 사이 {row['cross']['ok']}/{CROSS_TALKS}" if meet else ''), flush=True)
 
 
+KST = datetime.timezone(datetime.timedelta(hours=9))
+SLOTS = (7, 19)   # 하루 두 번, KST
+
+
+def slot_due(summary):
+    """가장 최근에 지난 07시/19시 이후에 세대가 없으면 True. 깃허브 예약 실행이 늦거나 빠져도 다음 시도에서 따라잡는다."""
+    if not summary['gens']:
+        return True
+    now = datetime.datetime.now(KST)
+    cands = [now.replace(hour=h, minute=0, second=0, microsecond=0) - datetime.timedelta(days=d) for d in (0, 1) for h in SLOTS]
+    last_slot = max(c for c in cands if c <= now)
+    last_at = datetime.datetime.fromisoformat(summary['gens'][-1]['at'])
+    return last_at < last_slot
+
+
 def write_meta(summary, st):
     summary['meta'] = {
         'islands': {k: {'ko': v['ko'], 'body': v['body'], 'chars': box(k)} for k, v in ISLANDS.items()},
@@ -444,10 +459,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--gens', type=int, default=1)
     ap.add_argument('--reset', action='store_true')
+    ap.add_argument('--auto', action='store_true', help='07시·19시(KST) 차례가 지났는데 아직 안 돌았으면 한 세대만 돌린다')
     a = ap.parse_args()
     os.makedirs(DATA, exist_ok=True)
     st = new_state() if a.reset else load_json(STATE, new_state())
     summary = {'gens': []} if a.reset else load_json(SUMMARY, {'gens': []})
+    if a.auto:
+        a.gens = 1 if slot_due(summary) else 0
+        print('차례가 됨: 한 세대 돌림' if a.gens else '아직 차례가 아님: 건너뜀', flush=True)
     for _ in range(a.gens):
         write_meta(summary, st)
         one_gen(st, summary)

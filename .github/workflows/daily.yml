@@ -2,8 +2,7 @@ name: 하루 넘기기
 
 on:
   schedule:
-    - cron: '0 22 * * *'   # 매일 07:00 KST
-    - cron: '0 10 * * *'   # 매일 19:00 KST
+    - cron: '17 * * * *'   # 매시간 확인. 07시·19시(KST) 차례가 지났는데 안 돌았으면 그때 돈다
   workflow_dispatch:
     inputs:
       gens:
@@ -38,6 +37,7 @@ jobs:
         run: |
           if [ "${{ github.event.inputs.probe }}" = "yes" ]; then python engine/probe.py; exit 0; fi
           ARGS="--gens ${{ github.event.inputs.gens || '1' }}"
+          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="--auto"; fi
           if [ "${{ github.event.inputs.reset }}" = "yes" ]; then ARGS="$ARGS --reset"; fi
           python engine/run.py $ARGS
       - name: 기록 저장
