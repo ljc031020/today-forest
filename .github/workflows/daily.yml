@@ -12,6 +12,9 @@ on:
       reset:
         description: '처음부터 다시 (yes 입력 시)'
         default: 'no'
+      probe:
+        description: '두 섬 사이 대화만 시험 (yes 입력 시, 기록 안 바뀜)'
+        default: 'no'
 
 concurrency:
   group: world
@@ -33,6 +36,7 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
+          if [ "${{ github.event.inputs.probe }}" = "yes" ]; then python engine/probe.py; exit 0; fi
           ARGS="--gens ${{ github.event.inputs.gens || '1' }}"
           if [ "${{ github.event.inputs.reset }}" = "yes" ]; then ARGS="$ARGS --reset"; fi
           python engine/run.py $ARGS
