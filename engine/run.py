@@ -149,6 +149,8 @@ def check(island, raw):
         if len(set(m)) != len(m): return None, 'a mark used twice'
         return m, None
     rows = raw.get('grid')
+    if isinstance(rows, str): rows = [rows]
+    if isinstance(rows, list) and len(rows) == 1 and '/' in str(rows[0]): rows = str(rows[0]).split('/')
     if not (isinstance(rows, list) and len(rows) == 3): return None, 'grid must have 3 rows'
     cells = ''
     for r in rows:
