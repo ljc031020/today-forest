@@ -57,38 +57,58 @@ function wordHTML(w, k, q){
 }
 const wordAt = (row, k, s = scene) => row && row.islands[k] && (row.islands[k].words || {})[s];
 
+
+/* 섬 모양: 씨앗마다 다른 해안선 + 안쪽 등고선 */
+function blobPath(seed, cx = 50, cy = 41, rx = 44, ry = 32){
+  const n = 12, P = [];
+  for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2;
+    const j = 1 + 0.07 * Math.sin(3 * a + seed) + 0.05 * Math.sin(5 * a + seed * 2.3) + 0.03 * Math.cos(2 * a + seed * 0.7);
+    P.push([cx + Math.cos(a) * rx * j, cy + Math.sin(a) * ry * j]); }
+  const f = v => v.toFixed(2);
+  let d = `M${f(P[0][0])},${f(P[0][1])}`;
+  for (let i = 0; i < n; i++) { const p0 = P[(i - 1 + n) % n], p1 = P[i], p2 = P[(i + 1) % n], p3 = P[(i + 2) % n];
+    d += `C${f(p1[0] + (p2[0] - p0[0]) / 6)},${f(p1[1] + (p2[1] - p0[1]) / 6)} ${f(p2[0] - (p3[0] - p1[0]) / 6)},${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])},${f(p2[1])}`; }
+  return d + 'Z';
+}
+const SEED = {line: 1.3, grid: 4.1, twin: 2.6};
+function topoSVG(k, cx = 50, cy = 41){
+  const d = blobPath(SEED[k]);
+  const ring = (s, o) => `<path d="${d}" transform="translate(${cx} ${cy}) scale(${s}) translate(${-cx} ${-cy})" style="fill:none;stroke:${COLOR[k]};stroke-opacity:${o}" vector-effect="non-scaling-stroke" stroke-width="1.2"/>`;
+  return `<svg class="topo" viewBox="0 0 100 82" preserveAspectRatio="none" aria-hidden="true">
+    <path d="${d}" transform="translate(1.4 2.6)" style="fill:rgba(19,32,26,.07)"/>
+    <path d="${d}" style="fill:color-mix(in srgb,${COLOR[k]} 12%,var(--card));stroke:${COLOR[k]};stroke-opacity:.55" vector-effect="non-scaling-stroke" stroke-width="2"/>
+    ${ring(.84, .32)}${ring(.68, .22)}${ring(.52, .14)}</svg>`;
+}
 /* ════════ 1단계: 전체 ════════ */
 async function drawOverview(){
   const M = await loadMem(nowGen);
   const map = $('#map'), W = map.clientWidth, H = map.clientHeight;
-  const w = Math.max(220, Math.min(W * 0.3, H * 0.52 / 0.82, 400)), h = w * 0.82;
-  const P = {line: [W * 0.24, H * 0.3], grid: [W * 0.76, H * 0.3], twin: [W * 0.5, H * 0.73]};
+  const w = Math.max(200, Math.min(W * 0.28, H * 0.47 / 0.82, 400)), h = w * 0.82;
+  const P = {line: [W * 0.25, h * 0.5 + 14], grid: [W * 0.75, h * 0.5 + 14], twin: [W * 0.5, H - h * 0.5 - 24]};
   let html = '';
-  if (innerWidth > 900) {
-    const y = P.line[1], x1 = P.line[0] + w / 2 + 8, x2 = P.grid[0] - w / 2 - 8;
-    html += `<div class="bridge-o" style="left:${x1}px;top:${y}px;width:${x2 - x1}px;${met ? 'border-top-style:solid;opacity:.8' : ''}"></div>`;
-  }
+  const y = P.line[1], x1 = P.line[0] + w / 2 - 4, x2 = P.grid[0] - w / 2 + 4, my = y + Math.min(46, h * 0.18);
+  if (innerWidth > 900) html += `<svg class="route" width="${W}" height="${H}" aria-hidden="true"><path d="M${x1},${y} Q${W / 2},${my * 2 - y} ${x2},${y}" ${met ? '' : 'stroke-dasharray="2 9"'}/></svg>`;
   for (const k of ORDER) {
     const r = LAST.islands[k] || {}, w0 = wordAt(LAST, k);
     const born = (M && M.islands[k] && M.islands[k].born) || {};
     const ids = Object.keys(born).map(Number).sort((a, b) => a - b);
     const [cx, cy] = P[k];
     const pos = innerWidth > 900 ? `left:${cx - w / 2}px;top:${cy - h / 2}px;` : '';
-    html += `<a class="isle" href="#/${k}" style="--k:${COLOR[k]};--w:${w}px;${pos}order:${{line:1,grid:3,twin:4}[k]};view-transition-name:isle-${k}">
+    html += `<a class="isle" href="#/${k}" style="--k:${COLOR[k]};--w:${w}px;${pos}order:${{line:1,grid:3,twin:4}[k]};view-transition-name:isle-${k}">${topoSVG(k)}
       <span class="nm"><i></i>${KO(k)}</span>
       <span class="word">${wordHTML(w0, k, Math.round(w * 0.085))}</span>
       <span class="meta"><span class="dots">${ids.map(id => `<b class="${born[id] === nowGen ? 'new' : ''}" title="AI #${id}"></b>`).join('')}</span>${r.ok}/32 통함</span>
       <span class="go">들어가 보기</span></a>`;
   }
-  const mx = innerWidth > 900 ? `left:${W / 2}px;top:${P.line[1]}px` : 'order:2';
+  const mx = innerWidth > 900 ? `left:${W / 2}px;top:${my}px` : 'order:2';
   html += met
     ? `<a class="flag" href="#/cross/${nowGen}" style="${mx}">두 섬이 만나는 중<small>섬 사이 대화 보기</small></a>`
     : `<div class="flag" style="${mx}">${fmtMD(MEET)} 만남<small>D-${dday(MEET)}</small></div>`;
-  const tx = innerWidth > 900 ? `left:${P.twin[0] + w / 2 + 110}px;top:${P.twin[1]}px` : 'order:5';
-  html += `<div class="flag quiet" style="${tx}">만나지 않는 섬 · 비교용</div>`;
+  const tx = innerWidth > 900 ? `left:${P.twin[0] + w / 2 + 40}px;top:${P.twin[1]}px;transform:translate(0,-50%)` : 'order:5';
+  html += `<div class="flag quiet" style="${tx}"><b>만나지 않는 섬</b>끝까지 혼자 말을 만들어요<br>두 섬과 견줘 보는 기준</div>`;
   map.innerHTML = html;
 
-  $('#picks').innerHTML = `<span class="k">그림</span>` + SIDS.map(id => `<button aria-pressed="${id === scene}" data-s="${id}" aria-label="${esc(ID2KO[id])}" title="${esc(ID2KO[id])}"><img src="img/${id}.png" alt=""></button>`).join('');
+  $('#picks').innerHTML = `<span class="k">그림을 고르면 세 섬의 말이 바뀌어요</span>` + SIDS.map(id => `<button aria-pressed="${id === scene}" data-s="${id}" aria-label="${esc(ID2KO[id])}" title="${esc(ID2KO[id])}"><img src="img/${id}.png" alt=""></button>`).join('');
   $('#picks').querySelectorAll('button').forEach(b => b.onclick = () => { scene = b.dataset.s; drawOverview(); });
 
   const at = g => ((trip.findIndex(x => x.gen === g)) / (N - 1) * 100);
@@ -105,17 +125,18 @@ async function drawIsland(k){
   $('#dictH').innerHTML = `이 섬의 말 <small>${nowGen}세대 · 그림을 누르면 아래에 변해 온 길이 나와요</small>`;
   $('#dict').innerHTML = SIDS.map(s => {
     const w = wordAt(LAST, k, s), p = wordAt(prev, k, s);
-    return `<button class="dc" data-s="${s}" aria-pressed="${s === scene}" style="--k:${COLOR[k]}" title="${esc(ID2KO[s])}">${p !== undefined && p !== w ? '<span class="new" title="이번 세대에 바뀜"></span>' : ''}<img src="img/${s}.png" alt="${esc(ID2KO[s])}"><span class="gword">${wordHTML(w, k, 20)}</span></button>`;
+    return `<button class="dc" data-s="${s}" aria-pressed="${s === scene}" style="--k:${COLOR[k]}">${p !== undefined && p !== w ? '<span class="new">바뀜</span>' : ''}<span class="dh"><img src="img/${s}.png" alt=""><span>${esc(ID2KO[s])}</span></span><span class="gword">${wordHTML(w, k, 24)}</span></button>`;
   }).join('');
   $('#dict').querySelectorAll('.dc').forEach(b => b.onclick = () => { scene = b.dataset.s; drawIsland(k); });
 
   const born = MI.born || {};
   const ids = Object.keys(born).map(Number).sort((a, b) => a - b);
-  $('#ais').innerHTML = ids.map(id => `<div class="ai"><span class="av" style="border-color:${COLOR[k]};color:${COLOR[k]}">${id}${born[id] === nowGen ? '<span class="new">새</span>' : ''}</span><p><b>AI #${id}</b>${born[id]}세대에 옴 · 기억 30개</p></div>`).join('');
+  $('#ais').innerHTML = ids.map(id => `<div class="ai"><span class="av" style="border-color:${COLOR[k]};color:${COLOR[k]}">${id}${born[id] === nowGen ? '<span class="new">새</span>' : ''}</span><p><b>AI #${id}</b>${born[id]}세대에 옴</p></div>`).join('');
   const next = (MI.end && MI.end.born || []).map(b => '#' + b.id).join(', ');
+  const mini = (kk, x, op = 1) => `<g transform="translate(${x} 4) scale(.34)" opacity="${op}"><path d="${blobPath(SEED[kk])}" style="fill:color-mix(in srgb,${COLOR[kk]} 22%,var(--card));stroke:${COLOR[kk]}" stroke-width="3"/></g>`;
   const fate = k === 'twin'
-    ? `<span class="ic"><i style="left:0;background:var(--twin)"></i><i style="left:34px;background:var(--rule)"></i></span><p><b>만나지 않는 섬</b>글자 섬과 같은 조건으로 시작해서, 끝까지 혼자 말을 만들어요. 만남이 말을 어떻게 바꾸는지 견줘 보는 기준이에요.</p>`
-    : `<span class="ic"><i style="left:0;background:var(--line)"></i><i style="left:16px;background:var(--grid)"></i></span><p><b>${met ? '다른 섬과 만나는 중' : `${fmtMD(MEET)}, ${KO(k === 'line' ? 'grid' : 'line')}${JOSA(KO(k === 'line' ? 'grid' : 'line'), '과', '와')} 만나요 · D-${dday(MEET)}`}</b>그날부터 두 섬의 AI가 서로에게 말을 걸어요. 들은 낯선 글자는 빌려 쓸 수 있어요.</p>`;
+    ? `<svg class="ic" viewBox="0 0 92 36" aria-hidden="true">${mini('twin', 0)}<path d="M40,18 L56,18" stroke="var(--rule)" stroke-width="2" stroke-dasharray="2 4"/><circle cx="74" cy="18" r="13" fill="none" stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="3 3"/></svg><p><b>만나지 않는 섬</b>글자 섬과 같은 조건으로 시작해서, 끝까지 혼자 말을 만들어요. 만남이 말을 어떻게 바꾸는지 견줘 보는 기준이에요.</p>`
+    : `<svg class="ic" viewBox="0 0 92 36" aria-hidden="true">${mini(k, 0)}<path d="M36,22 Q46,30 56,22" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="2 4"/>${mini(k === 'line' ? 'grid' : 'line', 54)}</svg><p><b>${met ? '다른 섬과 만나는 중' : `${fmtMD(MEET)}, ${KO(k === 'line' ? 'grid' : 'line')}${JOSA(KO(k === 'line' ? 'grid' : 'line'), '과', '와')} 만나요 · D-${dday(MEET)}`}</b>그날부터 두 섬의 AI가 서로에게 말을 걸어요. 들은 낯선 글자는 빌려 쓸 수 있어요.</p>`;
   $('#fate').innerHTML = fate;
   $('#cta').innerHTML = `<a class="pill pri" href="#/${k}/${nowGen}" style="background:${COLOR[k]};border-color:${COLOR[k]}">${nowGen}세대 대화 보기</a>` +
     `<a class="pill" href="#/${k}/${nowGen}/relay">세대 교체만 보기${next ? ` · 다음 세대 ${next}` : ''}</a>`;
@@ -372,6 +393,7 @@ function parse(){
 }
 function crumb(r){
   const parts = [`<a class="logo" href="#/">오늘의 숲</a>`];
+  if (!r.k) parts.push(`<span class="tagline">AI들이 낯선 글자로 말을 만드는 세 섬 · ${nowGen}세대째</span>`);
   if (r.k) parts.push('<span class="sep">›</span>', r.g ? `<a class="lvl" href="#/${r.k === 'cross' ? '' : r.k}" style="--k:${COLOR[r.k]}"><i></i>${KO(r.k)}</a>` : `<span class="here" style="--k:${COLOR[r.k]}"><i></i>${KO(r.k)}</span>`);
   if (r.g) parts.push('<span class="sep">›</span>', `<span class="here" style="--k:${COLOR[r.k]}">${r.g}세대 ${r.relay ? '세대 교체' : '대화'}</span>`);
   $('#crumb').innerHTML = parts.join('');
