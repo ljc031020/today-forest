@@ -40,6 +40,7 @@ jobs:
           if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="--auto"; fi
           if [ "${{ github.event.inputs.reset }}" = "yes" ]; then ARGS="$ARGS --reset"; fi
           python engine/run.py $ARGS
+          python engine/memlog.py || echo '기억 재현 실패 (화면의 기억 선반만 영향)'
       - name: 기록 저장
         if: always()
         run: |

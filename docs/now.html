@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>오늘의 숲 · 지금</title>
-<meta name="description" content="세 섬의 AI들이 그림을 보고 말을 만든다. 지금 오가는 대화와, 첫날부터 발표날까지의 여정.">
+<meta name="description" content="세 섬의 AI들이 그림을 보고 말을 만든다. 기억이 말을 고르고, 세대가 바뀌며 말이 흔들리는 과정.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Sans:wght@500&family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+Cherokee:wght@500&family=Noto+Sans+KR:wght@500&display=swap">
@@ -23,11 +23,10 @@ html,body{height:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 var(--f-ui);word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:6px}
-.app{height:100vh;min-height:620px;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto}
-.trip{min-width:0}
+.app{height:100vh;min-height:640px;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto}
 
 /* 머리 */
-.top{display:flex;align-items:center;gap:24px;padding:18px 28px 0}
+.top{display:flex;align-items:center;gap:24px;padding:16px 28px 0}
 .logo{font:700 22px/1 var(--f-num);letter-spacing:-.01em;white-space:nowrap}
 .isl{display:flex;gap:4px;background:rgba(19,32,26,.06);border-radius:999px;padding:4px}
 .isl button{display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;font-size:14px;color:var(--mute);white-space:nowrap}
@@ -40,60 +39,83 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .pill[hidden]{display:none}
 
 /* 무대 */
-.stage{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;padding:16px 28px 8px;min-height:0;position:relative}
-.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;align-items:center;gap:0}
-.step{display:flex;align-items:center;gap:10px;color:var(--faint);font-size:15px;position:relative;padding-right:12px;transition:color .25s}
+.stage{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;padding:14px 28px 6px;min-height:0;position:relative}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;align-items:center}
+.step{display:flex;align-items:center;gap:10px;color:var(--faint);font-size:15px;padding-right:12px;transition:color .25s}
 .step::after{content:"";flex:1;height:2px;background:var(--rule);border-radius:2px;transition:background .25s}
 .step:nth-child(4)::after{display:none}
 .step b{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:2px solid var(--rule);font:700 14px/1 var(--f-num);flex:0 0 auto;transition:all .25s;background:var(--paper)}
 .step.done{color:var(--mute)}.step.done b{border-color:var(--c);color:var(--c)}.step.done::after{background:var(--c)}
 .step.on{color:var(--ink);font-weight:600}.step.on b{background:var(--c);border-color:var(--c);color:#fff;transform:scale(1.12)}
 .roster{display:flex;align-items:center;gap:6px;padding-left:20px}
-.av{position:relative;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:2px solid var(--rule);background:var(--card);font:700 13px/1 var(--f-num);color:var(--mute);transition:all .25s}
+.av{position:relative;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:2px solid var(--rule);background:var(--card);font:700 13px/1 var(--f-num);color:var(--mute);transition:all .25s;flex:0 0 auto}
 .av.speak{background:var(--c);border-color:var(--c);color:#fff}
 .av.listen{border-color:var(--c);color:var(--c)}
 .av .new{position:absolute;top:-7px;right:-9px;font:600 10px/1 var(--f-ui);background:var(--ink);color:var(--paper);padding:3px 5px;border-radius:6px}
 
-.scene{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1fr);align-items:center;gap:20px;min-height:0}
-.side{display:flex;flex-direction:column;align-items:center;gap:14px;min-width:0}
-.who{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--mute)}
-.who .av{width:44px;height:44px;font-size:16px}
-.card{position:relative;width:min(26vh,260px);aspect-ratio:1;border-radius:20px;background:var(--card);box-shadow:0 1px 0 rgba(19,32,26,.06),0 10px 30px -18px rgba(19,32,26,.45);display:grid;place-items:center;overflow:hidden}
-.card img{width:86%;height:86%;object-fit:contain}
-.card .eye{position:absolute;left:10px;top:10px;display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mute);background:var(--paper);padding:4px 8px;border-radius:999px}
+.scene{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr) minmax(0,1fr);align-items:stretch;gap:16px;min-height:0}
+.side{display:grid;grid-template-rows:auto minmax(0,1fr) auto;justify-items:center;align-items:center;gap:10px;min-width:0;min-height:0;background:rgba(248,250,247,.55);border-radius:22px;padding:12px 14px}
+.who{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--mute);justify-self:start}
+.who .av{width:40px;height:40px;font-size:15px}
+.card{position:relative;height:min(19vh,190px);aspect-ratio:1;border-radius:18px;background:var(--card);box-shadow:0 1px 0 rgba(19,32,26,.06),0 10px 30px -18px rgba(19,32,26,.45);display:grid;place-items:center;overflow:hidden}
+.card img{width:86%;height:86%;object-fit:contain;transition:opacity .35s,transform .35s}
+.card .eye{position:absolute;left:8px;top:8px;font-size:12px;color:var(--mute);background:var(--paper);padding:3px 8px;border-radius:999px}
 .card.hide img{opacity:0;transform:scale(.9)}
-.card img{transition:opacity .35s,transform .35s}
-.cands{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:min(30vh,290px)}
-.cand{position:relative;aspect-ratio:1;border-radius:14px;background:var(--card);display:grid;place-items:center;overflow:hidden;transition:transform .15s,box-shadow .2s;box-shadow:0 0 0 0 transparent}
+.cands{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;height:min(21vh,210px);aspect-ratio:1}
+.cand{position:relative;border-radius:12px;background:var(--card);display:grid;place-items:center;overflow:hidden;transition:transform .15s,box-shadow .2s;min-height:0}
 .cand img{width:84%;height:84%;object-fit:contain;transition:opacity .3s}
 .cand.back{background:repeating-linear-gradient(135deg,rgba(19,32,26,.07) 0 6px,transparent 6px 12px),var(--card)}
 .cand.back img{opacity:0}
-.cand.scan{transform:translateY(-5px)}
+.cand.scan{transform:translateY(-4px)}
+.cand.hint::before{content:"";position:absolute;right:6px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px var(--card)}
 .cand.chosen{box-shadow:0 0 0 3px var(--ink)}
 .cand.right{box-shadow:0 0 0 4px var(--c)}
 .cand.wrong{box-shadow:0 0 0 3px var(--ink)}
 .cand.wrong::after{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent calc(50% - 1.5px),var(--ink) calc(50% - 1.5px) calc(50% + 1.5px),transparent calc(50% + 1.5px));opacity:.7}
-.cand.missed{box-shadow:0 0 0 3px var(--c);outline:2px dashed var(--c);outline-offset:4px}
+.cand.missed{box-shadow:0 0 0 3px var(--c);outline:2px dashed var(--c);outline-offset:3px}
 
-.wire{position:relative;height:100%;min-height:200px;display:flex;align-items:center}
-.wire::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px dashed var(--rule)}
-.msg{position:absolute;left:0;top:50%;transform:translate(0,-50%);display:flex;align-items:center;gap:.03em;font:500 clamp(56px,10vh,108px)/1 var(--f-g);color:var(--ink);background:var(--paper);padding:0 .18em;white-space:nowrap;transition:transform .9s cubic-bezier(.6,0,.2,1),left .9s cubic-bezier(.6,0,.2,1);direction:ltr;unicode-bidi:isolate}
+/* 기억 선반: 그림 12장마다 그 그림에 쓴 말이 쌓인다 */
+.shelf{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:3px;width:100%;max-width:400px;align-self:end}
+.col{display:flex;flex-direction:column;align-items:center;gap:2px;border-radius:7px;padding:3px 0 4px;transition:background .25s,box-shadow .25s;min-width:0}
+.col>img{width:100%;max-width:26px;aspect-ratio:1;object-fit:contain;opacity:.85}
+.col .chips{display:flex;flex-direction:column;align-items:center;gap:2px;height:76px;overflow:hidden;width:100%}
+.col.look{background:var(--card);box-shadow:0 0 0 2px var(--c)}
+.col.empty-ring .chips{outline:2px dashed var(--c);outline-offset:-2px;border-radius:6px}
+.chip{flex:0 0 auto;min-width:0;max-width:100%;height:16px;padding:0 2px;border-radius:4px;display:grid;place-items:center;font:500 11px/1 var(--f-g);white-space:nowrap;overflow:hidden;direction:ltr;unicode-bidi:isolate;transition:transform .2s,box-shadow .2s}
+.chip.ok{background:color-mix(in srgb,var(--k,var(--c)) 22%,var(--card))}
+.chip.no{box-shadow:inset 0 0 0 1px var(--rule);color:var(--mute)}
+.chip.far{box-shadow:inset 0 0 0 1.5px var(--k2)}
+.chip.mut{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.chip .gm{display:grid;grid-template-columns:repeat(3,3px);gap:1px}
+.chip .gm i{width:3px;height:3px;background:rgba(19,32,26,.15);border-radius:1px}
+.chip .gm i.f{background:var(--ink)}
+.chip.use{transform:scale(1.5);box-shadow:0 0 0 2px var(--ink);z-index:2;position:relative}
+.chip.hear{box-shadow:0 0 0 2px var(--c);transform:scale(1.25)}
+.chip.add{animation:pop .35s cubic-bezier(.2,.9,.3,1.4)}
+
+.wire{position:relative;display:flex;flex-direction:column;align-items:stretch;justify-content:center;min-width:0}
+.track{position:relative;height:clamp(90px,15vh,140px)}
+.track::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px dashed var(--rule)}
+.msg{position:absolute;left:0;top:50%;transform:translate(0,-50%);display:flex;align-items:center;gap:.03em;font:500 clamp(54px,10vh,104px)/1 var(--f-g);color:var(--ink);background:var(--paper);padding:0 .14em;white-space:nowrap;transition:left .9s cubic-bezier(.6,0,.2,1);direction:ltr;unicode-bidi:isolate}
 .msg span{display:inline-block;animation:pop .28s cubic-bezier(.2,.9,.3,1.4)}
-.msg.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;font-size:clamp(30px,5.6vh,54px);padding:6px}
-.msg.grid i{font-style:normal;display:grid;place-items:center;width:1.25em;height:1.25em;border-radius:8px;background:rgba(19,32,26,.06)}
+.msg.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;font-size:clamp(24px,4.4vh,44px);padding:4px}
+.msg.grid i{font-style:normal;display:grid;place-items:center;width:1.25em;height:1.25em;border-radius:7px;background:rgba(19,32,26,.06)}
 .msg.grid i:not(:empty){background:var(--card);box-shadow:inset 0 0 0 2px var(--c)}
-.verdict{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px;opacity:0;transition:opacity .25s;white-space:nowrap}
+.tag{align-self:center;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;padding:5px 12px;border-radius:999px;background:var(--card);opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s;white-space:nowrap;margin-top:6px}
+.tag.show{opacity:1;transform:none}
+.tag.memo::before{content:"";width:12px;height:12px;border-radius:3px;background:color-mix(in srgb,var(--c) 30%,var(--card));box-shadow:0 0 0 1.5px var(--ink)}
+.tag.fresh::before{content:"✦";color:var(--c);font-size:13px}
+.verdict{align-self:center;display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px;opacity:0;transition:opacity .25s;white-space:nowrap;margin-top:8px}
 .verdict i{width:16px;height:16px;border-radius:50%;border:3px solid var(--c)}
 .verdict.ok i{background:var(--c)}
 .verdict.show{opacity:1}
 
-/* 기억 줄 */
+/* 이번 세대 대화 줄 */
 .mem{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px}
 .mem .k{font-size:13px;color:var(--mute);white-space:nowrap}
 .slots{display:grid;grid-template-columns:repeat(32,minmax(0,1fr));gap:4px}
-.slot{aspect-ratio:3/4;border-radius:7px;border:1.5px dashed var(--rule);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;overflow:hidden;min-width:0}
-.slot img{width:78%;aspect-ratio:1;object-fit:contain}
-.slot s{text-decoration:none;font:500 10px/1 var(--f-g);color:var(--ink);white-space:nowrap;max-width:100%;overflow:hidden}
+.slot{height:clamp(30px,5vh,44px);border-radius:7px;border:1.5px dashed var(--rule);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;overflow:hidden;min-width:0}
+.slot img{width:78%;max-height:70%;aspect-ratio:1;object-fit:contain}
 .slot.ok{border:0;background:color-mix(in srgb,var(--c) 18%,var(--card))}
 .slot.no{border:1.5px solid var(--rule);background:var(--card)}
 .slot.no img{opacity:.45}
@@ -102,34 +124,60 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .tally{font:700 22px/1 var(--f-num);white-space:nowrap}
 .tally small{font:400 13px var(--f-ui);color:var(--mute);margin-left:4px}
 
-.summary{position:absolute;inset:0;display:grid;place-items:center;background:color-mix(in srgb,var(--paper) 88%,transparent);opacity:0;pointer-events:none;transition:opacity .4s}
+.summary{position:absolute;inset:0;display:grid;place-items:center;background:color-mix(in srgb,var(--paper) 90%,transparent);opacity:0;pointer-events:none;transition:opacity .4s;z-index:4}
 .summary.show{opacity:1}
 .summary div{text-align:center}
 .summary b{display:block;font:700 clamp(64px,13vh,140px)/1 var(--f-num);color:var(--c)}
 .summary p{margin:10px 0 0;font-size:17px;color:var(--mute)}
 
+/* 세대 교체 */
+.relay{position:absolute;inset:0;z-index:5;background:var(--paper);padding:14px 28px 10px;display:none;grid-template-rows:auto minmax(0,1fr);gap:12px}
+.relay.show{display:grid}
+.relay-h{display:flex;align-items:baseline;gap:14px}
+.relay-h b{font:700 26px/1 var(--f-num)}
+.relay-h span{font-size:15px;color:var(--mute)}
+.relay-b{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr) minmax(0,1.1fr);gap:22px;align-items:center;min-height:0}
+.rcol{display:flex;flex-direction:column;gap:14px;min-width:0}
+.rcol>.k{font-size:14px;color:var(--mute);display:flex;align-items:center;gap:8px}
+.agent{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:end;transition:opacity .8s,transform .8s}
+.agent .shelf{max-width:none}
+.agent .shelf .chips{height:58px}
+.agent.gone{opacity:.12;transform:translateX(-30px)}
+.pool{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:4px}
+.pc{height:clamp(34px,5.5vh,46px);border-radius:6px;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:0;overflow:hidden;transition:box-shadow .15s,transform .15s,opacity .3s}
+.pc img{width:62%;max-height:58%;object-fit:contain}
+.pc s{text-decoration:none;font:500 10px/1 var(--f-g);white-space:nowrap;max-width:100%;overflow:hidden;direction:ltr;unicode-bidi:isolate}
+.pc.no{opacity:.55}
+.pc.hit{box-shadow:0 0 0 2px var(--c);transform:scale(1.12)}
+.pc.taken{background:color-mix(in srgb,var(--c) 14%,var(--card))}
+.flash{position:absolute;z-index:6;background:var(--ink);color:var(--paper);font:500 15px/1 var(--f-g);padding:6px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;animation:pop .3s cubic-bezier(.2,.9,.3,1.4)}
+.flash small{font:400 12px var(--f-ui);opacity:.75;margin-left:6px}
+.wait{position:absolute;inset:0;z-index:5;background:var(--paper);display:none;place-items:center;text-align:center}
+.wait.show{display:grid}
+.wait b{display:block;font:700 clamp(48px,9vh,96px)/1 var(--f-num);font-variant-numeric:tabular-nums}
+.wait p{margin:12px 0 0;font-size:17px;color:var(--mute)}
+
 /* 여정 */
-.trip{padding:6px 28px 22px}
-.trip-h{display:flex;align-items:center;gap:12px;margin:0 0 6px 0}
+.trip{padding:4px 28px 16px;min-width:0}
+.trip-h{display:flex;align-items:center;gap:12px;margin:0 0 4px 0;flex-wrap:wrap}
 .pick{display:flex;align-items:center;gap:8px;white-space:nowrap;padding:5px 12px 5px 6px;border-radius:999px;background:var(--card);border:1px solid var(--rule);font-size:14px}
-.pick img{width:28px;height:28px}
-.trip-h .note{font-size:13px;color:var(--mute)}
-.picker{display:none;gap:6px;flex-wrap:wrap;padding:8px;background:var(--card);border-radius:14px;box-shadow:0 10px 30px -14px rgba(19,32,26,.4);position:absolute;z-index:5}
+.pick img{width:26px;height:26px}
+.trip-h .note{font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+.picker{display:none;gap:6px;flex-wrap:wrap;padding:8px;background:var(--card);border-radius:14px;box-shadow:0 10px 30px -14px rgba(19,32,26,.4);position:absolute;z-index:8;max-width:340px}
 .picker.open{display:flex}
 .picker button{width:44px;height:44px;border-radius:10px;display:grid;place-items:center}
 .picker button[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--ink)}
 .picker img{width:36px;height:36px}
-.tl{position:relative;display:grid;grid-template-columns:86px repeat(var(--n),minmax(0,1fr));row-gap:0}
+.tl{position:relative;display:grid;grid-template-columns:var(--cols)}
 .tl .lh{position:sticky;left:0;z-index:2;background:var(--paper);display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mute);white-space:nowrap;cursor:pointer}
 .tl .lh i{width:9px;height:9px;border-radius:50%;background:var(--k)}
 .tl .lh.sel{color:var(--ink);font-weight:600}
-.mk{height:30px;position:relative;font-size:12px;color:var(--mute)}
+.mk{height:28px;position:relative;font-size:12px;color:var(--mute)}
 .mk span{position:absolute;left:0;bottom:6px;white-space:nowrap}
-.mk.now span,.mk.meet span,.mk.end span{left:50%;transform:translateX(-50%);font-weight:600;color:var(--ink);padding:2px 7px;border-radius:6px}
+.mk.now span,.mk.meet span,.mk.end span{left:50%;transform:translateX(-50%);font-weight:600;color:var(--ink);padding:2px 7px;border-radius:6px;z-index:1}
 .mk.now span{background:var(--ink);color:var(--paper)}
-.mk.meet span{background:var(--card);box-shadow:inset 0 0 0 1.5px var(--ink)}
-.mk.end span{background:var(--card);box-shadow:inset 0 0 0 1.5px var(--ink)}
-.cell{height:clamp(42px,6vh,56px);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;position:relative;border-left:1px solid transparent;min-width:0;padding-bottom:4px}
+.mk.meet span,.mk.end span{background:var(--card);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.cell{height:clamp(40px,6vh,54px);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;position:relative;min-width:0;padding-bottom:4px}
 .cell.past{cursor:pointer}
 .cell.past:hover{background:rgba(19,32,26,.05);border-radius:6px}
 .cell .w{font:500 var(--fs,14px)/1 var(--f-g);white-space:nowrap;color:var(--ink);direction:ltr;unicode-bidi:isolate}
@@ -138,15 +186,14 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .cell .gw i{width:var(--q,4px);height:var(--q,4px);border-radius:1px;background:rgba(19,32,26,.1)}
 .cell .gw i.f{background:var(--k)}
 .cell .gw.same{opacity:.35}
-.cell .bar{width:58%;height:12px;display:flex;align-items:flex-end}
+.cell .bar{width:58%;height:10px;display:flex;align-items:flex-end}
 .cell .bar u{display:block;width:100%;background:var(--k);border-radius:2px 2px 0 0;opacity:.75}
-.cell.fut .w{color:transparent}
-.cell.fut::before{content:"";width:6px;height:6px;border-radius:50%;border:1.5px solid var(--faint);margin-bottom:18px}
+.cell.fut::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--rule);margin-bottom:16px}
 .cell.cur{background:rgba(19,32,26,.08);border-radius:6px}
 .cell.view{box-shadow:inset 0 0 0 2px var(--k);border-radius:6px}
-.vline{position:absolute;top:24px;bottom:0;width:0;border-left:2px solid var(--ink);pointer-events:none}
+.vline{position:absolute;top:22px;bottom:0;width:0;border-left:2px solid var(--ink);pointer-events:none}
 .vline.dash{border-left-style:dashed;opacity:.5}
-.bridge{position:absolute;width:2px;pointer-events:none;background:repeating-linear-gradient(var(--line) 0 4px,var(--grid) 4px 8px)}
+.bridge{position:absolute;width:2px;pointer-events:none;background:repeating-linear-gradient(var(--line) 0 3px,var(--grid) 3px 6px)}
 .tip{position:fixed;z-index:9;pointer-events:none;background:var(--ink);color:var(--paper);font-size:13px;padding:6px 10px;border-radius:8px;opacity:0;transition:opacity .15s;white-space:nowrap}
 .tip.show{opacity:1}
 
@@ -157,15 +204,17 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .intro h2{font:700 24px/1.2 var(--f-num);margin:0 0 20px}
 .three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .three>div{background:var(--card);border-radius:18px;padding:18px}
-.three .pic{height:120px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px}
+.three .pic{height:110px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px}
 .three p{margin:0;font-size:16px;line-height:1.6}
 .three p b{display:block;font:700 18px/1.3 var(--f-num);margin-bottom:4px}
 .mini-card{width:64px;height:64px;border-radius:12px;background:var(--paper);display:grid;place-items:center}
 .mini-card img{width:52px}
 .mini-g{font:500 40px/1 var(--f-g)}
 .arrow{color:var(--faint);font-size:22px}
-.mini-slot{width:26px;height:36px;border-radius:6px;background:color-mix(in srgb,var(--line) 18%,var(--card));display:grid;place-items:center;font:500 11px var(--f-g)}
-.mini-slot.no{background:var(--card);border:1.5px solid var(--rule)}
+.mini-col{display:flex;flex-direction:column;align-items:center;gap:3px}
+.mini-col img{width:34px}
+.mini-col span{width:30px;height:18px;border-radius:4px;display:grid;place-items:center;font:500 12px var(--f-g);background:color-mix(in srgb,var(--line) 20%,var(--card))}
+.mini-col span.no{background:none;box-shadow:inset 0 0 0 1px var(--rule);color:var(--mute)}
 .intro .close{margin-top:20px;display:flex;justify-content:flex-end}
 .intro .close button{background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:999px;font-weight:600}
 
@@ -173,26 +222,28 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 @keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-@media (max-width:820px){
+@media (max-width:900px){
+  .app{height:auto}
   .top{flex-wrap:wrap;gap:12px;padding:14px 16px 0}
   .top .sp{display:none}
   .isl{order:3;width:100%;justify-content:space-between}
   .isl button{padding:7px 10px;flex:1;justify-content:center}
-  .app{height:auto}
-  .stage{padding:14px 16px 8px;min-height:0}
+  .stage{padding:14px 16px 8px}
   .steps{grid-template-columns:repeat(4,minmax(0,1fr))}
   .step{flex-direction:column;align-items:flex-start;gap:6px;font-size:13px}
   .step::after{display:none}
   .roster{grid-column:1/-1;padding:8px 0 0}
-  .scene{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto;gap:14px}
-  .wire{grid-column:1/-1;grid-row:2;min-height:120px}
-  .card{width:min(38vw,180px)}.cands{width:min(42vw,200px)}
+  .scene{grid-template-columns:minmax(0,1fr);gap:10px}
+  .card{height:150px}.cands{height:170px}
   .slots{grid-template-columns:repeat(16,minmax(0,1fr))}
   .mem{grid-template-columns:minmax(0,1fr) auto}.mem .k{display:none}
+  .relay{position:fixed;overflow:auto}
+  .relay-b{grid-template-columns:minmax(0,1fr)}
+  .pool{grid-template-columns:repeat(8,minmax(0,1fr))}
   .trip{padding:6px 16px 18px}
   .tlw{overflow-x:auto;margin:0 -16px}
-  .tl .lh{padding-left:16px}
   .tl{min-width:900px}
+  .tl .lh{padding-left:16px}
   .three{grid-template-columns:minmax(0,1fr)}
 }
 </style>
@@ -209,7 +260,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   </header>
 
   <main class="stage" id="stage">
-    <div class="steps" id="steps">
+    <div class="steps">
       <div class="step"><b>1</b>본다</div>
       <div class="step"><b>2</b>말한다</div>
       <div class="step"><b>3</b>고른다</div>
@@ -217,15 +268,21 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
       <div class="roster" id="roster" aria-label="이번 세대의 AI 넷"></div>
     </div>
     <div class="scene">
-      <div class="side">
-        <div class="card hide" id="target"><span class="eye" id="eye">이 AI만 봄</span><img alt="" id="targetImg"></div>
+      <section class="side">
         <div class="who"><span class="av speak" id="spAv"></span><span>말하는 AI</span></div>
+        <div class="card hide" id="target"><span class="eye">이 AI만 봄</span><img alt="" id="targetImg"></div>
+        <div class="shelf" id="spShelf" aria-label="말하는 AI의 기억"></div>
+      </section>
+      <div class="wire">
+        <div class="track" id="track"><div class="msg" id="msg"></div></div>
+        <div class="tag" id="tag"></div>
+        <div class="verdict" id="verdict"><i></i><span></span></div>
       </div>
-      <div class="wire" id="wire"><div class="msg" id="msg"></div><div class="verdict" id="verdict"><i></i><span></span></div></div>
-      <div class="side">
-        <div class="cands" id="cands"></div>
+      <section class="side">
         <div class="who"><span class="av listen" id="liAv"></span><span>듣는 AI</span></div>
-      </div>
+        <div class="cands" id="cands"></div>
+        <div class="shelf" id="liShelf" aria-label="듣는 AI의 기억"></div>
+      </section>
     </div>
     <div class="mem">
       <span class="k">이번 세대 대화</span>
@@ -233,6 +290,15 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
       <span class="tally" id="tally"></span>
     </div>
     <div class="summary" id="summary"><div><b id="sumN"></b><p id="sumP"></p></div></div>
+    <div class="relay" id="relay">
+      <div class="relay-h"><b>세대 교체</b><span id="relaySub"></span></div>
+      <div class="relay-b">
+        <div class="rcol"><div class="k">떠나는 AI</div><div id="leaving"></div></div>
+        <div class="rcol"><div class="k">최근 대화 64번</div><div class="pool" id="pool"></div></div>
+        <div class="rcol"><div class="k">새로 온 AI · 30개만 물려받음</div><div id="arriving"></div></div>
+      </div>
+    </div>
+    <div class="wait" id="wait"><div><b id="waitT"></b><p id="waitP"></p></div></div>
   </main>
 
   <section class="trip" aria-label="첫날부터 발표날까지">
@@ -252,10 +318,10 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
     <div class="three">
       <div><div class="pic"><span class="mini-card"><img src="img/r9.png" alt=""></span><span class="arrow">→</span><span class="mini-g">κν</span><span class="arrow">→</span><span class="mini-card"><img src="img/r9.png" alt=""></span></div>
         <p><b>그림 맞히기</b>한 AI는 그림을 보고 낯선 글자로 말하고, 다른 AI는 그 말만 듣고 그림을 골라요.</p></div>
-      <div><div class="pic"><span class="mini-slot">κν</span><span class="mini-slot">κν</span><span class="mini-slot no">ξλ</span><span class="mini-slot">κν</span><span class="mini-slot">κν</span></div>
-        <p><b>통한 말이 남아요</b>맞힌 말은 기억에 남아 또 쓰여요. 그렇게 섬마다 자기 말이 생겨요.</p></div>
-      <div><div class="pic"><span class="av" style="opacity:.3">25</span><span class="av" style="opacity:.3">26</span><span class="arrow">→</span><span class="av" style="position:relative">29<span class="new" style="position:absolute;top:-7px;right:-9px;font:600 10px/1 var(--f-ui);background:var(--ink);color:var(--paper);padding:3px 5px;border-radius:6px">새</span></span><span class="av" style="position:relative">30<span class="new" style="position:absolute;top:-7px;right:-9px;font:600 10px/1 var(--f-ui);background:var(--ink);color:var(--paper);padding:3px 5px;border-radius:6px">새</span></span></div>
-        <p><b>세대가 바뀌면 말도 바뀌어요</b>하루 두 번, AI 둘이 떠나고 둘이 와요. 새 AI는 기억을 일부만 물려받아서 말이 조금씩 달라져요.</p></div>
+      <div><div class="pic"><span class="mini-col"><img src="img/r9.png" alt=""><span>κν</span><span>κν</span><span class="no">ξλ</span></span><span class="mini-col"><img src="img/q8.png" alt=""><span>κ</span><span>κ</span></span><span class="mini-col"><img src="img/h5.png" alt=""><span>δι</span></span></div>
+        <p><b>기억이 말을 골라요</b>AI마다 그림별 기억이 있어요. 통했던 말을 꺼내 또 써요. 기억에 없으면 새로 지어요.</p></div>
+      <div><div class="pic"><span class="av" style="opacity:.3">29</span><span class="av" style="opacity:.3">30</span><span class="arrow">→</span><span class="av">33<span class="new">새</span></span><span class="av">34<span class="new">새</span></span></div>
+        <p><b>세대가 바뀌면 말이 흔들려요</b>하루 두 번, AI 둘이 떠나고 둘이 와요. 새 AI는 최근 대화를 일부만, 가끔 틀리게 물려받아요.</p></div>
     </div>
     <div class="close"><button id="introClose">보러 가기</button></div>
   </div>
@@ -270,13 +336,19 @@ const COLOR = {line:'var(--line)', grid:'var(--grid)', twin:'var(--twin)'};
 const SCENE_KO = {water:'물',fire:'불',tree:'나무',person:'사람',mountain:'산',house:'집',sea:'바다',forest:'숲',village:'마을',volcano:'화산','big fire':'큰 불',crowd:'군중'};
 const S = await (await fetch('data/summary.json', {cache:'no-store'})).json();
 const META = S.meta, GENS = S.gens;
+const SIDS = Object.values(META.scenes);
 const ID2KO = {}; for (const [en, id] of Object.entries(META.scenes)) ID2KO[id] = SCENE_KO[en] || en;
+const JOSA = w => { const c = w.charCodeAt(w.length - 1) - 0xAC00; return c >= 0 && c % 28 ? '을' : '를'; };
 const ORDER = ['line','grid','twin'];
 const KO = k => k === 'cross' ? '두 섬 사이' : META.islands[k].ko;
 const BODY = k => META.islands[k].body;
 const LAST = GENS[GENS.length - 1];
-const genCache = {};
-const loadGen = n => genCache[n] || (genCache[n] = fetch(`data/gens/g${String(n).padStart(3,'0')}.json`, {cache:'no-store'}).then(r => r.json()));
+const nowGen = LAST.gen;
+const cache = {};
+const getJSON = u => cache[u] || (cache[u] = fetch(u, {cache:'no-store'}).then(r => r.ok ? r.json() : null).catch(() => null));
+const pad = n => String(n).padStart(3, '0');
+const loadGen = n => getJSON(`data/gens/g${pad(n)}.json`);
+const loadMem = n => getJSON(`data/mem/g${pad(n)}.json`);
 
 /* ── 여정: 지난 세대 + 앞으로 올 세대(07·19시) ── */
 const KST = 9 * 3600e3;
@@ -284,149 +356,241 @@ const fmtMD = t => { const d = new Date(t + KST); return `${d.getUTCMonth()+1}/$
 const END = Date.parse('2026-10-29T07:00:00+09:00');
 const MEET = Date.parse(META.meet_at || '2026-10-22T00:00:00+09:00');
 const trip = GENS.map(g => ({gen: g.gen, t: Date.parse(g.at), row: g}));
-{ let t = Date.parse(LAST.at), n = LAST.gen;
+{ const t = Date.parse(LAST.at); let n = LAST.gen;
   const d0 = new Date(t + KST); let day = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth(), d0.getUTCDate()) - KST;
-  const slots = [];
-  for (let k = 0; k < 40; k++) { for (const h of [7, 19]) { const s = day + h * 3600e3; if (s > t && s <= END) slots.push(s); } day += 864e5; }
-  for (const s of slots) trip.push({gen: ++n, t: s, row: null}); }
+  for (let k = 0; k < 40; k++) { for (const h of [7, 19]) { const s = day + h * 3600e3; if (s > t + 3600e3 && s <= END) trip.push({gen: ++n, t: s, row: null}); } day += 864e5; } }
 const N = trip.length;
 const meetGen = META.met_gen || (trip.find(x => x.t >= MEET) || {}).gen;
-const nowGen = LAST.gen;
+const endGen = trip[N - 1].gen;
+const nextSlot = trip.find(x => !x.row);
 
 /* ── 상태 ── */
 let manual = false, island = 'twin', viewGen = nowGen, scene = META.scenes.forest, speed = 1, token = 0, liveOn = false;
 const islandsAvail = () => ORDER.concat(GENS.some(g => g.cross) ? ['cross'] : []);
-
-/* 섬 버튼 */
-function drawIslands(){
-  $('#isl').innerHTML = islandsAvail().map(k => `<button aria-pressed="${k === island}" data-k="${k}" style="--k:${k === 'cross' ? 'linear-gradient(90deg,var(--line) 50%,var(--grid) 50%)' : COLOR[k]}"><i${k === 'cross' ? ' style="background:linear-gradient(90deg,var(--line) 50%,var(--grid) 50%)"' : ''}></i>${KO(k)}</button>`).join('');
-  $('#isl').querySelectorAll('button').forEach(b => b.onclick = () => { manual = true; island = b.dataset.k; if (island === 'cross' && !(GENS.find(g => g.gen === viewGen) || {}).cross) viewGen = nowGen; start(); });
-}
-
-/* ── 무대 ── */
-const stage = $('#stage');
 const wait = ms => sleep(ms / speed);
+const stage = $('#stage');
 function setColor(k){ stage.style.setProperty('--c', COLOR[k] || 'var(--ink)'); }
 function setStep(i){ document.querySelectorAll('.step').forEach((s, j) => { s.classList.toggle('on', j === i); s.classList.toggle('done', j < i); }); }
-function glyphHTML(w, body){
-  if (body === 'grid') return [...w].map(c => `<i>${c === '.' ? '' : esc(c)}</i>`).join('');
-  return [...w].map(c => `<span>${esc(c)}</span>`).join('');
+
+function drawIslands(){
+  $('#isl').innerHTML = islandsAvail().map(k => `<button aria-pressed="${k === island}" data-k="${k}" style="--k:${COLOR[k] || 'var(--ink)'}"><i></i>${KO(k)}</button>`).join('');
+  $('#isl').querySelectorAll('button').forEach(b => b.onclick = () => { manual = true; island = b.dataset.k; viewGen = nowGen; start(); });
 }
-function drawSlots(list, cur){
+
+/* ── 기억 선반 ── */
+// 기억 한 줄: {s:그림, m:말, ok, f:말한 섬, mut:베끼다 바뀐 줄}
+const toEntry = (x, k) => ({s: x[0], m: x[1], ok: !!x[2], f: x[3] || k});
+function chipInner(e){
+  if (BODY(e.f) === 'grid') return `<span class="gm">${[...e.m].map(c => `<i class="${c === '.' ? '' : 'f'}"></i>`).join('')}</span>`;
+  return esc(e.m);
+}
+function shelfHTML(mem, k, opt = {}){
+  const by = {}; SIDS.forEach(s => by[s] = []);
+  mem.forEach((e, i) => { (by[e.s] || (by[e.s] = [])).push([e, i]); });
+  return SIDS.map(s => `<div class="col${opt.look === s ? ' look' : ''}" data-s="${s}"><img src="img/${s}.png" alt="" title="${esc(ID2KO[s])}"><div class="chips">` +
+    by[s].slice().reverse().map(([e, i]) => `<span class="chip ${e.ok ? 'ok' : 'no'}${e.f !== k ? ' far' : ''}${e.mut ? ' mut' : ''}${opt.add === i ? ' add' : ''}" data-i="${i}" style="--k:${COLOR[e.f]};--k2:${COLOR[e.f]}">${chipInner(e)}</span>`).join('') +
+    `</div></div>`).join('');
+}
+function remember(mem, e){ mem.push(e); if (mem.length > 30) mem.shift(); return mem.length - 1; }
+
+/* ── 무대 ── */
+function drawSlots(list){
   $('#slots').innerHTML = Array.from({length: 32}, (_, i) => {
     const r = list[i];
-    if (!r) return `<div class="slot${i === cur ? ' cur' : ''}"></div>`;
-    const w = r.msg ? (BODY(r.from) === 'grid' ? '▦' : r.msg) : '·';
-    return `<div class="slot ${r.ok ? 'ok' : 'no'}" style="--c:${COLOR[r.from] || 'var(--ink)'}" title="${esc(ID2KO[r.scene] || '')}"><img src="img/${r.scene}.png" alt=""><s>${esc(w)}</s></div>`;
+    if (!r) return `<div class="slot${i === list.length ? ' cur' : ''}"></div>`;
+    return `<div class="slot ${r.ok ? 'ok' : 'no'}" style="--c:${COLOR[r.from] || 'var(--ink)'}" title="${esc(ID2KO[r.scene] || '')}"><img src="img/${r.scene}.png" alt=""></div>`;
   }).join('');
-  const ok = list.filter(r => r && r.ok).length;
+  const ok = list.filter(r => r.ok).length;
   $('#tally').innerHTML = list.length ? `${ok}<small>/ ${list.length} 통함</small>` : '';
 }
-function drawRoster(ids, newIds, sp, li){
-  $('#roster').innerHTML = ids.map(id => `<span class="av${id === sp ? ' speak' : id === li ? ' listen' : ''}">${id}${newIds.includes(id) ? '<span class="new">새</span>' : ''}</span>`).join('');
+function drawRoster(ids, born, gen, sp, li){
+  $('#roster').innerHTML = ids.map(id => `<span class="av${id === sp ? ' speak' : id === li ? ' listen' : ''}">${id}${gen > 1 && born[id] === gen ? '<span class="new">새</span>' : ''}</span>`).join('');
 }
 function clearScene(){
-  $('#target').classList.add('hide'); $('#msg').innerHTML = ''; $('#msg').className = 'msg'; $('#msg').style.left = '0px';
-  $('#verdict').classList.remove('show','ok');
+  $('#target').classList.add('hide'); const m = $('#msg'); m.innerHTML = ''; m.className = 'msg'; m.style.left = '0px';
+  $('#verdict').classList.remove('show','ok'); $('#tag').className = 'tag';
   $('#cands').innerHTML = Array.from({length: 4}, () => '<div class="cand back"><img alt=""></div>').join('');
   setStep(-1);
 }
 
 async function play(rec, tk, ctx){
-  const from = rec.from, body = BODY(from);
+  const from = rec.from, to = rec.to, body = BODY(from);
   setColor(from);
+  const spMem = ctx.mem[rec.sp] || (ctx.mem[rec.sp] = []), liMem = ctx.mem[rec.li] || (ctx.mem[rec.li] = []);
   $('#spAv').textContent = rec.sp; $('#liAv').textContent = rec.li;
   $('#spAv').style.cssText = `background:${COLOR[from]};border-color:${COLOR[from]}`;
-  $('#liAv').style.cssText = `border-color:${COLOR[rec.to]};color:${COLOR[rec.to]}`;
-  if (ctx) drawRoster(ctx.ids, ctx.newIds, rec.sp, rec.li);
+  $('#liAv').style.cssText = `border-color:${COLOR[to]};color:${COLOR[to]}`;
+  drawRoster(ctx.ids, ctx.born, ctx.gen, rec.sp, rec.li);
+  $('#spShelf').innerHTML = shelfHTML(spMem, from); $('#spShelf').style.setProperty('--c', COLOR[from]);
+  $('#liShelf').innerHTML = shelfHTML(liMem, to); $('#liShelf').style.setProperty('--c', COLOR[to]);
   clearScene();
-  // 1 본다
+  // 1 본다: 그림을 보고, 기억 속 그 그림 칸을 찾는다
   setStep(0); $('#targetImg').src = `img/${rec.scene}.png`;
-  await wait(250); if (tk !== token) return;
+  await wait(200); if (tk !== token) return;
   $('#target').classList.remove('hide');
-  await wait(900); if (tk !== token) return;
-  // 2 말한다
+  await wait(500); if (tk !== token) return;
+  const col = $(`#spShelf .col[data-s="${rec.scene}"]`); col && col.classList.add('look');
+  await wait(700); if (tk !== token) return;
+  // 2 말한다: 기억에 같은 말이 있으면 꺼내 쓰고, 없으면 새로 짓는다
   setStep(1);
+  const used = [...spMem.keys()].reverse().find(i => spMem[i].s === rec.scene && spMem[i].m === rec.msg);
+  const tag = $('#tag');
+  if (used !== undefined) { const c = $(`#spShelf .chip[data-i="${used}"]`); c && c.classList.add('use'); tag.textContent = '기억에서 꺼냄'; tag.className = 'tag memo show'; }
+  else { tag.textContent = '새로 지음'; tag.className = 'tag fresh show'; }
+  await wait(500); if (tk !== token) return;
   const m = $('#msg'); m.className = 'msg' + (body === 'grid' ? ' grid' : '');
   if (body === 'grid') { m.innerHTML = '<i></i>'.repeat(9); const cells = m.querySelectorAll('i');
-    for (let i = 0; i < 9; i++) { if (tk !== token) return; const c = rec.msg[i]; if (c !== '.') { cells[i].textContent = c; cells[i].animate([{transform:'scale(.3)',opacity:0},{transform:'scale(1)',opacity:1}], 220); await wait(140); } } }
-  else for (const c of rec.msg) { if (tk !== token) return; m.insertAdjacentHTML('beforeend', `<span>${esc(c)}</span>`); await wait(230); }
-  await wait(350); if (tk !== token) return;
-  const wire = $('#wire'); m.style.left = Math.max(0, wire.clientWidth - m.offsetWidth) + 'px';
+    for (let i = 0; i < 9; i++) { if (tk !== token) return; const c = rec.msg[i]; if (c !== '.') { cells[i].textContent = c; cells[i].animate([{transform:'scale(.3)',opacity:0},{transform:'scale(1)',opacity:1}], 220); await wait(120); } } }
+  else for (const c of rec.msg) { if (tk !== token) return; m.insertAdjacentHTML('beforeend', `<span>${esc(c)}</span>`); await wait(200); }
+  await wait(300); if (tk !== token) return;
+  m.style.left = Math.max(0, $('#track').clientWidth - m.offsetWidth) + 'px';
   await wait(950); if (tk !== token) return;
-  // 3 고른다
-  setStep(2);
+  // 3 고른다: 듣는 AI가 기억에서 같은 말을 찾고, 네 장 중 하나를 고른다
+  setStep(2); tag.className = 'tag';
+  const heard = liMem.map((e, i) => [e, i]).filter(([e]) => e.m === rec.msg);
+  heard.forEach(([e, i]) => { const c = $(`#liShelf .chip[data-i="${i}"]`); c && c.classList.add('hear'); const cl = c && c.closest('.col'); cl && cl.classList.add('look'); });
+  tag.textContent = heard.length ? '들어 본 말' : '처음 듣는 말'; tag.className = 'tag ' + (heard.length ? 'memo' : 'fresh') + ' show';
   const cands = rec.cands || [];
   $('#cands').innerHTML = cands.map(c => `<div class="cand" data-s="${c}"><img src="img/${c}.png" alt="${esc(ID2KO[c] || '')}"></div>`).join('');
   const els = [...$('#cands').children];
-  await wait(350);
-  for (let r = 0; r < 2; r++) for (const e of els) { if (tk !== token) return; e.classList.add('scan'); await wait(120); e.classList.remove('scan'); }
+  await wait(400); if (tk !== token) return;
+  const known = new Set(heard.filter(([e]) => e.ok).map(([e]) => e.s));
+  els.forEach(e => known.has(e.dataset.s) && e.classList.add('hint'));
+  for (let r = 0; r < 2; r++) for (const e of els) { if (tk !== token) return; e.classList.add('scan'); await wait(110); e.classList.remove('scan'); }
   const pick = els.find(e => e.dataset.s === rec.guess);
   pick && pick.classList.add('chosen');
   await wait(600); if (tk !== token) return;
-  // 4 기억한다
-  setStep(3);
+  // 4 기억한다: 정답 그림 칸에 이번 말이 쌓인다(둘 다)
+  setStep(3); tag.className = 'tag';
   if (rec.ok) pick && pick.classList.add('right');
   else { pick && pick.classList.add('wrong'); const t = els.find(e => e.dataset.s === rec.scene); t && t.classList.add('missed'); }
   const v = $('#verdict'); v.querySelector('span').textContent = rec.ok ? '통했다' : '안 통했다'; v.classList.toggle('ok', !!rec.ok); v.classList.add('show');
-  if (ctx) { ctx.done.push(rec); drawSlots(ctx.done, ctx.done.length); const s = $('#slots').children[ctx.done.length - 1]; s && s.classList.add('fill'); }
-  await wait(1500);
+  const e = {s: rec.scene, m: rec.msg, ok: !!rec.ok, f: from};
+  const a = remember(spMem, {...e}); const b = remember(liMem, {...e});
+  $('#spShelf').innerHTML = shelfHTML(spMem, from, {look: rec.scene, add: a});
+  $('#liShelf').innerHTML = shelfHTML(liMem, to, {look: rec.scene, add: b});
+  ctx.done.push(rec); drawSlots(ctx.done); const sl = $('#slots').children[ctx.done.length - 1]; sl && sl.classList.add('fill');
+  await wait(1600);
 }
 
-async function replay(gen, isl){
-  const tk = ++token;
-  const G = await loadGen(gen); if (tk !== token) return;
-  let talks = isl === 'cross' ? ((G.cross || {}).talks || []) : (G.islands[isl] || {}).talks || [];
-  talks = talks.map(t => ({from: isl, to: isl, ...t})).filter(t => t.msg);
-  const ids = [...new Set(talks.flatMap(t => [t.sp, t.li]))].sort((a, b) => a - b);
-  const newIds = gen > 1 && isl !== 'cross' ? ids.slice(-2) : [];
-  drawRoster(ids, newIds);
-  while (tk === token) {
-    const ctx = {ids, newIds, done: []};
-    drawSlots([], 0);
-    for (const rec of talks) { if (tk !== token) return; await play(rec, tk, ctx); }
-    if (tk !== token) return;
-    const ok = ctx.done.filter(r => r.ok).length;
-    $('#sumN').textContent = `${ok}/${ctx.done.length}`;
-    $('#sumP').textContent = `${gen}세대 ${KO(isl)}에서 통한 대화`;
-    $('#summary').classList.add('show'); await wait(3200); $('#summary').classList.remove('show');
-    if (!manual && isl !== 'cross') { island = ORDER[(ORDER.indexOf(isl) + 1) % ORDER.length]; viewGen = nowGen; start(); return; }
+/* ── 세대 교체 ── */
+function flash(el, html){
+  const r = el.getBoundingClientRect(), s = stage.getBoundingClientRect();
+  const f = document.createElement('div'); f.className = 'flash'; f.innerHTML = html;
+  f.style.left = (r.left - s.left + r.width / 2) + 'px'; f.style.top = (r.top - s.top - 34) + 'px'; f.style.transform = 'translateX(-50%)';
+  stage.appendChild(f); setTimeout(() => f.remove(), 1600 / speed);
+}
+async function relay(gen, k, M, ctx, tk){
+  const end = M && M.islands[k] && M.islands[k].end; if (!end) return;
+  setColor(k); setStep(-1);
+  const R = $('#relay');
+  $('#relaySub').textContent = `${KO(k)} · ${gen}세대 → ${gen + 1}세대`;
+  $('#leaving').innerHTML = end.left.map(id => `<div class="agent" data-id="${id}"><span class="av">${id}</span><div class="shelf">${shelfHTML(ctx.mem[id] || [], k)}</div></div>`).join('<div style="height:12px"></div>');
+  const pool = end.pool.map(x => toEntry(x, k));
+  $('#pool').innerHTML = pool.map((e, j) => `<div class="pc${e.ok ? '' : ' no'}" data-j="${j}"><img src="img/${e.s}.png" alt=""><s>${BODY(e.f) === 'grid' ? '▦' : esc(e.m)}</s></div>`).join('');
+  $('#arriving').innerHTML = end.born.map(b => `<div class="agent" data-id="${b.id}"><span class="av">${b.id}<span class="new">새</span></span><div class="shelf">${shelfHTML([], k)}</div></div>`).join('<div style="height:12px"></div>');
+  R.classList.add('show');
+  await wait(1200); if (tk !== token) return;
+  R.querySelectorAll('#leaving .agent').forEach(a => a.classList.add('gone'));
+  await wait(1000); if (tk !== token) return;
+  for (const b of end.born) {
+    const mem = [], mut = Object.fromEntries(b.mut.map(x => [x[0], x]));
+    const box = R.querySelector(`#arriving .agent[data-id="${b.id}"] .shelf`);
+    for (let p = 0; p < b.pick.length; p++) {
+      if (tk !== token) return;
+      const j = b.pick[p], src = pool[j], pc = R.querySelector(`.pc[data-j="${j}"]`);
+      const e = {...src}; if (mut[p]) { e.m = mut[p][2]; e.mut = true; }
+      mem.push(e);
+      pc.classList.add('hit', 'taken');
+      box.innerHTML = shelfHTML(mem, k, {add: mem.length - 1});
+      if (mut[p]) { const c = box.querySelector(`.chip[data-i="${mem.length - 1}"]`); c && flash(c, `${esc(mut[p][1])} → ${esc(mut[p][2])}<small>잘못 옮김</small>`); await wait(900); }
+      else await wait(70);
+      pc.classList.remove('hit');
+    }
+    await wait(400);
+    R.querySelectorAll('.pc.taken').forEach(x => x.classList.remove('taken'));
   }
+  if (tk !== token) return;
+  R.querySelectorAll(`#arriving .col[data-s="${scene}"]`).forEach(c => c.classList.add(c.querySelector('.chip') ? 'look' : 'empty-ring'));
+  await wait(2600);
+  R.classList.remove('show');
+}
+const countdown = () => { if (!nextSlot) return ''; let s = Math.max(0, Math.floor((nextSlot.t - Date.now()) / 1000)); const h = Math.floor(s / 3600); s %= 3600; return `${h}:${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; };
+async function waitCard(k, tk){
+  if (!nextSlot) return;
+  const W = $('#wait'); W.classList.add('show');
+  $('#waitP').textContent = `${KO(k)}의 ${nextSlot.gen}세대는 ${fmtMD(nextSlot.t)} ${new Date(nextSlot.t + KST).getUTCHours()}시에 시작해요`;
+  const t0 = Date.now();
+  while (tk === token && Date.now() - t0 < 4000 / speed) { $('#waitT').textContent = countdown(); await sleep(250); }
+  W.classList.remove('show');
 }
 
-async function live(isl){
-  const tk = ++token; clearScene(); drawSlots([], 0);
-  const ctx = {ids: [], newIds: [], done: []};
-  const es = new EventSource(`/api/live?island=${isl}&n=8`);
+async function replay(gen, k){
+  const tk = ++token;
+  $('#relay').classList.remove('show'); $('#wait').classList.remove('show'); $('#summary').classList.remove('show');
+  const [G, M] = await Promise.all([loadGen(gen), loadMem(gen)]); if (tk !== token) return;
+  let talks = k === 'cross' ? ((G.cross || {}).talks || []) : (G.islands[k] || {}).talks || [];
+  talks = talks.map(t => ({from: k, to: k, ...t})).filter(t => t.msg);
+  const MI = M && M.islands[k] || {};
+  const ctx = {gen, done: [], born: {}, mem: {}, ids: []};
+  if (k === 'cross') { ctx.ids = [...new Set(talks.flatMap(t => [t.sp, t.li]))].sort((a, b) => a - b);
+    for (const kk of META.meet) { const mm = M && M.islands[kk]; if (mm) for (const [id, arr] of Object.entries(mm.start)) ctx.mem[id] = arr.map(x => toEntry(x, kk)); } }
+  else { for (const [id, arr] of Object.entries(MI.start || {})) { const mu = new Set((MI.mut || {})[id] || []); ctx.mem[id] = arr.map((x, i) => ({...toEntry(x, k), mut: mu.has(i)})); }
+    ctx.born = Object.fromEntries(Object.entries(MI.born || {}).map(([a, b]) => [+a, b]));
+    ctx.ids = Object.keys(MI.start || {}).map(Number).sort((a, b) => a - b);
+    if (!ctx.ids.length) ctx.ids = [...new Set(talks.flatMap(t => [t.sp, t.li]))].sort((a, b) => a - b); }
+  drawRoster(ctx.ids, ctx.born, gen); drawSlots([]);
+  for (const rec of talks) { if (tk !== token) return; await play(rec, tk, ctx); }
+  if (tk !== token) return;
+  const ok = ctx.done.filter(r => r.ok).length;
+  $('#sumN').textContent = `${ok}/${ctx.done.length}`; $('#sumP').textContent = `${gen}세대 ${KO(k)}에서 통한 대화`;
+  $('#summary').classList.add('show'); await wait(2600); $('#summary').classList.remove('show');
+  if (tk !== token) return;
+  if (k !== 'cross') await relay(gen, k, M, ctx, tk);
+  if (tk !== token) return;
+  if (gen >= nowGen) await waitCard(k, tk);
+  if (tk !== token) return;
+  if (!manual && k !== 'cross') { island = ORDER[(ORDER.indexOf(k) + 1) % ORDER.length]; viewGen = nowGen; }
+  else if (gen < nowGen) viewGen = gen + 1;
+  start();
+}
+
+async function live(k){
+  const tk = ++token; clearScene(); drawSlots([]);
+  const st = await getJSON('data/state.json');
+  const ctx = {gen: (st && st.gen || nowGen) + 1, done: [], born: {}, mem: {}, ids: []};
+  for (const kk of ORDER) for (const a of (st && st.islands[kk].agents) || []) { ctx.mem[a.id] = a.memory.map(x => ({s: x.scene, m: x.msg, ok: x.ok, f: x.from || kk})); if (kk === k) { ctx.ids.push(a.id); ctx.born[a.id] = a.born; } }
+  ctx.ids.sort((a, b) => a - b);
+  const es = new EventSource(`/api/live?island=${k}&n=8`);
   const q = []; let end = false, wake = null;
   es.onmessage = e => { const d = JSON.parse(e.data); if (d.kind === 'done' || d.kind === 'error') { end = true; es.close(); } else if (d.kind === 'result' && d.msg) q.push(d); wake && wake(); };
   es.onerror = () => { end = true; es.close(); wake && wake(); };
   while (tk === token) {
     if (!q.length) { if (end) break; await new Promise(r => wake = r); wake = null; continue; }
-    const d = q.shift(); ctx.ids = [...new Set([...ctx.ids, d.sp, d.li])].sort((a, b) => a - b);
-    await play({from: isl === 'cross' ? d.from : isl, to: isl === 'cross' ? d.to : isl, ...d}, tk, ctx);
+    const d = q.shift();
+    await play({...d, from: d.from || k, to: d.to || k}, tk, ctx);
   }
   es.close();
 }
 
 /* ── 여정 그리기 ── */
-function wordAt(row, isl){ return row && row.islands[isl] && (row.islands[isl].words || {})[scene]; }
+function wordAt(row, k){ return row && row.islands[k] && (row.islands[k].words || {})[scene]; }
 function drawTrip(){
-  const tl = $('#tl'); tl.style.setProperty('--n', N);
-  const colW = (tl.clientWidth - 86) / N;
-  let h = '<div></div>';
-  let lastMD = '';
+  const tl = $('#tl');
+  const P = trip.filter(x => x.row).length, F = N - P;
+  tl.style.setProperty('--cols', `86px repeat(${P}, minmax(0,3fr)) repeat(${F}, minmax(0,1fr))`);
+  const colW = (tl.clientWidth - 86) / (P * 3 + F) * 3;
+  let h = '<div></div>', lastMD = '';
+  const near = g => [nowGen, meetGen, endGen].some(y => y && y !== g && Math.abs(y - g) <= (g > nowGen ? 3 : 1));
   for (const x of trip) {
-    const md = fmtMD(x.t), cls = x.gen === nowGen ? 'now' : x.gen === meetGen ? 'meet' : x.gen === trip[N-1].gen ? 'end' : '';
-    let lab = '';
-    if (cls === 'now') lab = '지금'; else if (cls === 'meet') lab = `${md} 만남`; else if (cls === 'end') lab = `${md} 발표`;
-    else if (md !== lastMD && !trip.some(y => Math.abs(y.gen - x.gen) <= 2 && (y.gen === nowGen || y.gen === meetGen || y.gen === trip[N-1].gen))) lab = md;
-    if (md !== lastMD) lastMD = md;
+    const md = fmtMD(x.t), cls = x.gen === nowGen ? 'now' : x.gen === meetGen ? 'meet' : x.gen === endGen ? 'end' : '';
+    const lab = cls === 'now' ? '지금' : cls === 'meet' ? `${md} 만남` : cls === 'end' ? `${md} 발표` : (x.row && md !== lastMD && !near(x.gen) ? md : '');
+    lastMD = md;
     h += `<div class="mk ${cls}">${lab ? `<span>${lab}</span>` : ''}</div>`;
   }
   for (const k of ORDER) {
     h += `<div class="lh${k === island ? ' sel' : ''}" data-k="${k}" style="--k:${COLOR[k]}"><i></i>${KO(k)}</div>`;
-    let prev = null;
+    let prev;
     for (const x of trip) {
       const cls = ['cell', x.row ? 'past' : 'fut', x.gen === nowGen ? 'cur' : '', x.gen === viewGen && k === island ? 'view' : ''].join(' ');
       let inner = '';
@@ -435,44 +599,41 @@ function drawTrip(){
         const ok = (x.row.islands[k] || {}).ok || 0;
         if (w == null) inner = '<span class="w">·</span>';
         else if (BODY(k) === 'grid') { const q = Math.max(3, Math.min(6, Math.floor((colW - 8) / 3.6))); inner = `<span class="gw${same ? ' same' : ''}" style="--q:${q}px">${[...w].map(c => `<i class="${c === '.' ? '' : 'f'}"></i>`).join('')}</span>`; }
-        else { const fs = Math.max(9, Math.min(16, (colW - 4) / ([...w].length * 0.62))); inner = `<span class="w${same ? ' same' : ''}" style="--fs:${fs}px">${esc(w)}</span>`; }
+        else { const fs = Math.max(10, Math.min(22, (colW - 6) / ([...w].length * 0.62))); inner = `<span class="w${same ? ' same' : ''}" style="--fs:${fs}px">${esc(w)}</span>`; }
         inner += `<span class="bar"><u style="height:${Math.round(ok / 32 * 100)}%"></u></span>`;
       }
       h += `<div class="${cls}" style="--k:${COLOR[k]}" data-g="${x.gen}" data-k="${k}">${inner}</div>`;
     }
   }
   tl.innerHTML = h;
-  // 세로선: 지금, 만남, 발표
-  const col = g => 86 + (trip.findIndex(x => x.gen === g) + .5) * colW;
-  for (const [g, c] of [[nowGen, ''], [meetGen, ' dash'], [trip[N-1].gen, ' dash']]) if (g) tl.insertAdjacentHTML('beforeend', `<div class="vline${c}" style="left:${col(g)}px"></div>`);
-  // 다리: 만남 이후 글자 섬 ↔ 그림 섬
-  if (meetGen) { const cells = tl.querySelectorAll('.cell[data-k="line"]'); const c0 = cells[0], c1 = tl.querySelector('.cell[data-k="grid"]');
-    const top = c0.offsetTop + c0.offsetHeight - 6, bot = c1.offsetTop + 10;
-    for (const x of trip) if (x.gen >= meetGen) tl.insertAdjacentHTML('beforeend', `<div class="bridge" style="left:${col(x.gen) - 1}px;top:${top}px;height:${bot - top}px"></div>`); }
-  tl.querySelectorAll('.lh').forEach(e => e.onclick = () => { manual = true; island = e.dataset.k; start(); });
+  const cx = g => { const c = tl.querySelector(`.cell[data-k="line"][data-g="${g}"]`); return c ? c.offsetLeft + c.offsetWidth / 2 : 0; };
+  for (const [g, c] of [[nowGen, ''], [meetGen, ' dash'], [endGen, ' dash']]) if (g) tl.insertAdjacentHTML('beforeend', `<div class="vline${c}" style="left:${cx(g)}px"></div>`);
+  if (meetGen) { const c0 = tl.querySelector('.cell[data-k="line"]'), c1 = tl.querySelector('.cell[data-k="grid"]');
+    const top = c0.offsetTop + c0.offsetHeight - 4, bot = c1.offsetTop + 8;
+    for (const x of trip) if (x.gen >= meetGen) tl.insertAdjacentHTML('beforeend', `<div class="bridge" style="left:${cx(x.gen) - 1}px;top:${top}px;height:${bot - top}px"></div>`); }
+  tl.querySelectorAll('.lh').forEach(e => e.onclick = () => { manual = true; island = e.dataset.k; viewGen = nowGen; start(); });
   tl.querySelectorAll('.cell.past').forEach(e => {
     e.onclick = () => { manual = true; island = e.dataset.k; viewGen = +e.dataset.g; start(); };
-    e.onmouseenter = ev => { const x = trip.find(y => y.gen === +e.dataset.g), r = x.row.islands[e.dataset.k] || {};
+    e.onmouseenter = () => { const x = trip.find(y => y.gen === +e.dataset.g), r = x.row.islands[e.dataset.k] || {};
       const tip = $('#tip'); tip.textContent = `${x.gen}세대 · ${fmtMD(x.t)} · ${KO(e.dataset.k)} · ${r.ok}/32 통함`; tip.classList.add('show');
       const b = e.getBoundingClientRect(); tip.style.left = Math.min(innerWidth - tip.offsetWidth - 8, Math.max(8, b.left + b.width / 2 - tip.offsetWidth / 2)) + 'px'; tip.style.top = (b.top - tip.offsetHeight - 6) + 'px'; };
     e.onmouseleave = () => $('#tip').classList.remove('show');
   });
-  const trp = tl.parentElement; if (trp.scrollWidth > trp.clientWidth) trp.scrollLeft = Math.max(0, col(nowGen) - trp.clientWidth * 0.6);
-  const changes = ORDER.map(k => { let c = 0, p; for (const g of GENS) { const w = wordAt(g, k); if (p !== undefined && w !== p) c++; p = w; } return c; });
-  const nextSlot = trip.find(x => !x.row);
-  $('#tripNote').textContent = `${nowGen}세대째 · 만남까지 ${meetGen ? Math.max(0, meetGen - nowGen) : '-'}세대 · 발표까지 ${trip[N-1].gen - nowGen}세대` + (nextSlot ? ` · 다음 세대 ${fmtMD(nextSlot.t)} ${new Date(nextSlot.t + KST).getUTCHours()}시` : '');
+  const w = tl.parentElement; if (w.scrollWidth > w.clientWidth) w.scrollLeft = Math.max(0, cx(nowGen) - w.clientWidth * 0.6);
+}
+function tickNote(){
+  $('#tripNote').textContent = `${nowGen}세대째` + (meetGen ? ` · 만남까지 ${Math.max(0, meetGen - nowGen)}세대` : '') + ` · 발표까지 ${endGen - nowGen}세대` + (nextSlot ? ` · 다음 세대까지 ${countdown()}` : '');
 }
 
 /* 그림 고르기 */
 function drawPick(){
-  $('#pickImg').src = `img/${scene}.png`; $('#pickName').textContent = `‘${ID2KO[scene]}’을 부르는 말`;
-  $('#picker').innerHTML = Object.values(META.scenes).map(id => `<button aria-pressed="${id === scene}" data-s="${id}" aria-label="${esc(ID2KO[id])}"><img src="img/${id}.png" alt=""></button>`).join('');
+  $('#pickImg').src = `img/${scene}.png`; $('#pickName').textContent = `‘${ID2KO[scene]}’${JOSA(ID2KO[scene])} 부르는 말`;
+  $('#picker').innerHTML = SIDS.map(id => `<button aria-pressed="${id === scene}" data-s="${id}" aria-label="${esc(ID2KO[id])}"><img src="img/${id}.png" alt=""></button>`).join('');
   $('#picker').querySelectorAll('button').forEach(b => b.onclick = () => { scene = b.dataset.s; $('#picker').classList.remove('open'); drawPick(); drawTrip(); });
 }
-$('#pickBtn').onclick = e => { const p = $('#picker'); p.classList.toggle('open'); const b = e.currentTarget.getBoundingClientRect(); p.style.left = b.left + 'px'; p.style.top = (b.bottom + scrollY + 6) + 'px'; };
+$('#pickBtn').onclick = e => { const p = $('#picker'); p.classList.toggle('open'); const b = e.currentTarget.getBoundingClientRect(); p.style.left = (b.left + scrollX) + 'px'; p.style.top = (b.bottom + scrollY + 6) + 'px'; };
 document.addEventListener('click', e => { if (!e.target.closest('#picker,#pickBtn')) $('#picker').classList.remove('open'); });
 
-/* 시작 */
 function start(){
   drawIslands(); drawTrip();
   if (liveOn && island !== 'cross') live(island); else replay(viewGen, island);
@@ -482,16 +643,15 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { $('#intro'
 $('#introBtn').onclick = () => $('#intro').classList.add('open');
 $('#introClose').onclick = () => { $('#intro').classList.remove('open'); try { localStorage.setItem('tf-intro', '1'); } catch(e) {} };
 $('#intro').onclick = e => { if (e.target.id === 'intro') $('#intro').classList.remove('open'); };
-let seen = false; try { seen = localStorage.getItem('tf-intro') === '1'; } catch(e) {}
-if (!seen && !new URLSearchParams(location.search).has('nointro')) $('#intro').classList.add('open');
 const qs = new URLSearchParams(location.search);
+let seen = false; try { seen = localStorage.getItem('tf-intro') === '1'; } catch(e) {}
+if (!seen && !qs.has('nointro')) $('#intro').classList.add('open');
 if (qs.get('i') && META.islands[qs.get('i')]) { island = qs.get('i'); manual = true; }
 if (qs.get('g')) viewGen = Math.min(nowGen, Math.max(1, +qs.get('g')));
 if (qs.get('speed')) { speed = +qs.get('speed') || 1; $('#speedBtn').textContent = speed + '×'; }
 addEventListener('resize', () => drawTrip());
-drawPick(); start();
+drawPick(); tickNote(); setInterval(tickNote, 1000); start();
 
-/* 노트북에서 engine/live.py로 열었을 때만 실시간 버튼 */
 if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
   try { const j = await (await fetch('/api/ping', {cache:'no-store'})).json();
     if (j.key) { const b = $('#liveBtn'); b.hidden = false; b.onclick = () => { liveOn = !liveOn; b.querySelector('span').textContent = liveOn ? '기록 재생으로' : '실시간으로 보기'; start(); }; } } catch(e) {}
