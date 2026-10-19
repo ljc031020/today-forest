@@ -53,12 +53,12 @@ TF.compounds = function(k = 'grid', row = TF.LAST){
     if (two) { out.push({a, parts: two, op: '+'}); continue; }
     out.push({a, parts: [subs[0]], op: '⊃'});
   }
-  // 언제부터 이렇게 썼나: 현재 관계가 끊기지 않고 이어진 첫 세대
+  // 언제부터 이렇게 썼나: 현재 관계(× 는 같은 배수까지)가 끊기지 않고 이어진 첫 세대
   for (const c of out) {
     let since = TF.NOW;
     for (let i = TF.GENS.length - 1; i >= 0; i--) {
       const r = TF.GENS[i], A = TF.word(k, c.a, r); if (!A) break;
-      const ok = c.parts.every(b => { const B = TF.word(k, b, r); return B && [...TF.glyphSet(B)].every(x => TF.glyphSet(A).has(x)); });
+      const ok = c.parts.every(b => { const B = TF.word(k, b, r); return B && [...TF.glyphSet(B)].every(x => TF.glyphSet(A).has(x)); }) && (c.op !== '×' || TF.nCells(A) === c.n * TF.nCells(TF.word(k, c.parts[0], r)));
       if (!ok) break; since = r.gen;
     }
     c.since = since;
@@ -84,10 +84,10 @@ function buildTrip(){
   const trip = TF.GENS.map(g => ({gen: g.gen, t: Date.parse(g.at), row: g}));
   const t0 = Date.parse(TF.LAST.at); let n = TF.LAST.gen;
   const d0 = new Date(t0 + KST); let day = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth(), d0.getUTCDate()) - KST;
-  for (let i = 0; i < 40; i++) { for (const h of [7, 19]) { const s = day + h * 3600e3; if (s > t0 + 3600e3 && s <= END) trip.push({gen: ++n, t: s, row: null}); } day += 864e5; }
+  for (let i = 0; i < 40; i++) { for (const h of [7, 19]) { const s = day + h * 3600e3; if (s > t0 + 3600e3) trip.push({gen: ++n, t: s, row: null}); } day += 864e5; }
   TF.trip = trip; TF.END = END;
   TF.meetGen = TF.META.met_gen || (trip.find(x => x.t >= TF.MEET) || {}).gen;
-  TF.endGen = trip[trip.length - 1].gen;
+  TF.endGen = (trip.filter(x => x.t <= END).pop() || trip[trip.length - 1]).gen;
   TF.nextSlot = trip.find(x => !x.row);
   TF.met = !!TF.META.met_gen;
 }

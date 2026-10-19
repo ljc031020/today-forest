@@ -78,10 +78,11 @@ async function answer(b){
     let lines = '';
     if (Q.comp) lines = Q.comp.parts.map(p => `<div class="ml">${pic(p)}${big(W(quizK, p), quizK, 13)}<span>= ${NAME[p]}</span><em>통함</em></div>`).join('');
     else { const M = await TF.loadMem(NOW); const all = M ? Object.values(M.islands[quizK].start).flat() : [];
-      const hit = all.find(e => e[1] === W(quizK, Q.target) && e[2]);
+      const w = W(quizK, Q.target), G = await TF.loadGen(NOW), t = G && [...G.islands[quizK].talks].reverse().find(x => x.msg === w && x.ok);
+      const hit = all.find(e => e[1] === w && e[2]) || (t && [t.scene, t.msg, true]);
       lines = hit ? `<div class="ml">${pic(hit[0])}${big(hit[1], quizK, 13)}<span>= ?</span><em>통함</em></div>` : '<div class="ml none">메모에 이 말이 없어요. 찍어 보세요.</div>'; }
     $('#qMemoLines').innerHTML = lines; $('#qMemo').style.display = 'grid'; $('#qMemo').classList.add('pop');
-    $('#qSay').innerHTML = Q.comp ? '아쉬워요. 메모를 드릴게요.<small>이 말 안에 메모 속 말이 들어 있어요. 다시 골라 보세요.</small>' : '아쉬워요. AI의 메모에서 이 말이 쓰인 줄을 찾아 드릴게요.<small>그림을 보면 답이 보여요. 다시 골라 보세요.</small>';
+    $('#qSay').innerHTML = Q.comp ? '아쉬워요. 메모를 드릴게요.<small>이 말 안에 메모 속 말이 들어 있어요. 다시 골라 보세요.</small>' : lines.includes('none') ? '아쉬워요. 이 말은 아직 메모에 없어요.<small>AI들도 이럴 땐 찍어요. 다시 골라 보세요.</small>' : '아쉬워요. AI의 메모에서 이 말이 쓰인 줄을 찾았어요.<small>메모의 그림을 보고 다시 골라 보세요.</small>';
   } else $('#qSay').innerHTML = '조금 더! 메모를 다시 보세요.<small>남은 그림 중에 있어요.</small>';
 }
 $('#nextQ').onclick = newQuestion;

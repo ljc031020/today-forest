@@ -212,7 +212,7 @@ h2{font-weight:800;font-size:clamp(38px,4.6vw,66px)}
     <div class="lims">
       <div class="lim">
         <div class="row"><b>AI 자체는 바뀌지 않아요</b><span>바뀌는 건 메모예요. 그래서 '학습'은 '메모를 보고 따라 하기'예요.</span></div>
-        <div class="row"><b>AI는 백지가 아니에요</b><span>산을 ㅅ, 군중을 ㄹ 여럿으로 쓴 건 모양이 닮아서예요. 첫 말은 닮은 모양에서 시작했어요.</span></div>
+        <div class="row"><b>AI는 백지가 아니에요</b><span>산=ㅅ, 바다=ㅂ은 한국어 첫소리, 비교 섬의 산=ο는 그리스어 ‘όρος(산)’의 첫 글자와 같아요. 사람 말을 금지했는데도 새어 나온 흔적이에요.</span></div>
         <div class="row"><b>섬마다 한 번씩만 돌렸어요</b><span>그래서 '증명'이 아니라 '관찰'이에요. 문법은 아직 없는 걸음마 언어예요.</span></div>
       </div>
       <div class="cmp"><h3>메모가 없으면 얼마나 통할까?</h3><div id="cmpBars" style="display:grid;gap:16px"></div><p id="cmpNote"></p></div>
@@ -281,16 +281,16 @@ $('#stripH').textContent = `그림 섬에서 ‘숲’을 부른 말 · 1세대 
 const runs = []; for (const x of lin) { if (x.changed || !runs.length) runs.push({w: x.w, a: x.gen, b: x.gen}); else runs[runs.length - 1].b = x.gen; }
 $('#cells').style.setProperty('--n', runs.length);
 $('#cells').innerHTML = runs.map((r, i) => `<div class="cell${i === runs.length - 1 ? ' last' : ''}">${r.w ? g3(r.w, 18) : '·'}<b>${r.a === r.b ? r.a : r.a + '–' + r.b}세대</b></div>`).join('<span class="to">→</span>');
-$('#okChart').innerHTML = TF.okChart({w: 640, h: 250});
-{ const f = GENS[0].islands, l = LAST.islands;
-  $('#s4lead').innerHTML = `처음엔 AI마다 다르게 불렀어요. 통한 말이 메모에 남아 다시 쓰이면서 <b>${lastCh ? lastCh.gen : 1}세대부터</b> 모두 같은 말을 써요. 서로 알아듣는 비율도 <b>${pct(f.grid.ok)}% → ${pct(l.grid.ok)}%</b>로 올랐어요.`; }
+$('#okChart').innerHTML = TF.okChart({w: 640, h: 215});
+{ const f = GENS[0].islands, r5 = GENS.slice(-5), avg5 = r5.reduce((a, g) => a + g.islands.grid.ok, 0) / r5.length;
+  $('#s4lead').innerHTML = `처음엔 AI마다 다르게 불렀어요. 통한 말이 메모에 남아 다시 쓰이면서 <b>${lastCh ? lastCh.gen : 1}세대부터</b> 모두 같은 말을 써요. 서로 알아듣는 비율도 첫 세대 <b>${pct(f.grid.ok)}%</b> → 최근 다섯 세대 평균 <b>${pct(avg5)}%</b>.`; }
 
 /* 5 규칙: 합성어 식 + 길이 */
 { const cs = TF.compounds('grid').filter(c => c.op !== '⊃').sort((x, y) => (y.a === ID.forest) - (x.a === ID.forest)).slice(0, 3);
   const pic = s => `<div class="pic"><img src="img/${s}.png" alt="">${NAME[s]}</div>`;
   $('#eqs').innerHTML = cs.map(c => `<div class="eq">${c.parts.map(p => pic(p) + g3(W('grid', p), 22)).join('<span class="op">+</span>')}${c.op === '×' ? `<span class="op">× ${c.n}</span>` : ''}<span class="op">=</span>${g3(W('grid', c.a), 22)}${pic(c.a)}<span class="say">${c.since}세대부터</span></div>`).join('') || '<p class="hedge">이번 세대엔 합성어가 보이지 않아요.</p>';
   const first = cs[0];
-  $('#hedge').textContent = first ? `‘${NAME[first.a]}${TF.josa(NAME[first.a], '은', '는')} ${NAME[first.parts[0]]}${TF.josa(NAME[first.parts[0]], '이', '가')} 여럿’은 AI가 원래 아는 상식일 수도 있어요. 놀라운 건 한 AI의 표현이 ${first.since}세대부터 섬 모두의 규칙으로 굳었다는 거예요.` : '';
+  $('#hedge').textContent = first ? `‘${NAME[first.a]}${TF.josa(NAME[first.a], '은', '는')} ${NAME[first.parts[0]]}${TF.josa(NAME[first.parts[0]], '이', '가')} 여럿’은 AI가 원래 아는 상식일 수도 있어요. 놀라운 건 그 짜임이 ${first.since}세대부터 섬 모두가 쓰는 규칙으로 굳었다는 거예요.` : '';
   $('#lenBars').innerHTML = TF.lengths('grid').map(r => `<div class="bar"><div class="k">${{3:'자주 쓰는 말', 2:'보통', 1:'가끔 쓰는 말'}[r.t]}<small>${r.ex}</small></div><div class="tr"><div class="b" style="width:${r.first / 9 * 78}%"><span>${r.first.toFixed(1)}칸</span></div><div class="b now" style="width:${r.last / 9 * 78}%"><span>${r.last.toFixed(1)}칸</span></div></div></div>`).join('') + '<div class="legend"><span><i style="background:var(--rule)"></i>처음 세 세대</span><span><i style="background:var(--grid)"></i>최근 세 세대</span></div>'; }
 
 /* 6 세 섬 */
