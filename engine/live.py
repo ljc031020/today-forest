@@ -6,7 +6,7 @@
 PowerShell:
   $env:ANTHROPIC_API_KEY = "sk-ant-..."
   python engine\\live.py
-그다음 브라우저에서 http://localhost:8000/show.html
+그다음 브라우저에서 http://localhost:8000/index.html#/talk
 
 키가 없거나 인터넷이 끊기면 발표 모드는 자동으로 '기록 재생'으로 바뀐다.
 여기서 나눈 대화는 실험 기록(state)에 섞이지 않고 docs/data/live/ 에 따로 저장된다.
@@ -102,7 +102,7 @@ class Server(socketserver.ThreadingMixIn, http.server.HTTPServer):
 if __name__ == '__main__':
     if not os.environ.get('ANTHROPIC_API_KEY') and not run.DRY:
         print('! ANTHROPIC_API_KEY가 없습니다. 발표 모드는 기록 재생으로만 동작합니다.')
-    url = f'http://localhost:{PORT}/show.html'
+    url = f'http://localhost:{PORT}/index.html#/talk'
     print(f'오늘의 숲 · 실시간 무대: {url}  (끝내려면 Ctrl+C)')
     try: webbrowser.open(url)
     except Exception: pass

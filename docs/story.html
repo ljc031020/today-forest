@@ -3,436 +3,323 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>오늘의 숲 · 세상에 없는 언어</title>
-<meta name="description" content="AI들이 낯선 글자로 만든, 세상에 없던 언어. 어떻게 태어났고 어떻게 자라는지.">
+<title>오늘의 숲 · 세상에 없던 언어</title>
+<meta name="description" content="AI들이 낯선 글자로 만든, 세상에 없던 언어. 발표용 이야기.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Sans:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+Cherokee:wght@500&family=Noto+Sans+KR:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Sans:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+Cherokee:wght@500&family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+KR:wght@500&display=swap">
+<link rel="stylesheet" href="tf.css">
 <style>
-:root{
-  --paper:#E6EAE5; --card:#F8FAF7; --ink:#13201A; --mute:#5D6A63; --faint:#9AA59F; --rule:#C7D0CA;
-  --line:#2450D8; --grid:#0B8457; --twin:#8A3F9E; --ok:#0B8457;
-  --f-ui:"IBM Plex Sans KR",system-ui,sans-serif;
-  --f-num:"Hahmlet","IBM Plex Sans KR",serif;
-  --f-g:"Noto Sans","Noto Sans Georgian","Noto Sans Armenian","Noto Sans Runic","Noto Sans Cherokee","Noto Sans KR",sans-serif;
-  color-scheme:light;
-}
-*{box-sizing:border-box}
 html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
-body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 var(--f-ui);word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
-button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:6px}
-.g{font-family:var(--f-g);font-weight:500;direction:ltr;unicode-bidi:isolate;white-space:nowrap}
-
-/* 장면: 한 화면 = 한 장 */
-.sc{min-height:100vh;scroll-snap-align:start;display:grid;align-content:center;justify-items:center;gap:28px;padding:64px 40px;position:relative}
-.sc .inner{width:min(1160px,100%);display:grid;gap:28px}
-.kick{font:600 15px/1 var(--f-ui);color:var(--mute);display:flex;align-items:center;gap:10px}
-.kick b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);font:700 13px/1 var(--f-num)}
-h1,h2{font-family:var(--f-num);font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.12}
-h1{font-size:clamp(44px,7.4vw,108px)}
-h2{font-size:clamp(32px,4.4vw,60px)}
-.lead{font-size:clamp(17px,1.5vw,21px);line-height:1.7;color:var(--mute);margin:0;max-width:36em}
+body{font-size:18px}
+.sc{min-height:100vh;scroll-snap-align:start;display:grid;align-content:center;justify-items:center;padding:56px 56px;position:relative}
+.sc .inner{width:min(1180px,100%);display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
+.kick{font:600 16px/1 var(--f-ui);color:var(--mute);display:flex;align-items:center;gap:10px}
+.kick b{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);font:700 14px/1 var(--f-num)}
+h1{font-weight:800;font-size:clamp(52px,7.6vw,112px)}
+h2{font-weight:800;font-size:clamp(38px,4.6vw,66px)}
+.lead{font-size:clamp(20px,1.7vw,25px);line-height:1.65;color:var(--mute);margin:0;max-width:30em}
 .lead b{color:var(--ink);font-weight:600}
+.two,.sc .inner.two{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:52px;align-items:center}
+.btn{justify-self:start;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;background:var(--ink);color:var(--paper);font-weight:600;font-size:17px;text-decoration:none}
 
-/* 3×3 글자 */
-.g3{display:inline-grid;grid-template-columns:repeat(3,var(--q,20px));gap:calc(var(--q,20px) * .12)}
-.g3 i{width:var(--q,20px);height:var(--q,20px);border-radius:calc(var(--q,20px) * .2);background:rgba(19,32,26,.06);font:500 calc(var(--q,20px) * .7)/var(--q,20px) var(--f-g);font-style:normal;text-align:center;color:var(--ink)}
-.g3 i:not(:empty){background:var(--card);box-shadow:inset 0 0 0 calc(var(--q,20px) * .07) var(--k,var(--grid))}
-
-/* 1. 견본 */
-#s1 .inner{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:56px}
+/* 1 견본 */
 .spec{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.word{background:var(--card);border-radius:18px;padding:16px 12px 12px;display:grid;justify-items:center;gap:10px}
-.word .mn{font-size:13px;color:var(--mute)}
+.word{background:var(--card);border-radius:18px;padding:16px 10px 12px;display:grid;justify-items:center;gap:10px}
+.word .mn{font-size:16px;font-weight:600;color:var(--mute)}
 .word.hide .mn{visibility:hidden}
-.reveal{justify-self:start;display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:var(--ink);color:var(--paper);font-weight:600;font-size:15px}
 
-/* 2. 퀴즈 */
-.quiz{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:48px;align-items:center}
-.q-word{justify-self:center;display:grid;justify-items:center;gap:16px}
-.q-word .g3{--q:min(9vh,76px)}
+/* 2 퀴즈 */
+.quiz{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:48px;align-items:center}
+.q-left{display:grid;justify-items:center;gap:20px}
 .choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .ch{background:var(--card);border-radius:20px;aspect-ratio:1;display:grid;place-items:center;position:relative;transition:transform .15s,box-shadow .2s}
 .ch:hover{transform:translateY(-4px)}
-.ch img{width:80%}
-.ch.right{box-shadow:0 0 0 4px var(--ok)}
-.ch.wrong{box-shadow:0 0 0 3px var(--ink);opacity:.55}
-.ch .mark{position:absolute;top:10px;right:12px;font:700 14px/1 var(--f-ui)}
-.memo{background:#FFFDF2;border-radius:6px 18px 18px 18px;padding:18px 22px;box-shadow:0 12px 30px -20px rgba(19,32,26,.6);display:grid;gap:10px;transform-origin:top left}
-.memo h3{margin:0;font:600 14px/1 var(--f-ui);color:var(--mute)}
-.mline{display:flex;align-items:center;gap:12px;font-size:16px}
-.mline img{width:36px;height:36px}
-.mline .ok{margin-left:auto;color:var(--ok);font-weight:600;font-size:14px}
-.q-say{font:600 clamp(18px,1.6vw,22px)/1.5 var(--f-ui);min-height:2.4em}
-.q-say small{display:block;font-weight:400;font-size:15px;color:var(--mute)}
-.hidden{display:none !important}
-.pop{animation:pop .35s cubic-bezier(.2,.9,.3,1.3)}
-@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.ch img{width:78%}
+.ch .nm{position:absolute;bottom:8px;font-size:15px;color:var(--mute);font-weight:600}
+.ch.right{box-shadow:0 0 0 5px var(--ok)}
+.ch.wrong{box-shadow:0 0 0 3px var(--ink);opacity:.5}
+.q-say{font:600 clamp(20px,1.7vw,24px)/1.5 var(--f-ui);min-height:3em}
+.q-say small{display:block;font-weight:400;font-size:18px;color:var(--mute);margin-top:4px}
+.hidden{display:none!important}
 
-/* 3. AI의 책상 */
-.desk{display:grid;grid-template-columns:minmax(0,1.5fr) auto minmax(0,.7fr);gap:28px;align-items:center}
+/* 3 AI의 책상 */
+.desk{display:grid;grid-template-columns:minmax(0,1.55fr) auto minmax(0,.62fr);gap:24px;align-items:center}
 .papers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.paper{background:var(--card);border-radius:18px;padding:16px;display:grid;gap:10px;align-content:start;min-height:280px}
-.paper h3{margin:0;font:600 15px/1.3 var(--f-ui)}
-.paper h3 small{display:block;font-weight:400;font-size:13px;color:var(--mute);margin-top:2px}
+.paper{background:var(--card);border-radius:18px;padding:16px;display:grid;gap:10px;align-content:start;min-height:250px}
+.paper h3{font:700 19px/1.3 var(--f-num)}
 .paper .atlas{width:100%;border-radius:8px}
 .marks{display:flex;flex-wrap:wrap;gap:6px}
-.marks span{width:30px;height:30px;border-radius:7px;background:var(--paper);display:grid;place-items:center;font:500 17px/1 var(--f-g)}
-.mem-l{display:flex;align-items:center;gap:8px;font-size:13px}
-.mem-l img{width:26px;height:26px}
-.mem-l .g3{--q:11px}
-.mem-l em{font-style:normal;color:var(--ok);font-weight:600;margin-left:auto}
-.mem-l em.no{color:var(--faint)}
-.arrow{font:300 54px/1 var(--f-num);color:var(--faint)}
-.answer{background:var(--ink);color:var(--paper);border-radius:22px;padding:22px;display:grid;gap:14px;justify-items:center;text-align:center}
-.answer .g3{--q:44px;--k:#7BD8B0}
-.answer .g3 i{background:rgba(255,255,255,.08);color:var(--paper)}
-.answer .g3 i:not(:empty){background:rgba(255,255,255,.14)}
-.answer p{margin:0;font-size:14px;opacity:.75}
-.note{display:flex;gap:14px;align-items:flex-start;background:rgba(248,250,247,.6);border-radius:16px;padding:16px 20px;font-size:16px;line-height:1.6}
-.note b{white-space:nowrap}
+.marks span{width:32px;height:32px;border-radius:7px;background:var(--paper);display:grid;place-items:center;font:500 19px/1 var(--f-g)}
+.paper .memo{box-shadow:none;padding:10px 12px;gap:4px}
+.arrow{font:300 56px/1 var(--f-num);color:var(--faint)}
+.answer{background:var(--ink);color:var(--paper);border-radius:22px;padding:24px 18px;display:grid;gap:14px;justify-items:center;text-align:center}
+.answer p{margin:0;font-size:16px;opacity:.8}
+.relay{display:flex;flex-wrap:wrap;align-items:center;gap:14px;background:rgba(248,250,247,.65);border-radius:18px;padding:14px 20px;font-size:19px}
+.av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;border:3px solid var(--ink);font:700 15px/1 var(--f-num);background:var(--card);flex:0 0 auto}
+.av.dim{opacity:.25}.av.new{border-color:var(--grid);color:var(--grid)}
 
-/* 4. 규칙 셋 */
-.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.rule{background:var(--card);border-radius:24px;padding:26px;display:grid;gap:14px;align-content:start}
-.rule .ill{height:120px;display:flex;align-items:center;justify-content:center;gap:12px}
-.rule h3{margin:0;font:700 24px/1.25 var(--f-num)}
-.rule p{margin:0;color:var(--mute);font-size:16px}
-.av{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;border:3px solid var(--ink);font:700 16px/1 var(--f-num);background:var(--card)}
-.av.dim{opacity:.25}
-.av.new{border-color:var(--grid);color:var(--grid)}
-
-/* 5. 발견 */
-.find{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:48px;align-items:center}
-.chart{background:var(--card);border-radius:24px;padding:22px 22px 16px}
+/* 4 하나의 말로 */
+.strip{background:var(--card);border-radius:22px;padding:18px 18px 12px;display:grid;gap:8px}
+.strip-h{display:flex;align-items:center;gap:10px;font-weight:600;font-size:17px}
+.strip-h img{width:34px;height:34px}
+.cells{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.to{color:var(--faint);font:400 20px/1 var(--f-num)}
+.cell{display:grid;justify-items:center;gap:6px}
+.cell b{font:600 14px/1 var(--f-ui);color:var(--mute);white-space:nowrap}
+.cell.last{background:color-mix(in srgb,var(--grid) 12%,transparent);border-radius:12px;padding:6px;box-shadow:inset 0 0 0 2px var(--grid)}
+.cell.last b{color:var(--ink)}
+.chart{background:var(--card);border-radius:22px;padding:16px 18px 12px;display:grid;gap:6px}
 .chart svg{width:100%;height:auto;display:block}
-.legend{display:flex;gap:18px;font-size:14px;color:var(--mute);margin-top:8px;flex-wrap:wrap}
-.legend i{display:inline-block;width:14px;height:4px;border-radius:2px;margin-right:6px;vertical-align:middle}
-.eqs{display:grid;gap:14px}
-.eq{background:var(--card);border-radius:20px;padding:16px 22px;display:grid;grid-template-columns:auto auto auto auto minmax(0,1fr);gap:16px;align-items:center}
-.eq .pic{display:grid;justify-items:center;gap:4px;font-size:13px;color:var(--mute)}
-.eq .pic img{width:44px;height:44px}
-.eq .g3{--q:24px}
-.eq .op{font:700 26px/1 var(--f-num);color:var(--faint)}
-.eq .say{font-size:15px;color:var(--mute);text-align:right}
-.bars{background:var(--card);border-radius:24px;padding:26px;display:grid;gap:18px}
-.bar{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:center}
-.bar .k{font-weight:600}
-.bar .k small{display:block;font-weight:400;font-size:13px;color:var(--mute)}
-.bar .tr{display:grid;gap:6px}
-.bar .b{height:16px;border-radius:8px;background:var(--rule);position:relative}
-.bar .b.now{background:var(--grid)}
-.bar .b span{position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);font:600 14px/1 var(--f-num);white-space:nowrap}
 
-/* 6. 세 섬 */
+/* 5 규칙 */
+.rules2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px;align-items:start}
+.panel{display:grid;gap:12px}
+.panel h3{font:700 24px/1.3 var(--f-num)}
+.panel .hedge{font-size:16px;color:var(--mute);line-height:1.6;margin:0}
+.bars{background:var(--card);border-radius:22px;padding:22px;display:grid;gap:16px}
+
+/* 6 세 섬 */
 .isls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.isl{border-radius:28px;padding:26px;display:grid;justify-items:center;gap:14px;background:color-mix(in srgb,var(--k) 10%,var(--card));box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--k) 30%,transparent)}
-.isl h3{margin:0;font:700 20px/1 var(--f-num);display:flex;align-items:center;gap:8px}
-.isl h3 i{width:10px;height:10px;border-radius:50%;background:var(--k)}
-.isl .big{font:500 clamp(54px,6vw,88px)/1 var(--f-g)}
-.isl .big .g3{--q:clamp(26px,3vw,40px);--k:var(--grid)}
-.isl p{margin:0;font-size:14px;color:var(--mute);text-align:center}
-.meet{display:flex;align-items:center;justify-content:center;gap:16px;font-size:17px}
-.meet b{font:700 20px/1 var(--f-num);background:var(--card);padding:8px 16px;border-radius:999px;box-shadow:inset 0 0 0 2px var(--ink)}
+.isl{border-radius:28px;padding:26px 20px;display:grid;justify-items:center;gap:14px;background:color-mix(in srgb,var(--k) 10%,var(--card));box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--k) 30%,transparent)}
+.isl h3{font:700 22px/1 var(--f-num);display:flex;align-items:center;gap:8px}
+.isl h3 i{width:11px;height:11px;border-radius:50%;background:var(--k)}
+.isl .big{font:500 clamp(56px,6vw,92px)/1 var(--f-g);min-height:1.1em;display:grid;place-items:center}
+.isl p{margin:0;font-size:16px;color:var(--mute);text-align:center}
+.meet{display:flex;align-items:center;justify-content:center;gap:16px;font-size:20px;flex-wrap:wrap}
+.meet b{font:700 22px/1 var(--f-num);background:var(--card);padding:9px 18px;border-radius:999px;box-shadow:inset 0 0 0 2px var(--ink)}
 
-/* 7. 한계 */
-.lims{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+/* 7 솔직하게 */
+.lims{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;align-items:start}
 .lim{display:grid;gap:12px}
 .lim .row{background:var(--card);border-radius:18px;padding:16px 20px;display:grid;gap:4px}
-.lim .row b{font-size:17px}
-.lim .row span{color:var(--mute);font-size:15px}
-.cmp{background:var(--card);border-radius:24px;padding:24px;display:grid;gap:16px}
-.cmp h3{margin:0;font:700 20px/1.3 var(--f-num)}
-.cmp .bar{grid-template-columns:120px minmax(0,1fr)}
-.tag{display:inline-block;font-size:12px;font-weight:600;padding:3px 8px;border-radius:999px;background:var(--paper);color:var(--mute);margin-left:6px;vertical-align:middle}
+.lim .row b{font-size:20px}
+.lim .row span{color:var(--mute);font-size:17px}
+.cmp{background:var(--card);border-radius:22px;padding:24px;display:grid;gap:16px}
+.cmp h3{font:700 24px/1.3 var(--f-num)}
+.cmp p{margin:0;font-size:16px;color:var(--mute)}
 
-/* 8. 끝 */
-#s9{background:var(--ink);color:var(--paper)}
-#s9 .lead{color:rgba(230,234,229,.7)}
-#s9 .g3{--q:min(12vh,96px);--k:#7BD8B0}
-#s9 .g3 i{background:rgba(255,255,255,.06);color:var(--paper)}
-#s9 .g3 i:not(:empty){background:rgba(255,255,255,.12)}
-.end{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:48px;align-items:center}
-.more{display:flex;gap:12px;flex-wrap:wrap}
-.more a{text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:600;background:var(--paper);color:var(--ink)}
-.more a.sub{background:none;color:var(--paper);box-shadow:inset 0 0 0 1.5px rgba(230,234,229,.4)}
-.qr{background:var(--paper);border-radius:18px;padding:14px;width:180px}
+/* 8 끝 */
+#s8{background:var(--ink);color:var(--paper)}
+#s8 .lead,#s8 .kick{color:rgba(230,234,229,.72)}
+.end,.sc .inner.end{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:48px;align-items:center}
+.clock b{display:block;font:700 44px/1 var(--f-num);font-variant-numeric:tabular-nums}
+.clock span{font-size:16px;color:rgba(230,234,229,.7)}
+.qr{background:var(--paper);border-radius:18px;padding:14px;width:200px}
 .qr img{width:100%;display:block}
+.more{display:flex;gap:12px;flex-wrap:wrap}
+.more a{text-decoration:none;padding:13px 22px;border-radius:999px;font-weight:600;background:var(--paper);color:var(--ink)}
 
-/* 진행 점 */
 .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:grid;gap:10px;z-index:5}
 .dots a{width:10px;height:10px;border-radius:50%;background:var(--rule);display:block;transition:transform .2s,background .2s}
 .dots a.on{background:var(--ink);transform:scale(1.4)}
 .dark .dots a{background:rgba(230,234,229,.3)}.dark .dots a.on{background:var(--paper)}
-.hint{position:fixed;left:24px;bottom:18px;font-size:13px;color:var(--mute);z-index:5}
-.dark .hint{color:rgba(230,234,229,.6)}
 
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
 @media (max-width:900px){
   html{scroll-snap-type:none}
   .sc{min-height:auto;padding:56px 16px}
-  #s1 .inner,.quiz,.desk,.find,.lims,.end{grid-template-columns:minmax(0,1fr)}
+  .two,.sc .inner.two,.quiz,.desk,.rules2,.lims,.end,.sc .inner.end{grid-template-columns:minmax(0,1fr)}
   .spec{grid-template-columns:repeat(3,minmax(0,1fr))}
   .choices{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .papers,.rules,.isls{grid-template-columns:minmax(0,1fr)}
+  .papers,.isls{grid-template-columns:minmax(0,1fr)}
   .arrow{transform:rotate(90deg);justify-self:center}
-  .eq{grid-template-columns:auto auto auto auto;}.eq .say{grid-column:1/-1;text-align:left}
-  .bar{grid-template-columns:minmax(0,1fr)}
-  .dots,.hint{display:none}
+  .cells{justify-content:flex-start}
+  .dots{display:none}
 }
 </style>
 </head>
 <body>
 
-<!-- 1. 언어 그 자체 -->
 <section class="sc" id="s1">
-  <div class="inner">
+  <div class="inner two">
     <div style="display:grid;gap:24px">
       <div class="kick">오늘의 숲</div>
       <h1>세상에 없던<br>언어</h1>
       <p class="lead" id="s1lead"></p>
-      <button class="reveal" id="revealBtn">뜻 보기</button>
+      <button class="btn" id="revealBtn">뜻 보기</button>
     </div>
     <div class="spec" id="spec"></div>
   </div>
 </section>
 
-<!-- 2. 직접 맞혀 보기 -->
 <section class="sc" id="s2">
   <div class="inner">
-    <div class="kick"><b>1</b>어떻게 태어났을까 · 직접 해 보기</div>
+    <div class="kick"><b>1</b>직접 해 보기</div>
     <h2>이 말은 어떤 그림일까요?</h2>
     <div class="quiz">
-      <div class="q-word"><span id="qWord"></span><div class="memo hidden" id="memo"><h3>메모 한 줄</h3><div class="mline" id="memoLine"></div></div></div>
+      <div class="q-left"><span id="qWord"></span><div class="memo hidden" id="memo" style="--c:var(--grid)"><h4>메모 한 줄</h4><div class="ml" id="memoLine"></div></div></div>
       <div style="display:grid;gap:18px">
         <div class="choices" id="choices"></div>
-        <div class="q-say" id="qSay">네 장 중 하나를 골라 보세요.<small>아무 단서가 없으니 찍어도 돼요.</small></div>
+        <div class="q-say" id="qSay">넷 중 하나를 골라 보세요.<small>단서가 없으니 찍어도 돼요.</small></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 3. AI의 책상 -->
 <section class="sc" id="s3">
   <div class="inner">
     <div class="kick"><b>2</b>AI는 이렇게 배워요</div>
-    <h2>AI가 받는 건 종이 세 장뿐이에요</h2>
+    <h2>AI가 받는 건 종이 세 장뿐</h2>
     <div class="desk">
       <div class="papers">
-        <div class="paper"><h3>① 그림판<small>오늘 말해야 할 그림에 번호가 붙어 있어요</small></h3><img class="atlas" src="img/atlas.png" alt="그림 12장이 그려진 판"></div>
-        <div class="paper"><h3>② 쓸 수 있는 글자<small>사람의 말은 쓰면 안 돼요</small></h3><div class="marks" id="marks"></div></div>
-        <div class="paper"><h3>③ 지난 대화 메모<small>최근 30줄. 통했는지가 적혀 있어요</small></h3><div id="memLines" style="display:grid;gap:7px"></div></div>
+        <div class="paper"><h3>① 그림판</h3><img class="atlas" src="img/atlas.png" alt="그림 12장"></div>
+        <div class="paper"><h3>② 쓸 수 있는 글자</h3><div class="marks" id="marks"></div></div>
+        <div class="paper"><h3>③ 지난 대화 메모</h3><div class="memo" id="memLines" style="--c:var(--grid)"></div></div>
       </div>
       <div class="arrow" aria-hidden="true">→</div>
-      <div class="answer"><p>'숲'을 말해 보라고 하면</p><span id="ans"></span><p>메모에서 통했던 말을 꺼내 써요</p></div>
+      <div class="answer dark"><p>‘숲’을 말해 보라면</p><span id="ans"></span><p>메모에서 통했던 말을<br>꺼내 써요</p></div>
     </div>
-    <div class="note"><b>방금 여러분과 똑같아요.</b><span>AI 안의 무언가가 바뀌는 게 아니라, 메모가 쌓이고 바뀌어요. 그래서 같은 AI라도 어떤 메모를 받았는지에 따라 전혀 다른 말을 하게 돼요.</span></div>
+    <div class="relay"><span id="relayIds" style="display:flex;align-items:center;gap:10px"></span><span><b>하루 두 번 AI 둘이 바뀌어요.</b> 새 AI는 메모를 일부만, 가끔 틀리게 물려받아요.</span></div>
   </div>
 </section>
 
-<!-- 4. 규칙 셋 -->
 <section class="sc" id="s4">
   <div class="inner">
-    <div class="kick"><b>3</b>규칙은 세 개뿐</div>
-    <h2>스피드퀴즈 + 전화 게임</h2>
-    <div class="rules">
-      <div class="rule"><div class="ill"><img src="img/r9.png" alt="" style="width:80px"><span class="arrow" style="font-size:34px">→</span><span class="g3" id="r1w" style="--q:22px"></span></div><h3>한 명은 그림을 보고 말하고, 한 명은 맞혀요</h3><p>낯선 글자로만 말해야 해요. 넷 중에 둘씩 짝을 바꿔 가며 하루 서른두 번.</p></div>
-      <div class="rule"><div class="ill"><div class="memo" style="padding:10px 14px;transform:rotate(-3deg)"><div class="mline" style="font-size:14px"><img src="img/q8.png" alt="" style="width:26px;height:26px"><span class="g3" id="r2w" style="--q:12px"></span><span class="ok">통함</span></div></div></div><h3>통한 말은 메모에 남아 또 쓰여요</h3><p>안 통한 말은 금방 밀려나요. 그렇게 다 같이 쓰는 말이 생겨요.</p></div>
-      <div class="rule"><div class="ill"><span class="av dim">29</span><span class="av dim">30</span><span class="arrow" style="font-size:34px">→</span><span class="av new">33</span><span class="av new">34</span></div><h3>하루 두 번, 둘이 떠나고 둘이 와요</h3><p>새로 온 AI는 메모를 일부만, 가끔 틀리게 물려받아요. 그래서 말이 조금씩 변해요.</p></div>
+    <div class="kick"><b>3</b>말이 하나로 모여요</div>
+    <h2 id="s4h"></h2>
+    <div class="strip"><div class="strip-h"><img src="img/r9.png" alt=""><span id="stripH"></span></div><div class="cells" id="cells"></div></div>
+    <div class="two" style="gap:32px">
+      <p class="lead" id="s4lead"></p>
+      <div class="chart"><div id="okChart"></div><div class="legend"><span><i style="background:var(--grid)"></i>그림 섬</span><span><i style="background:var(--line)"></i>글자 섬</span><span><i style="background:var(--twin)"></i>비교 섬</span><span><i style="background:var(--faint)"></i>그냥 찍기 25%</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- 5. 발견 ① -->
 <section class="sc" id="s5">
-  <div class="inner find">
-    <div style="display:grid;gap:20px">
-      <div class="kick"><b>4</b>정말 언어처럼 움직일까 · ①</div>
-      <h2>점점 서로 알아들어요</h2>
-      <p class="lead" id="s5lead"></p>
+  <div class="inner">
+    <div class="kick"><b>4</b>언어의 규칙이 생겼어요</div>
+    <h2>아무도 정해 주지 않은 규칙 두 개</h2>
+    <div class="rules2">
+      <div class="panel"><h3>① 단어를 합쳐 새 단어를 만들어요</h3><div style="display:grid;gap:10px" id="eqs"></div><p class="hedge" id="hedge"></p></div>
+      <div class="panel"><h3>② 자주 쓰는 말은 짧아져요</h3><div class="bars" id="lenBars"></div></div>
     </div>
-    <div class="chart"><svg id="okChart" viewBox="0 0 640 320" role="img" aria-label="세대별 통한 대화 비율"></svg><div class="legend"><span><i style="background:var(--line)"></i>글자 섬</span><span><i style="background:var(--grid)"></i>그림 섬</span><span><i style="background:var(--twin)"></i>비교 섬</span><span><i style="background:var(--faint)"></i>그냥 찍었을 때 (25%)</span></div></div>
   </div>
 </section>
 
-<!-- 6. 발견 ② -->
 <section class="sc" id="s6">
-  <div class="inner find">
-    <div style="display:grid;gap:20px">
-      <div class="kick"><b>4</b>정말 언어처럼 움직일까 · ②</div>
-      <h2>단어를 합쳐<br>새 단어를 만들어요</h2>
-      <p class="lead">아무도 가르치지 않았는데, 그림 섬의 AI들은 <b>있던 단어를 모아 새 단어</b>를 만들었어요. 사람 말의 '나무 + 숲', '집 + 마을' 같은 합성어예요.</p>
-    </div>
-    <div class="eqs" id="eqs"></div>
-  </div>
-</section>
-
-<!-- 7. 발견 ③ -->
-<section class="sc" id="s7">
-  <div class="inner find">
-    <div style="display:grid;gap:20px">
-      <div class="kick"><b>4</b>정말 언어처럼 움직일까 · ③</div>
-      <h2>자주 쓰는 말은<br>짧아져요</h2>
-      <p class="lead">그림마다 나오는 횟수를 다르게 했어요. 자주 나오는 그림의 단어는 <b>점점 짧아졌고</b>, 가끔 나오는 그림은 길게 남았어요. 사람 언어에서도 자주 쓰는 단어가 짧아요.</p>
-    </div>
-    <div class="bars" id="lenBars"></div>
-  </div>
-</section>
-
-<!-- 8. 같은 조건, 다른 언어 + 한계 -->
-<section class="sc" id="s8">
   <div class="inner">
     <div class="kick"><b>5</b>같은 조건, 다른 언어</div>
-    <h2>세 섬에서 각자 다른 언어가 태어났어요</h2>
+    <h2>섬 셋에서 각자 다른 언어가 태어났어요</h2>
     <div class="isls" id="isls"></div>
     <div class="meet" id="meet"></div>
   </div>
 </section>
 
-<section class="sc" id="s8b">
+<section class="sc" id="s7">
   <div class="inner">
     <div class="kick"><b>6</b>솔직하게</div>
     <h2>이 실험이 말할 수 있는 것과 없는 것</h2>
     <div class="lims">
       <div class="lim">
-        <div class="row"><b>AI 자체는 바뀌지 않아요</b><span>배우는 건 메모예요. 그래서 '학습' 대신 '메모를 보고 따라 한다'고 말해요.</span></div>
-        <div class="row"><b>AI는 백지가 아니에요</b><span>산을 ㅅ, 군중을 ㄹ 여러 개로 그린 건 모양이 닮아서예요. 처음 말은 닮은 모양에서 시작했어요.</span></div>
-        <div class="row"><b>섬마다 한 번씩만 돌렸어요</b><span>그래서 '증명'이 아니라 '관찰'이에요. 아직 문법은 없고, 단어와 합성어까지 생긴 걸음마 언어예요.</span></div>
+        <div class="row"><b>AI 자체는 바뀌지 않아요</b><span>바뀌는 건 메모예요. 그래서 '학습'은 '메모를 보고 따라 하기'예요.</span></div>
+        <div class="row"><b>AI는 백지가 아니에요</b><span>산을 ㅅ, 군중을 ㄹ 여럿으로 쓴 건 모양이 닮아서예요. 첫 말은 닮은 모양에서 시작했어요.</span></div>
+        <div class="row"><b>섬마다 한 번씩만 돌렸어요</b><span>그래서 '증명'이 아니라 '관찰'이에요. 문법은 아직 없는 걸음마 언어예요.</span></div>
       </div>
-      <div class="cmp"><h3>메모가 정말 차이를 만들까?</h3><div id="cmpBars" style="display:grid;gap:16px"></div><p style="margin:0;font-size:14px;color:var(--mute)">메모를 아예 지운 AI로 같은 퀴즈를 돌려 비교할 예정이에요.</p></div>
+      <div class="cmp"><h3>메모가 없으면 얼마나 통할까?</h3><div id="cmpBars" style="display:grid;gap:16px"></div><p id="cmpNote"></p></div>
     </div>
   </div>
 </section>
 
-<!-- 9. 끝 -->
-<section class="sc" id="s9">
+<section class="sc dark" id="s8">
   <div class="inner end">
-    <div style="display:grid;gap:24px">
-      <div class="kick" style="color:rgba(230,234,229,.7)">오늘의 숲</div>
-      <h1 id="endTitle" style="font-size:clamp(40px,6vw,88px)"></h1>
+    <div style="display:grid;gap:22px">
+      <div class="kick">오늘의 숲</div>
+      <h1 style="font-size:clamp(42px,6vw,88px)">이 언어는<br>지금도 자라요</h1>
       <p class="lead" id="endLead"></p>
-      <div class="more"><a href="now.html#/">AI들의 대화 직접 보기</a><a class="sub" href="now.html#/grid">그림 섬 사전 전체</a></div>
+      <div class="clock"><b id="clockT"></b><span id="clockP"></span></div>
     </div>
-    <div style="display:grid;gap:18px;justify-items:center"><span id="endWord"></span><div class="qr"><img src="img/qr.png" alt="사이트 QR"></div></div>
+    <div style="display:grid;gap:18px;justify-items:center"><span id="endWord"></span><div class="qr"><img src="img/qr.png" alt="사이트로 가는 QR"></div><span style="font-size:16px;color:rgba(230,234,229,.72)">사이트에서 직접 해 보기</span></div>
   </div>
 </section>
 
 <nav class="dots" id="dots" aria-label="장면"></nav>
-<div class="hint">← → 키로 넘겨요</div>
-
+<script src="lang.js"></script>
 <script>
 (async function(){
 const $ = s => document.querySelector(s);
-const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const KO = {water:'물',fire:'불',tree:'나무',person:'사람',mountain:'산',house:'집',sea:'바다',forest:'숲',village:'마을',volcano:'화산','big fire':'큰 불',crowd:'군중'};
-const S = await (await fetch('data/summary.json', {cache:'no-store'})).json();
-const META = S.meta, GENS = S.gens, LAST = GENS[GENS.length - 1], NOW = LAST.gen;
-const ID = META.scenes, NAME = {}; for (const [en, id] of Object.entries(ID)) NAME[id] = KO[en];
-const SIDS = Object.values(ID);
-const W = (k, s, row = LAST) => (row.islands[k].words || {})[s];
-const g3 = (w, q, k) => `<span class="g3" style="--q:${q}px${k ? `;--k:${k}` : ''}">${[...w].map(c => `<i>${c === '.' ? '' : esc(c)}</i>`).join('')}</span>`;
-const glyphs = w => new Set([...w].filter(c => c !== '.'));
-const cells = w => [...w].filter(c => c !== '.').length;
+const TF = await window.TF.load();
+const {ID, NAME, SIDS, NOW, LAST, GENS} = TF, esc = TF.esc, g3 = TF.g3;
+const W = (k, s, r) => TF.word(k, s, r);
+const pct = v => Math.round(v / 32 * 100);
 
-/* 1. 견본: 그림 섬의 말 12개 (처음엔 뜻을 가림) */
-$('#s1lead').innerHTML = `AI 넷이 그림을 보고 서로에게 설명하다가 만든 말이에요. 10월 12일엔 없었어요. 지금은 <b>${NOW}세대</b>째, 하루 두 번씩 자라고 있어요.`;
-$('#spec').innerHTML = SIDS.map(s => `<div class="word hide">${g3(W('grid', s), 26)}<span class="mn">${NAME[s]}</span></div>`).join('');
-$('#revealBtn').onclick = () => { const on = $('#spec .word.hide'); document.querySelectorAll('#spec .word').forEach(w => w.classList.toggle('hide', !on)); $('#revealBtn').textContent = on ? '뜻 가리기' : '뜻 보기'; };
+/* 1 견본 */
+$('#s1lead').innerHTML = `AI 넷이 그림을 보고 서로에게 설명하다가 만든 말이에요. 10월 12일엔 없었어요. 지금 <b>${NOW}세대</b>째, 하루 두 번 자라요.`;
+$('#spec').innerHTML = SIDS.map(s => `<div class="word hide">${g3(W('grid', s), 28)}<span class="mn">${NAME[s]}</span></div>`).join('');
+$('#revealBtn').onclick = () => { const on = !!$('#spec .word.hide'); document.querySelectorAll('#spec .word').forEach(w => w.classList.toggle('hide', !on)); $('#revealBtn').textContent = on ? '뜻 가리기' : '뜻 보기'; };
 
-/* 2. 퀴즈: 숲(ᛄᛄᛄ)을 맞히고, 메모(나무 = ᛄ)를 본 뒤 다시 */
+/* 2 퀴즈: 숲을 맞히고 → 메모(나무) → 다시 */
 const QW = W('grid', ID.forest), TREE = W('grid', ID.tree);
-$('#qWord').innerHTML = g3(QW, 72);
+$('#qWord').innerHTML = g3(QW, 80);
 const order = [ID.village, ID.forest, ID.mountain, ID.tree];
-$('#choices').innerHTML = order.map(s => `<button class="ch" data-s="${s}" aria-label="${NAME[s]}"><img src="img/${s}.png" alt=""><span class="mark"></span></button>`).join('');
-$('#memoLine').innerHTML = `<img src="img/${ID.tree}.png" alt="">${g3(TREE, 18)}<span>= 나무</span><span class="ok">통함</span>`;
-let tries = 0;
+$('#choices').innerHTML = order.map(s => `<button class="ch" data-s="${s}" aria-label="${NAME[s]}"><img src="img/${s}.png" alt=""><span class="nm"></span></button>`).join('');
+$('#memoLine').innerHTML = `<img src="img/${ID.tree}.png" alt="나무">${g3(TREE, 20)}<span style="font-size:18px">= 나무</span><em>통함</em>`;
 document.querySelectorAll('.ch').forEach(b => b.onclick = () => {
-  tries++;
-  const right = b.dataset.s === ID.forest;
-  document.querySelectorAll('.ch').forEach(x => { x.classList.remove('right','wrong'); x.querySelector('.mark').textContent = ''; });
-  b.classList.add(right ? 'right' : 'wrong'); b.querySelector('.mark').textContent = right ? '맞아요' : '아니에요';
-  const memo = $('#memo');
-  if (memo.classList.contains('hidden')) {
-    memo.classList.remove('hidden'); memo.classList.add('pop');
-    $('#qSay').innerHTML = right ? '맞혔어요! 감이 좋으시네요.<small>이번엔 메모를 보고 왜 그런지 생각해 보세요. 나무가 세 그루면?</small>' : '아쉬워요. 그럼 메모 한 줄을 드릴게요.<small>나무가 이렇게 생겼다면, 위의 말은 뭘까요? 다시 골라 보세요.</small>';
-  } else {
-    $('#qSay').innerHTML = right ? '맞았어요. <b>방금 여러분이 한 게 AI의 \'학습\'이에요.</b><small>메모 한 줄을 보고, 통했던 말에서 뜻을 짐작한 거예요.</small>' : '조금 더! 메모 속 글자가 몇 번 들어 있는지 보세요.<small>나무가 여러 그루면…</small>';
-  }
+  const right = b.dataset.s === ID.forest, memo = $('#memo'), first = memo.classList.contains('hidden');
+  document.querySelectorAll('.ch').forEach(x => { x.classList.remove('right', 'wrong'); x.querySelector('.nm').textContent = ''; });
+  b.classList.add(right ? 'right' : 'wrong'); b.querySelector('.nm').textContent = NAME[b.dataset.s];
+  if (first) { memo.classList.remove('hidden'); memo.classList.add('pop');
+    $('#qSay').innerHTML = right ? '맞혔어요! 감이 좋네요.<small>메모를 보면 왜 그런지 보여요. 나무가 셋이면?</small>' : '아쉬워요. 메모 한 줄을 드릴게요.<small>나무가 이렇게 생겼다면, 위의 말은 뭘까요?</small>'; }
+  else $('#qSay').innerHTML = right ? '맞아요. <b>방금 한 게 AI의 \'학습\'이에요.</b><small>메모 한 줄을 보고, 통했던 말에서 뜻을 짐작했어요.</small>' : '조금 더! 메모 속 글자가 몇 번 있나 보세요.<small>나무가 여러 그루면…</small>';
 });
 
-/* 3. AI의 책상: 실제 기억에서 몇 줄 */
-$('#marks').innerHTML = META.islands.grid.chars.slice(0, 32).map(([c]) => `<span>${esc(c)}</span>`).join('') + '<span style="width:auto;padding:0 8px;font:500 13px var(--f-ui);color:var(--mute)">… 40자</span>';
-const M = await (await fetch(`data/mem/g${String(NOW).padStart(3, '0')}.json`, {cache:'no-store'})).json().catch(() => null);
+/* 3 책상: 실제 메모에서 몇 줄 */
+$('#marks').innerHTML = TF.META.islands.grid.chars.slice(0, 24).map(([c]) => `<span>${esc(c)}</span>`).join('') + '<span style="width:auto;padding:0 8px;font:500 14px var(--f-ui);color:var(--mute)">…40자</span>';
+const M = await TF.loadMem(NOW);
 let lines = [];
-if (M) { const st = M.islands.grid.start; const best = Object.values(st).sort((a, b) => b.filter(e => e[0] === ID.forest).length - a.filter(e => e[0] === ID.forest).length)[0] || [];
-  const pick = best.filter(e => e[0] === ID.forest || e[0] === ID.tree).slice(-3); const other = best.filter(e => !(e[0] === ID.forest || e[0] === ID.tree)).slice(-4);
-  lines = [...other.slice(0, 3), ...pick, ...other.slice(3)]; }
-$('#memLines').innerHTML = lines.map(e => `<div class="mem-l"><img src="img/${e[0]}.png" alt="${NAME[e[0]]}">${g3(e[1], 11)}<em class="${e[2] ? '' : 'no'}">${e[2] ? '통함' : '안 통함'}</em></div>`).join('') + '<div class="mem-l" style="color:var(--mute)">… 모두 30줄</div>';
-$('#ans').innerHTML = g3(QW, 44, '#7BD8B0');
-const cellsOnly = w => [...w].map(c => `<i>${c === '.' ? '' : esc(c)}</i>`).join('');
-$('#r1w').innerHTML = cellsOnly(QW); $('#r2w').innerHTML = cellsOnly(TREE);
+if (M) { const st = Object.values(M.islands.grid.start); const best = st.sort((a, b) => b.filter(e => e[0] === ID.forest).length - a.filter(e => e[0] === ID.forest).length)[0] || [];
+  const f = best.filter(e => e[0] === ID.forest).slice(-1), t = best.filter(e => e[0] === ID.tree).slice(-1), o = best.filter(e => e[0] !== ID.forest && e[0] !== ID.tree).slice(-3);
+  lines = [o[0], t[0], o[1], f[0], o[2]].filter(Boolean); }
+$('#memLines').innerHTML = lines.map(e => `<div class="ml${e[0] === ID.forest ? ' use' : ''}"><img src="img/${e[0]}.png" alt="${NAME[e[0]]}">${g3(e[1], 12)}<em class="${e[2] ? '' : 'no'}">${e[2] ? '통함' : '안 통함'}</em></div>`).join('') + '<div class="ml none">… 모두 30줄</div>';
+$('#ans').innerHTML = g3(QW, 46);
+{ const e = M && M.islands.grid.end; if (e) $('#relayIds').innerHTML = e.left.map(i => `<span class="av dim">${i}</span>`).join('') + '<span class="arrow" style="font-size:30px">→</span>' + e.born.map(b => `<span class="av new">${b.id}</span>`).join(''); }
 
-/* 5. 통한 비율 그래프 */
-{ const sv = $('#okChart'), X0 = 44, X1 = 624, Y0 = 290, Y1 = 16, n = GENS.length;
-  const x = i => X0 + (X1 - X0) * (n === 1 ? 0 : i / (n - 1)), y = v => Y0 - (Y0 - Y1) * v / 32;
-  let h = '';
-  for (const v of [0, 8, 16, 24, 32]) h += `<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" stroke="#C7D0CA" stroke-width="1"/><text x="${X0 - 10}" y="${y(v) + 4}" text-anchor="end" font-size="13" fill="#5D6A63">${Math.round(v / 32 * 100)}%</text>`;
-  h += `<line x1="${X0}" x2="${X1}" y1="${y(8)}" y2="${y(8)}" stroke="#9AA59F" stroke-width="2" stroke-dasharray="6 6"/>`;
-  for (const [k, c] of [['line','#2450D8'],['grid','#0B8457'],['twin','#8A3F9E']]) {
-    const pts = GENS.map((g, i) => `${x(i).toFixed(1)},${y(g.islands[k].ok).toFixed(1)}`).join(' ');
-    h += `<polyline points="${pts}" fill="none" stroke="${c}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
-    h += `<circle cx="${x(n - 1)}" cy="${y(LAST.islands[k].ok)}" r="5" fill="${c}"/>`; }
-  h += `<text x="${X0}" y="314" font-size="13" fill="#5D6A63">1세대</text><text x="${X1}" y="314" text-anchor="end" font-size="13" fill="#5D6A63">${NOW}세대</text>`;
-  sv.innerHTML = h;
-  const f = GENS[0].islands, l = LAST.islands, pct = v => Math.round(v / 32 * 100);
-  $('#s5lead').innerHTML = `한 번 대화할 때마다 상대가 맞혔는지 셌어요. 1세대엔 <b>${pct(Math.min(f.line.ok, f.grid.ok, f.twin.ok))}~${pct(Math.max(f.line.ok, f.grid.ok, f.twin.ok))}%</b>였는데, 지금은 <b>${pct(Math.min(l.line.ok, l.grid.ok, l.twin.ok))}~${pct(Math.max(l.line.ok, l.grid.ok, l.twin.ok))}%</b>예요. 다 같이 같은 단어를 쓰게 됐다는 뜻이에요.`; }
+/* 4 하나의 말로: 숲의 일생 + 통한 비율 */
+const lin = TF.lineage('grid', ID.forest), nCh = lin.filter((x, i) => i && x.changed).length;
+const lastCh = [...lin].reverse().find(x => x.changed);
+$('#s4h').textContent = `‘숲’은 ${nCh}번 바뀐 뒤 하나로 굳었어요`;
+$('#stripH').textContent = `그림 섬에서 ‘숲’을 부른 말 · 1세대 → ${NOW}세대`;
+const runs = []; for (const x of lin) { if (x.changed || !runs.length) runs.push({w: x.w, a: x.gen, b: x.gen}); else runs[runs.length - 1].b = x.gen; }
+$('#cells').style.setProperty('--n', runs.length);
+$('#cells').innerHTML = runs.map((r, i) => `<div class="cell${i === runs.length - 1 ? ' last' : ''}">${r.w ? g3(r.w, 18) : '·'}<b>${r.a === r.b ? r.a : r.a + '–' + r.b}세대</b></div>`).join('<span class="to">→</span>');
+$('#okChart').innerHTML = TF.okChart({w: 640, h: 250});
+{ const f = GENS[0].islands, l = LAST.islands;
+  $('#s4lead').innerHTML = `처음엔 AI마다 다르게 불렀어요. 통한 말이 메모에 남아 다시 쓰이면서 <b>${lastCh ? lastCh.gen : 1}세대부터</b> 모두 같은 말을 써요. 서로 알아듣는 비율도 <b>${pct(f.grid.ok)}% → ${pct(l.grid.ok)}%</b>로 올랐어요.`; }
 
-/* 6. 합성어: 지금 그림 섬 말에서 '안에 들어 있는' 짝을 찾는다 */
-{ const pairs = [['forest','tree','나무가 들어 있어요'],['village','house','집이 들어 있어요'],['village','person','사람도 들어 있어요'],['crowd','person','사람이 여럿'],['sea','water','물이 들어 있어요'],['volcano','mountain','산이 들어 있어요'],['big fire','fire','불이 들어 있어요']];
-  const ok = pairs.filter(([a, b]) => { const A = W('grid', ID[a]), B = W('grid', ID[b]); if (!A || !B) return false; const ga = glyphs(A); return [...glyphs(B)].every(c => ga.has(c)) && cells(A) > cells(B); });
-  const show = []; const used = new Set(); for (const p of ok) { if (used.has(p[0]) && show.length >= 3) continue; show.push(p); used.add(p[0]); if (show.length === 4) break; }
-  $('#eqs').innerHTML = show.map(([a, b, say]) => `<div class="eq"><div class="pic"><img src="img/${ID[b]}.png" alt="">${KO[b]}</div>${g3(W('grid', ID[b]), 24)}<span class="op">→</span>${g3(W('grid', ID[a]), 24)}<div class="say"><b style="color:var(--ink)">${KO[a]}</b><br>${say}</div></div>`).join('') || '<p class="lead">이번 세대에는 합성어가 보이지 않아요.</p>'; }
+/* 5 규칙: 합성어 식 + 길이 */
+{ const cs = TF.compounds('grid').filter(c => c.op !== '⊃').sort((x, y) => (y.a === ID.forest) - (x.a === ID.forest)).slice(0, 3);
+  const pic = s => `<div class="pic"><img src="img/${s}.png" alt="">${NAME[s]}</div>`;
+  $('#eqs').innerHTML = cs.map(c => `<div class="eq">${c.parts.map(p => pic(p) + g3(W('grid', p), 22)).join('<span class="op">+</span>')}${c.op === '×' ? `<span class="op">× ${c.n}</span>` : ''}<span class="op">=</span>${g3(W('grid', c.a), 22)}${pic(c.a)}<span class="say">${c.since}세대부터</span></div>`).join('') || '<p class="hedge">이번 세대엔 합성어가 보이지 않아요.</p>';
+  const first = cs[0];
+  $('#hedge').textContent = first ? `‘${NAME[first.a]}${TF.josa(NAME[first.a], '은', '는')} ${NAME[first.parts[0]]}${TF.josa(NAME[first.parts[0]], '이', '가')} 여럿’은 AI가 원래 아는 상식일 수도 있어요. 놀라운 건 한 AI의 표현이 ${first.since}세대부터 섬 모두의 규칙으로 굳었다는 거예요.` : '';
+  $('#lenBars').innerHTML = TF.lengths('grid').map(r => `<div class="bar"><div class="k">${{3:'자주 쓰는 말', 2:'보통', 1:'가끔 쓰는 말'}[r.t]}<small>${r.ex}</small></div><div class="tr"><div class="b" style="width:${r.first / 9 * 78}%"><span>${r.first.toFixed(1)}칸</span></div><div class="b now" style="width:${r.last / 9 * 78}%"><span>${r.last.toFixed(1)}칸</span></div></div></div>`).join('') + '<div class="legend"><span><i style="background:var(--rule)"></i>처음 세 세대</span><span><i style="background:var(--grid)"></i>최근 세 세대</span></div>'; }
 
-/* 7. 길이: 자주·보통·가끔, 처음 3세대 vs 최근 3세대 (그림 섬, 채운 칸 수) */
-{ const tier = META.tier, by = t => Object.entries(ID).filter(([en]) => tier[en] === t).map(([, id]) => id);
-  const avg = (rows, t) => { const v = rows.flatMap(g => by(t).map(s => W('grid', s, g)).filter(Boolean).map(cells)); return v.reduce((a, b) => a + b, 0) / v.length; };
-  const first = GENS.slice(0, 3), last = GENS.slice(-3), mx = 9;
-  $('#lenBars').innerHTML = [[3, '자주 나오는 그림', '물·불·사람·집'], [2, '보통', '나무·산·바다·숲·마을'], [1, '가끔 나오는 그림', '화산·큰 불·군중']].map(([t, k, ex]) => {
-    const a = avg(first, t), b = avg(last, t);
-    return `<div class="bar"><div class="k">${k}<small>${ex}</small></div><div class="tr"><div class="b" style="width:${a / mx * 80}%"><span>${a.toFixed(1)}칸</span></div><div class="b now" style="width:${b / mx * 80}%"><span>${b.toFixed(1)}칸</span></div></div></div>`;
-  }).join('') + '<div class="legend"><span><i style="background:var(--rule)"></i>처음 세 세대</span><span><i style="background:var(--grid)"></i>최근 세 세대</span></div>'; }
+/* 6 세 섬 */
+$('#isls').innerHTML = TF.ORDER.map(k => `<div class="isl" style="--k:${TF.COLOR[k]}"><h3><i></i>${TF.ISL[k]}</h3><div class="big">${TF.wordHTML(W(k, ID.forest), k, 36)}</div><p>‘숲’ · ${TF.ISL_DESC[k]}</p></div>`).join('');
+$('#meet').innerHTML = TF.met ? `<b>만남 시작</b><span>${TF.META.met_gen}세대부터 글자 섬과 그림 섬이 서로의 말을 들어요.</span>` : `<b>10/22 · D-${TF.dday(TF.MEET)}</b><span>글자 섬과 그림 섬이 처음 만나요. 다른 언어가 섞이면?</span>`;
 
-/* 8. 세 섬 + 만남 */
-{ const D = {line: ['글자 섬', 'var(--line)', '한 줄로 글자를 늘어놓는 섬'], grid: ['그림 섬', 'var(--grid)', '3×3 칸에 글자를 놓는 섬'], twin: ['비교 섬', 'var(--twin)', '글자 섬과 같은 조건, 끝까지 아무도 안 만남']};
-  $('#isls').innerHTML = ['line','grid','twin'].map(k => { const w = W(k, ID.forest); return `<div class="isl" style="--k:${D[k][1]}"><h3><i></i>${D[k][0]}</h3><div class="big">${k === 'grid' ? g3(w, 36) : `<span class="g">${esc(w)}</span>`}</div><p>‘숲’ · ${D[k][2]}</p></div>`; }).join('');
-  const meetT = Date.parse(META.meet_at || '2026-10-22T00:00:00+09:00');
-  const dd = Math.ceil((meetT - Date.now()) / 864e5);
-  $('#meet').innerHTML = META.met_gen ? `<b>만남 시작</b><span>글자 섬과 그림 섬이 서로의 말을 듣고 있어요.</span>` : `<b>10/22 · D-${dd}</b><span>글자 섬과 그림 섬이 처음 만나요. 다른 언어가 섞이면 어떻게 될까요?</span>`; }
+/* 7 메모 없는 AI */
+{ const C = await TF.loadControl(); const g = LAST.islands.grid.ok;
+  const rows = [['그냥 찍기', 25, ''], ['메모를 지운 AI', C && C.islands && C.islands.grid ? pct(C.islands.grid.ok / C.islands.grid.talks * 32) : null, ''], [`메모 30줄 · ${NOW}세대`, pct(g), 'now']];
+  $('#cmpBars').innerHTML = rows.map(([k, v, c]) => `<div class="bar"><div class="k">${k}</div><div class="tr">${v == null ? '<span class="tagp">측정 중</span>' : `<div class="b ${c}" style="width:${v * 0.78}%"><span>${v}%</span></div>`}</div></div>`).join('');
+  $('#cmpNote').textContent = C && C.islands ? `그림 섬 기준, 같은 AI·같은 규칙에서 메모만 지우고 ${C.islands.grid.talks}번 돌렸어요. 차이만큼이 메모가 만든 언어예요.` : '같은 AI·같은 규칙에서 메모만 지우고 돌려 비교하는 중이에요.'; }
 
-/* 메모 비교 (지금 있는 숫자: 우연 / 1세대 / 지금) */
-{ const f = GENS[0].islands.grid.ok, l = LAST.islands.grid.ok, pct = v => Math.round(v / 32 * 100);
-  $('#cmpBars').innerHTML = [['그냥 찍기', 25, ''], ['1세대 · 메모 거의 없음', pct(f), ''], [`${NOW}세대 · 메모 30줄`, pct(l), 'now'], ['메모를 지운 AI', null, '']].map(([k, v, c]) =>
-    `<div class="bar"><div class="k">${k}</div><div class="tr">${v == null ? '<span class="tag">측정 예정</span>' : `<div class="b ${c}" style="width:${v * 0.8}%"><span>${v}%</span></div>`}</div></div>`).join(''); }
-
-/* 9. 끝 */
-$('#endTitle').innerHTML = `오늘 그림 섬에서<br>‘숲’은 이렇게 써요`;
-$('#endLead').textContent = `${NOW}세대째. 이 말은 내일 또 조금 바뀔지도 몰라요. 그래서 이 프로젝트의 제목은 날마다 바뀌어요.`;
-$('#endWord').innerHTML = g3(QW, 90, '#7BD8B0');
+/* 8 끝 */
+$('#endLead').textContent = `${NOW}세대째. 하루 두 번 새 세대가 와요. 내일의 ‘숲’은 또 다를지 몰라요.`;
+$('#endWord').innerHTML = g3(QW, 70);
+const tick = () => { $('#clockT').textContent = TF.countdown(); $('#clockP').textContent = TF.nextSlot ? `${TF.nextSlot.gen}세대가 오기까지` : ''; };
+tick(); setInterval(tick, 1000);
 
 /* 넘기기 */
 const secs = [...document.querySelectorAll('.sc')];
 $('#dots').innerHTML = secs.map((s, i) => `<a href="#${s.id}" aria-label="${i + 1}번째 장면"></a>`).join('');
 const dots = [...document.querySelectorAll('#dots a')];
-const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { const i = secs.indexOf(e.target); dots.forEach((d, j) => d.classList.toggle('on', i === j)); document.body.classList.toggle('dark', e.target.id === 's9'); } }), {threshold: .55});
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { const i = secs.indexOf(e.target); dots.forEach((d, j) => d.classList.toggle('on', i === j)); document.body.classList.toggle('dark', e.target.id === 's8'); } }), {threshold: .55});
 secs.forEach(s => io.observe(s));
 const cur = () => { let best = 0, bd = 1e9; secs.forEach((s, i) => { const d = Math.abs(s.getBoundingClientRect().top); if (d < bd) { bd = d; best = i; } }); return best; };
 addEventListener('keydown', e => {
-  if (e.target.closest('button,a,input')) { if (!['ArrowRight','ArrowLeft','PageDown','PageUp'].includes(e.key)) return; }
   const n = ['ArrowRight','ArrowDown','PageDown',' '].includes(e.key) ? 1 : ['ArrowLeft','ArrowUp','PageUp'].includes(e.key) ? -1 : 0;
-  if (!n) return; e.preventDefault();
-  const i = Math.max(0, Math.min(secs.length - 1, cur() + n)); secs[i].scrollIntoView({behavior: 'smooth'});
+  if (!n || (e.key === ' ' && e.target.closest('button'))) return; e.preventDefault();
+  secs[Math.max(0, Math.min(secs.length - 1, cur() + n))].scrollIntoView({behavior: 'smooth'});
 });
 })();
 </script>

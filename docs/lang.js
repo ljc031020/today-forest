@@ -1,0 +1,119 @@
+/* 오늘의 숲 — 발표(story)와 사이트(index)가 함께 쓰는 데이터·그리기 도구 */
+(function(){
+const TF = window.TF = {};
+const KO = {water:'물',fire:'불',tree:'나무',person:'사람',mountain:'산',house:'집',sea:'바다',forest:'숲',village:'마을',volcano:'화산','big fire':'큰 불',crowd:'군중'};
+const esc = TF.esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+TF.COLOR = {line:'var(--line)', grid:'var(--grid)', twin:'var(--twin)'};
+TF.ISL = {line:'글자 섬', grid:'그림 섬', twin:'비교 섬'};
+TF.ISL_DESC = {line:'글자를 한 줄로 늘어놓는 섬', grid:'3×3 칸에 글자를 놓는 섬', twin:'글자 섬과 같은 조건, 아무도 만나지 않는 섬'};
+TF.ORDER = ['grid', 'line', 'twin'];
+const pad = n => String(n).padStart(3, '0');
+const cache = {};
+const getJSON = TF.getJSON = u => cache[u] || (cache[u] = fetch(u, {cache:'no-store'}).then(r => r.ok ? r.json() : null).catch(() => null));
+
+TF.load = async function(){
+  const S = await getJSON('data/summary.json');
+  TF.S = S; TF.META = S.meta; TF.GENS = S.gens; TF.LAST = S.gens[S.gens.length - 1]; TF.NOW = TF.LAST.gen;
+  TF.ID = S.meta.scenes; TF.NAME = {}; TF.EN = {};
+  for (const [en, id] of Object.entries(TF.ID)) { TF.NAME[id] = KO[en] || en; TF.EN[id] = en; }
+  TF.SIDS = Object.values(TF.ID);
+  TF.KO = KO;
+  buildTrip();
+  return TF;
+};
+TF.loadGen = n => getJSON(`data/gens/g${pad(n)}.json`);
+TF.loadMem = n => getJSON(`data/mem/g${pad(n)}.json`);
+TF.loadControl = () => getJSON('data/control.json');
+TF.body = k => TF.META.islands[k].body;
+TF.word = (k, s, row = TF.LAST) => row && row.islands[k] && (row.islands[k].words || {})[s];
+TF.josa = (w, a, b) => { const c = w.charCodeAt(w.length - 1) - 0xAC00; return c >= 0 && c % 28 ? a : b; };
+
+/* 글자 그리기: 그림 섬은 3×3, 나머지는 한 줄 */
+TF.g3 = (w, q = 20, k) => `<span class="g3" style="--q:${q}px${k ? `;--k:${k}` : ''}">${[...w].map(c => `<i>${c === '.' ? '' : esc(c)}</i>`).join('')}</span>`;
+TF.cells = w => [...w].map(c => `<i>${c === '.' ? '' : esc(c)}</i>`).join('');
+TF.wordHTML = (w, k, q = 20) => w == null ? '<span class="g" style="opacity:.3">—</span>' : TF.body(k) === 'grid' ? TF.g3(w, q) : `<span class="g">${esc(w)}</span>`;
+TF.glyphSet = w => new Set([...w].filter(c => c !== '.'));
+TF.nCells = w => [...w].filter(c => c !== '.').length;
+
+/* 합성어: 지금 말 A가 다른 말들의 글자로만 이루어졌는지 → '나무 ×3 = 숲', '집 + 사람 = 마을' */
+TF.compounds = function(k = 'grid', row = TF.LAST){
+  const W = s => TF.word(k, s, row);
+  const out = [];
+  for (const a of TF.SIDS) {
+    const A = W(a); if (!A) continue;
+    const ga = TF.glyphSet(A), na = TF.nCells(A);
+    const subs = TF.SIDS.filter(b => b !== a && W(b) && TF.nCells(W(b)) < na && [...TF.glyphSet(W(b))].every(c => ga.has(c)));
+    if (!subs.length) continue;
+    // 한 단어의 반복
+    const one = subs.find(b => [...ga].every(c => TF.glyphSet(W(b)).has(c)) && na % TF.nCells(W(b)) === 0);
+    if (one) { out.push({a, parts: [one], op: '×', n: na / TF.nCells(W(one))}); continue; }
+    // 두 단어 합
+    let two = null;
+    for (const b of subs) for (const c of subs) if (b < c) { const u = new Set([...TF.glyphSet(W(b)), ...TF.glyphSet(W(c))]); if (u.size === ga.size && [...ga].every(x => u.has(x))) two = two || [b, c]; }
+    if (two) { out.push({a, parts: two, op: '+'}); continue; }
+    out.push({a, parts: [subs[0]], op: '⊃'});
+  }
+  // 언제부터 이렇게 썼나: 현재 관계가 끊기지 않고 이어진 첫 세대
+  for (const c of out) {
+    let since = TF.NOW;
+    for (let i = TF.GENS.length - 1; i >= 0; i--) {
+      const r = TF.GENS[i], A = TF.word(k, c.a, r); if (!A) break;
+      const ok = c.parts.every(b => { const B = TF.word(k, b, r); return B && [...TF.glyphSet(B)].every(x => TF.glyphSet(A).has(x)); });
+      if (!ok) break; since = r.gen;
+    }
+    c.since = since;
+  }
+  const rank = {'×': 0, '+': 1, '⊃': 2};
+  return out.sort((x, y) => rank[x.op] - rank[y.op] || x.since - y.since);
+};
+
+/* 길이: 자주·보통·가끔 그림의 평균 칸(글자) 수, 처음 3세대 vs 최근 3세대 */
+TF.lengths = function(k = 'grid'){
+  const tier = TF.META.tier, by = t => Object.entries(TF.ID).filter(([en]) => tier[en] === t).map(([, id]) => id);
+  const avg = (rows, t) => { const v = rows.flatMap(g => by(t).map(s => TF.word(k, s, g)).filter(Boolean).map(TF.nCells)); return v.reduce((a, b) => a + b, 0) / Math.max(1, v.length); };
+  return [3, 2, 1].map(t => ({t, first: avg(TF.GENS.slice(0, 3), t), last: avg(TF.GENS.slice(-3), t), ex: by(t).map(s => TF.NAME[s]).join('·')}));
+};
+
+/* 여정: 지난 세대 + 앞으로 올 세대(매일 07·19시) */
+const KST = TF.KST = 9 * 3600e3;
+TF.md = t => { const d = new Date(t + KST); return `${d.getUTCMonth() + 1}/${d.getUTCDate()}`; };
+TF.hour = t => new Date(t + KST).getUTCHours();
+function buildTrip(){
+  const END = Date.parse('2026-10-29T07:00:00+09:00');
+  TF.MEET = Date.parse(TF.META.meet_at || '2026-10-22T00:00:00+09:00');
+  const trip = TF.GENS.map(g => ({gen: g.gen, t: Date.parse(g.at), row: g}));
+  const t0 = Date.parse(TF.LAST.at); let n = TF.LAST.gen;
+  const d0 = new Date(t0 + KST); let day = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth(), d0.getUTCDate()) - KST;
+  for (let i = 0; i < 40; i++) { for (const h of [7, 19]) { const s = day + h * 3600e3; if (s > t0 + 3600e3 && s <= END) trip.push({gen: ++n, t: s, row: null}); } day += 864e5; }
+  TF.trip = trip; TF.END = END;
+  TF.meetGen = TF.META.met_gen || (trip.find(x => x.t >= TF.MEET) || {}).gen;
+  TF.endGen = trip[trip.length - 1].gen;
+  TF.nextSlot = trip.find(x => !x.row);
+  TF.met = !!TF.META.met_gen;
+}
+TF.countdown = () => { if (!TF.nextSlot) return ''; let s = Math.max(0, Math.floor((TF.nextSlot.t - Date.now()) / 1000)); const h = Math.floor(s / 3600); s %= 3600; return `${h}:${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; };
+TF.dday = t => { const a = new Date(Date.now() + KST), b = new Date(t + KST); return Math.round((Date.UTC(b.getUTCFullYear(), b.getUTCMonth(), b.getUTCDate()) - Date.UTC(a.getUTCFullYear(), a.getUTCMonth(), a.getUTCDate())) / 864e5); };
+
+/* 통한 비율 그래프 (SVG 문자열) */
+TF.okChart = function(opt = {}){
+  const W = opt.w || 640, H = opt.h || 300, X0 = 44, X1 = W - 16, Y0 = H - 30, Y1 = 14, n = TF.GENS.length;
+  const x = i => X0 + (X1 - X0) * (n === 1 ? 0 : i / (n - 1)), y = v => Y0 - (Y0 - Y1) * v / 32;
+  let h = '';
+  for (const v of [0, 8, 16, 24, 32]) h += `<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" stroke="#C7D0CA" stroke-width="1"/><text x="${X0 - 10}" y="${y(v) + 4}" text-anchor="end" font-size="13" fill="#5D6A63">${Math.round(v / 32 * 100)}%</text>`;
+  h += `<line x1="${X0}" x2="${X1}" y1="${y(8)}" y2="${y(8)}" stroke="#9AA59F" stroke-width="2" stroke-dasharray="6 6"/>`;
+  const cols = {line:'#2450D8', grid:'#0B8457', twin:'#8A3F9E'};
+  for (const k of (opt.only || ['line','grid','twin'])) {
+    const pts = TF.GENS.map((g, i) => `${x(i).toFixed(1)},${y(g.islands[k].ok).toFixed(1)}`).join(' ');
+    h += `<polyline points="${pts}" fill="none" stroke="${cols[k]}" stroke-width="${opt.only ? 4 : 3}" stroke-linejoin="round" stroke-linecap="round"/>`;
+    h += `<circle cx="${x(n - 1)}" cy="${y(TF.LAST.islands[k].ok)}" r="5" fill="${cols[k]}"/>`;
+  }
+  if (TF.meetGen && TF.meetGen <= TF.NOW) { const i = TF.GENS.findIndex(g => g.gen === TF.meetGen); h += `<line x1="${x(i)}" x2="${x(i)}" y1="${Y1}" y2="${Y0}" stroke="#13201A" stroke-width="1.5" stroke-dasharray="4 4"/><text x="${x(i) + 6}" y="${Y1 + 12}" font-size="13" fill="#13201A">만남</text>`; }
+  h += `<text x="${X0}" y="${H - 8}" font-size="13" fill="#5D6A63">1세대</text><text x="${X1}" y="${H - 8}" text-anchor="end" font-size="13" fill="#5D6A63">${TF.NOW}세대</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="세대별 통한 대화 비율">${h}</svg>`;
+};
+
+/* 한 단어의 일생: 세대마다 그 그림을 부른 말 (바뀐 세대만 진하게) */
+TF.lineage = function(k, s){
+  let prev; return TF.GENS.map(g => { const w = TF.word(k, s, g); const ch = w !== prev; prev = w; return {gen: g.gen, w, changed: ch, ok: g.islands[k].ok}; });
+};
+})();

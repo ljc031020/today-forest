@@ -2,7 +2,7 @@
 
 ## 그냥 띄우기 (인터넷만 있으면 됨)
 
-브라우저에서 https://ljc031020.github.io/today-forest/show.html 을 열고 `F`로 전체 화면.
+브라우저에서 https://ljc031020.github.io/today-forest/story.html 을 열고 F11로 전체 화면, ← → 키로 넘긴다. 마지막 장의 QR은 사이트(오늘의 언어)로 간다.
 
 - `→` `Space` `Page Down`: 다음 장면 / `←` `Page Up`: 이전 장면 (프레젠터 리모컨도 됨)
 - `H`: 도움말
@@ -27,7 +27,7 @@ $env:ANTHROPIC_API_KEY = "sk-ant-..."   # 메모해 둔 키
 python engine\live.py
 ```
 
-브라우저가 http://localhost:8000/show.html 로 열린다. 오른쪽 아래에 `● 실시간 연결됨`이 보이면 '지금 이 순간'에서 AI들이 그 자리에서 새 대화를 만든다.
+브라우저가 http://localhost:8000/index.html#/talk 로 열린다. 위쪽에 `● 실시간으로` 버튼이 보이면 누르는 순간부터 AI들이 그 자리에서 새 대화를 만든다.
 
 - 키가 없거나 인터넷이 끊기면 자동으로 기록 재생으로 바뀐다. 발표가 멈추지 않는다.
 - 여기서 만든 대화는 실험 기록에 섞이지 않고 `docs/data/live/`에 따로 저장된다.

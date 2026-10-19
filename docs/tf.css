@@ -1,0 +1,60 @@
+/* 오늘의 숲 — 발표와 사이트가 함께 쓰는 바탕 */
+:root{
+  --paper:#E6EAE5; --card:#F8FAF7; --ink:#13201A; --mute:#55625B; --faint:#9AA59F; --rule:#C7D0CA; --memo:#FFFDF2;
+  --line:#2450D8; --grid:#0B8457; --twin:#8A3F9E; --ok:#0B8457; --hi:#7BD8B0;
+  --f-ui:"IBM Plex Sans KR",system-ui,sans-serif;
+  --f-num:"Hahmlet","IBM Plex Sans KR",serif;
+  --f-g:"Noto Sans","Noto Sans Georgian","Noto Sans Armenian","Noto Sans Runic","Noto Sans Cherokee","Noto Sans Arabic","Noto Sans KR",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 var(--f-ui);word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:6px}
+img[src^="img/"]{-webkit-user-drag:none}
+.g{font-family:var(--f-g);font-weight:500;direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+h1,h2,h3{font-family:var(--f-num);letter-spacing:-.02em;margin:0;line-height:1.15}
+
+/* 3×3 글자 */
+.g3{display:inline-grid;grid-template-columns:repeat(3,var(--q,20px));gap:calc(var(--q,20px) * .12);vertical-align:middle}
+.g3 i{width:var(--q,20px);height:var(--q,20px);border-radius:calc(var(--q,20px) * .2);background:rgba(19,32,26,.06);font:500 calc(var(--q,20px) * .7)/var(--q,20px) var(--f-g);font-style:normal;text-align:center;color:var(--ink)}
+.g3 i:not(:empty){background:var(--card);box-shadow:inset 0 0 0 max(1px,calc(var(--q,20px) * .07)) var(--k,var(--grid))}
+.dark .g3 i{background:rgba(255,255,255,.07);color:var(--paper)}
+.dark .g3 i:not(:empty){background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 max(1.5px,calc(var(--q,20px) * .07)) var(--hi)}
+
+/* 메모 종이 */
+.memo{background:var(--memo);border-radius:6px 18px 18px 18px;padding:16px 20px;box-shadow:0 12px 30px -20px rgba(19,32,26,.6);display:grid;gap:8px}
+.memo h4{margin:0 0 2px;font:600 14px/1.3 var(--f-ui);color:var(--mute)}
+.ml{display:flex;align-items:center;gap:10px;font-size:15px;min-height:30px;border-radius:8px;padding:2px 6px;margin:0 -6px;transition:background .2s,box-shadow .2s}
+.ml img{width:30px;height:30px;flex:0 0 auto}
+.ml .g{font-size:20px}
+.ml em{font-style:normal;margin-left:auto;font-weight:600;font-size:14px;color:var(--ok);white-space:nowrap}
+.ml em.no{color:var(--faint)}
+.ml.use{background:color-mix(in srgb,var(--c,var(--grid)) 16%,transparent);box-shadow:inset 0 0 0 2px var(--c,var(--grid))}
+.ml.mut::after{content:"잘못 옮김";font-size:11px;font-weight:600;color:var(--paper);background:var(--ink);padding:2px 6px;border-radius:6px;margin-left:6px}
+.ml.none{color:var(--mute);font-size:14px}
+
+/* 공통 막대 */
+.bar{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:center}
+.bar .k{font-weight:600}
+.bar .k small{display:block;font-weight:400;font-size:14px;color:var(--mute)}
+.bar .tr{display:grid;gap:6px}
+.bar .b{height:18px;border-radius:9px;background:var(--rule);position:relative;min-width:6px}
+.bar .b.now{background:var(--grid)}
+.bar .b span{position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);font:700 16px/1 var(--f-num);white-space:nowrap}
+.legend{display:flex;gap:18px;font-size:14px;color:var(--mute);flex-wrap:wrap}
+.legend i{display:inline-block;width:16px;height:5px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.tagp{display:inline-block;font-size:13px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--paper);color:var(--mute)}
+
+/* 합성어 식 */
+.eq{background:var(--card);border-radius:20px;padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.eq .pic{display:grid;justify-items:center;gap:2px;font-size:14px;color:var(--mute);min-width:52px}
+.eq .pic img{width:42px;height:42px}
+.eq .op{font:700 26px/1 var(--f-num);color:var(--ink)}
+.eq .say{margin-left:auto;font-size:14px;color:var(--mute);text-align:right}
+
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.pop{animation:pop .35s cubic-bezier(.2,.9,.3,1.3)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media (max-width:900px){.bar{grid-template-columns:minmax(0,1fr)}}
