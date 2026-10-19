@@ -4,6 +4,8 @@
 
 브라우저에서 https://ljc031020.github.io/today-forest/story.html 을 열고 F11로 전체 화면, ← → 키로 넘긴다. 마지막 장의 QR은 사이트(오늘의 언어)로 간다.
 
+발표 날 모습 미리 보기(가짜 데이터): story.html?preview , index.html?preview#/notes — 노란 띠가 보이면 미리보기다. 발표 때는 ?preview 없이 연다.
+
 - `→` `Space` `Page Down`: 다음 장면 / `←` `Page Up`: 이전 장면 (프레젠터 리모컨도 됨)
 - `H`: 도움말
 - '지금 이 순간' 장면에서 `1` 글자 섬 · `2` 그림 섬 · `3` 비교 섬 · `4` 두 섬 사이 · `R` 처음부터

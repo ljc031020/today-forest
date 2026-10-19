@@ -59,6 +59,22 @@ h2{font-weight:800;font-size:clamp(38px,4.6vw,66px)}
 .av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;border:3px solid var(--ink);font:700 15px/1 var(--f-num);background:var(--card);flex:0 0 auto}
 .av.dim{opacity:.25}.av.new{border-color:var(--grid);color:var(--grid)}
 
+.atlasg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.atlasg div{display:grid;justify-items:center;background:var(--paper);border-radius:8px;padding:4px 2px 2px}
+.atlasg img{width:100%;max-width:44px;aspect-ratio:1}
+.atlasg b{font:600 11px/1.2 var(--f-ui);color:var(--mute)}
+.pn{margin:0;font-size:14px;color:var(--mute)}
+.scripts{display:grid;gap:7px}
+.scripts .sr{display:grid;gap:3px}
+.scripts .sr small{font-size:12.5px;color:var(--mute);font-weight:600}
+.scripts .sr div{display:flex;gap:4px;flex-wrap:wrap}
+.scripts .sr span{width:28px;height:28px;border-radius:7px;background:var(--paper);display:grid;place-items:center;font:500 17px/1 var(--f-g)}
+.rids{display:flex;align-items:center;gap:10px}
+.rids .rl{display:grid;justify-items:center;gap:4px}
+.rids .rl small{font-size:12px;color:var(--mute);font-weight:600}
+.rids .rl div{display:flex;gap:6px}
+.isl .sc-n{font-size:13px;color:var(--mute);margin-top:-6px}
+
 /* 4 하나의 말로 */
 .strip{background:var(--card);border-radius:22px;padding:18px 18px 12px;display:grid;gap:8px}
 .strip-h{display:flex;align-items:center;gap:10px;font-weight:600;font-size:17px}
@@ -162,14 +178,14 @@ h2{font-weight:800;font-size:clamp(38px,4.6vw,66px)}
     <h2>AI가 받는 건 종이 세 장뿐</h2>
     <div class="desk">
       <div class="papers">
-        <div class="paper"><h3>① 그림판</h3><img class="atlas" src="img/atlas.png" alt="그림 12장"></div>
-        <div class="paper"><h3>② 쓸 수 있는 글자</h3><div class="marks" id="marks"></div></div>
+        <div class="paper"><h3>① 그림 12장</h3><div class="atlasg" id="atlasg"></div><p class="pn">이름 없이 번호표만 붙어 있어요</p></div>
+        <div class="paper"><h3>② 쓸 수 있는 글자</h3><div class="scripts" id="marks"></div></div>
         <div class="paper"><h3>③ 지난 대화 메모</h3><div class="memo" id="memLines" style="--c:var(--grid)"></div></div>
       </div>
       <div class="arrow" aria-hidden="true">→</div>
       <div class="answer dark"><p>‘숲’을 말해 보라면</p><span id="ans"></span><p>메모에서 통했던 말을<br>꺼내 써요</p></div>
     </div>
-    <div class="relay"><span id="relayIds" style="display:flex;align-items:center;gap:10px"></span><span><b>하루 두 번 AI 둘이 바뀌어요.</b> 새 AI는 메모를 일부만, 가끔 틀리게 물려받아요.</span></div>
+    <div class="relay"><span id="relayIds" class="rids"></span><span><b>하루 두 번 AI 둘이 바뀌어요.</b> 새 AI는 메모를 일부만, 가끔 틀리게 물려받아요.</span></div>
   </div>
 </section>
 
@@ -187,19 +203,19 @@ h2{font-weight:800;font-size:clamp(38px,4.6vw,66px)}
 
 <section class="sc" id="s5">
   <div class="inner">
-    <div class="kick"><b>4</b>언어의 규칙이 생겼어요</div>
-    <h2>아무도 정해 주지 않은 규칙 두 개</h2>
+    <div class="kick"><b>4</b>언어가 스스로 정리돼요</div>
+    <h2>아무도 정해 주지 않았는데 생긴 것</h2>
     <div class="rules2">
       <div class="panel"><h3>① 단어를 합쳐 새 단어를 만들어요</h3><div style="display:grid;gap:10px" id="eqs"></div><p class="hedge" id="hedge"></p></div>
-      <div class="panel"><h3>② 자주 쓰는 말은 짧아져요</h3><div class="bars" id="lenBars"></div></div>
+      <div class="panel"><h3 id="splitH">② 긴 말은 줄고, 뜻은 나뉘어요</h3><div id="lenBars"></div><p class="hedge" id="splitNote"></p></div>
     </div>
   </div>
 </section>
 
 <section class="sc" id="s6">
   <div class="inner">
-    <div class="kick"><b>5</b>같은 조건, 다른 언어</div>
-    <h2>섬 셋에서 각자 다른 언어가 태어났어요</h2>
+    <div class="kick"><b>5</b><span id="s6k">같은 조건, 다른 언어</span></div>
+    <h2 id="s6h">섬 셋에서 각자 다른 언어가 태어났어요</h2>
     <div class="isls" id="isls"></div>
     <div class="meet" id="meet"></div>
   </div>
@@ -243,7 +259,7 @@ const W = (k, s, r) => TF.word(k, s, r);
 const pct = v => Math.round(v / 32 * 100);
 
 /* 1 견본 */
-$('#s1lead').innerHTML = `AI 넷이 그림을 보고 서로에게 설명하다가 만든 말이에요. 10월 12일엔 없었어요. 지금 <b>${NOW}세대</b>째, 하루 두 번 자라요.`;
+$('#s1lead').innerHTML = `AI 넷이 그림을 보고 서로에게 설명하다가 만든 말이에요. 글자는 여러 문자에서 빌렸지만, 이 단어들은 10월 12일엔 없었어요. 지금 <b>${NOW}세대</b>째, 하루 두 번 자라요.`;
 $('#spec').innerHTML = SIDS.map(s => `<div class="word hide">${g3(W('grid', s), 28)}<span class="mn">${NAME[s]}</span></div>`).join('');
 $('#revealBtn').onclick = () => { const on = !!$('#spec .word.hide'); document.querySelectorAll('#spec .word').forEach(w => w.classList.toggle('hide', !on)); $('#revealBtn').textContent = on ? '뜻 가리기' : '뜻 보기'; };
 
@@ -258,12 +274,14 @@ document.querySelectorAll('.ch').forEach(b => b.onclick = () => {
   document.querySelectorAll('.ch').forEach(x => { x.classList.remove('right', 'wrong'); x.querySelector('.nm').textContent = ''; });
   b.classList.add(right ? 'right' : 'wrong'); b.querySelector('.nm').textContent = NAME[b.dataset.s];
   if (first) { memo.classList.remove('hidden'); memo.classList.add('pop');
-    $('#qSay').innerHTML = right ? '맞혔어요! 감이 좋네요.<small>메모를 보면 왜 그런지 보여요. 나무가 셋이면?</small>' : '아쉬워요. 메모 한 줄을 드릴게요.<small>나무가 이렇게 생겼다면, 위의 말은 뭘까요?</small>'; }
+    $('#qSay').innerHTML = right ? '맞혔어요! 감이 좋네요.<small>메모를 보면 왜 그런지 보여요. 나무가 여럿이면?</small>' : '아쉬워요. 메모 한 줄을 드릴게요.<small>나무가 이렇게 생겼다면, 위의 말은 뭘까요?</small>'; }
   else $('#qSay').innerHTML = right ? '맞아요. <b>방금 한 게 AI의 \'학습\'이에요.</b><small>메모 한 줄을 보고, 통했던 말에서 뜻을 짐작했어요.</small>' : '조금 더! 메모 속 글자가 몇 번 있나 보세요.<small>나무가 여러 그루면…</small>';
 });
 
 /* 3 책상: 실제 메모에서 몇 줄 */
-$('#marks').innerHTML = TF.META.islands.grid.chars.slice(0, 24).map(([c]) => `<span>${esc(c)}</span>`).join('') + '<span style="width:auto;padding:0 8px;font:500 14px var(--f-ui);color:var(--mute)">…40자</span>';
+{ const by = {}; for (const [c, sc] of TF.META.islands.grid.chars) (by[sc] = by[sc] || []).push(c);
+  $('#marks').innerHTML = Object.entries(by).map(([sc, cs]) => `<div class="sr"><small>${TF.SCRIPT_KO[sc] || sc} ${cs.length}자</small><div>${cs.slice(0, 5).map(c => `<span>${esc(c)}</span>`).join('')}${cs.length > 5 ? '<span style="background:none;color:var(--faint)">…</span>' : ''}</div></div>`).join(''); }
+$('#atlasg').innerHTML = SIDS.map(s => `<div><img src="img/${s}.png" alt=""><b>#${s}</b></div>`).join('');
 const M = await TF.loadMem(NOW);
 let lines = [];
 if (M) { const st = Object.values(M.islands.grid.start); const best = st.sort((a, b) => b.filter(e => e[0] === ID.forest).length - a.filter(e => e[0] === ID.forest).length)[0] || [];
@@ -271,31 +289,48 @@ if (M) { const st = Object.values(M.islands.grid.start); const best = st.sort((a
   lines = [o[0], t[0], o[1], f[0], o[2]].filter(Boolean); }
 $('#memLines').innerHTML = lines.map(e => `<div class="ml${e[0] === ID.forest ? ' use' : ''}"><img src="img/${e[0]}.png" alt="${NAME[e[0]]}">${g3(e[1], 12)}<em class="${e[2] ? '' : 'no'}">${e[2] ? '통함' : '안 통함'}</em></div>`).join('') + '<div class="ml none">… 모두 30줄</div>';
 $('#ans').innerHTML = g3(QW, 46);
-{ const e = M && M.islands.grid.end; if (e) $('#relayIds').innerHTML = e.left.map(i => `<span class="av dim">${i}</span>`).join('') + '<span class="arrow" style="font-size:30px">→</span>' + e.born.map(b => `<span class="av new">${b.id}</span>`).join(''); }
+{ const e = M && M.islands.grid.end; if (e) $('#relayIds').innerHTML = `<div class="rl"><div>${e.left.map(i => `<span class="av dim">${i}</span>`).join('')}</div><small>떠나는 AI</small></div><span class="arrow" style="font-size:30px">→</span><div class="rl"><div>${e.born.map(b => `<span class="av new">${b.id}</span>`).join('')}</div><small>새로 온 AI</small></div>`; }
 
 /* 4 하나의 말로: 숲의 일생 + 통한 비율 */
 const lin = TF.lineage('grid', ID.forest), nCh = lin.filter((x, i) => i && x.changed).length;
 const lastCh = [...lin].reverse().find(x => x.changed);
-$('#s4h').textContent = `‘숲’은 ${nCh}번 바뀐 뒤 하나로 굳었어요`;
+const since = lastCh ? lastCh.gen : 1, settled = NOW - since + 1 >= 3;
+$('#s4h').textContent = settled ? `‘숲’은 ${nCh}번 바뀐 뒤 하나로 굳었어요` : `‘숲’은 ${nCh}번 바뀌었고, 지금도 바뀌는 중이에요`;
 $('#stripH').textContent = `그림 섬에서 ‘숲’을 부른 말 · 1세대 → ${NOW}세대`;
 const runs = []; for (const x of lin) { if (x.changed || !runs.length) runs.push({w: x.w, a: x.gen, b: x.gen}); else runs[runs.length - 1].b = x.gen; }
-$('#cells').style.setProperty('--n', runs.length);
-$('#cells').innerHTML = runs.map((r, i) => `<div class="cell${i === runs.length - 1 ? ' last' : ''}">${r.w ? g3(r.w, 18) : '·'}<b>${r.a === r.b ? r.a : r.a + '–' + r.b}세대</b></div>`).join('<span class="to">→</span>');
+const MAXR = 9, shown = runs.length > MAXR ? [runs[0], {skip: runs.length - MAXR + 1}, ...runs.slice(-(MAXR - 2))] : runs;
+$('#cells').style.setProperty('--n', shown.length);
+$('#cells').innerHTML = shown.map((r, i) => r.skip ? `<div class="cell"><span style="font:600 15px/1.3 var(--f-ui);color:var(--mute);text-align:center">…<br>${r.skip}번<br>더 바뀜</span></div>` : `<div class="cell${i === shown.length - 1 ? ' last' : ''}">${r.w ? g3(r.w, 18) : '·'}<b>${r.a === r.b ? r.a : r.a + '–' + r.b}세대</b></div>`).join('<span class="to">→</span>');
 $('#okChart').innerHTML = TF.okChart({w: 640, h: 215});
 { const f = GENS[0].islands, r5 = GENS.slice(-5), avg5 = r5.reduce((a, g) => a + g.islands.grid.ok, 0) / r5.length;
-  $('#s4lead').innerHTML = `처음엔 AI마다 다르게 불렀어요. 통한 말이 메모에 남아 다시 쓰이면서 <b>${lastCh ? lastCh.gen : 1}세대부터</b> 모두 같은 말을 써요. 서로 알아듣는 비율도 첫 세대 <b>${pct(f.grid.ok)}%</b> → 최근 다섯 세대 평균 <b>${pct(avg5)}%</b>.`; }
+  $('#s4lead').innerHTML = `처음엔 AI마다 다르게 불렀어요. 통한 말이 메모에 남아 다시 쓰이면서 ${settled ? `<b>${since}세대부터</b> 모두 같은 말을 써요` : (() => { const L = runs.slice().sort((x, y) => (y.b - y.a) - (x.b - x.a))[0]; return `<b>${L.a}–${L.b}세대</b>엔 한 말로 모였다가 다시 바뀌었어요`; })()}. 서로 알아듣는 비율도 첫 세대 <b>${pct(f.grid.ok)}%</b> → 최근 다섯 세대 평균 <b>${pct(avg5)}%</b>.`; }
 
 /* 5 규칙: 합성어 식 + 길이 */
-{ const cs = TF.compounds('grid').filter(c => c.op !== '⊃').sort((x, y) => (y.a === ID.forest) - (x.a === ID.forest)).slice(0, 3);
+{ const SP = TF.split('grid'), all = TF.compounds('grid').filter(c => c.op !== '⊃' && (!SP || c.a !== SP.b));
+  const f0 = all.find(c => c.a === ID.forest), rest = all.filter(c => c !== f0), byS = (x, y) => x.since - y.since;
+  const cs = [f0, rest.filter(c => c.op === '×').sort(byS)[0], rest.filter(c => c.op === '+').sort(byS)[0]].filter(Boolean);
+  for (const c of rest) if (cs.length < 3 && !cs.includes(c)) cs.push(c);
   const pic = s => `<div class="pic"><img src="img/${s}.png" alt="">${NAME[s]}</div>`;
   $('#eqs').innerHTML = cs.map(c => `<div class="eq">${c.parts.map(p => pic(p) + g3(W('grid', p), 22)).join('<span class="op">+</span>')}${c.op === '×' ? `<span class="op">× ${c.n}</span>` : ''}<span class="op">=</span>${g3(W('grid', c.a), 22)}${pic(c.a)}<span class="say">${c.since}세대부터</span></div>`).join('') || '<p class="hedge">이번 세대엔 합성어가 보이지 않아요.</p>';
   const first = cs[0];
   $('#hedge').textContent = first ? `‘${NAME[first.a]}${TF.josa(NAME[first.a], '은', '는')} ${NAME[first.parts[0]]}${TF.josa(NAME[first.parts[0]], '이', '가')} 여럿’은 AI가 원래 아는 상식일 수도 있어요. 놀라운 건 그 짜임이 ${first.since}세대부터 섬 모두가 쓰는 규칙으로 굳었다는 거예요.` : '';
-  $('#lenBars').innerHTML = TF.lengths('grid').map(r => `<div class="bar"><div class="k">${{3:'자주 쓰는 말', 2:'보통', 1:'가끔 쓰는 말'}[r.t]}<small>${r.ex}</small></div><div class="tr"><div class="b" style="width:${r.first / 9 * 78}%"><span>${r.first.toFixed(1)}칸</span></div><div class="b now" style="width:${r.last / 9 * 78}%"><span>${r.last.toFixed(1)}칸</span></div></div></div>`).join('') + '<div class="legend"><span><i style="background:var(--rule)"></i>처음 세 세대</span><span><i style="background:var(--grid)"></i>최근 세 세대</span></div>'; }
+  const sp = TF.split('grid');
+  if (sp) { $('#lenBars').innerHTML = TF.splitHTML('grid', 18);
+    $('#splitNote').textContent = `처음엔 ‘${NAME[sp.a]}’${TF.josa(NAME[sp.a], '을', '를')} ${sp.from}칸으로 길게 썼어요. ${sp.shrank}세대에 ${NAME[sp.a]}${TF.josa(NAME[sp.a], '은', '는')} ${sp.to}칸으로 줄고, ${sp.took}세대부터는 그 긴 말을 ‘${NAME[sp.b]}’${TF.josa(NAME[sp.b], '이', '가')} 이어받았어요.`; }
+  else { $('#splitH').textContent = '② 처음보다 말이 짧아졌어요'; $('#lenBars').className = 'bars'; $('#lenBars').innerHTML = TF.lengths('grid').map(r => `<div class="bar"><div class="k">${{3:'자주 나오는 그림', 2:'보통', 1:'가끔 나오는 그림'}[r.t]}<small>${r.ex}</small></div><div class="tr"><div class="b" style="width:${r.first / 9 * 78}%"><span>${r.first.toFixed(1)}칸</span></div><div class="b now" style="width:${r.last / 9 * 78}%"><span>${r.last.toFixed(1)}칸</span></div></div></div>`).join(''); } }
 
 /* 6 세 섬 */
-$('#isls').innerHTML = TF.ORDER.map(k => `<div class="isl" style="--k:${TF.COLOR[k]}"><h3><i></i>${TF.ISL[k]}</h3><div class="big">${TF.wordHTML(W(k, ID.forest), k, 36)}</div><p>‘숲’ · ${TF.ISL_DESC[k]}</p></div>`).join('');
-$('#meet').innerHTML = TF.met ? `<b>만남 시작</b><span>${TF.META.met_gen}세대부터 글자 섬과 그림 섬이 서로의 말을 들어요.</span>` : `<b>10/22 · D-${TF.dday(TF.MEET)}</b><span>글자 섬과 그림 섬이 처음 만나요. 다른 언어가 섞이면?</span>`;
+const MT = TF.meeting();
+if (MT) {
+  $('#s6k').textContent = '두 섬이 만났어요';
+  $('#s6h').textContent = MT.recent > MT.first ? `만난 지 ${MT.days}세대, 서로의 말을 배우는 중이에요` : `만난 지 ${MT.days}세대, 아직 서로의 말이 낯설어요`;
+  $('#isls').className = ''; $('#isls').innerHTML = TF.meetHTML();
+  $('#meet').innerHTML = '';
+} else {
+  $('#isls').innerHTML = TF.ORDER.map(k => { const w = W(k, ID.forest); return `<div class="isl" style="--k:${TF.COLOR[k]}"><h3><i></i>${TF.ISL[k]}</h3><div class="big">${TF.wordHTML(w, k, 36)}</div><span class="sc-n">${TF.scriptsIn(w).map(x => TF.SCRIPT_KO[x]).join('·')}</span><p>‘숲’ · ${TF.ISL_DESC[k]}</p></div>`; }).join('');
+  const dd = TF.dday(TF.MEET);
+  $('#meet').innerHTML = TF.met ? `<b>만남 시작</b><span>${TF.META.met_gen}세대부터 글자 섬과 그림 섬이 서로의 말을 들어요.</span>` : `<b>10/22 · ${dd > 0 ? 'D-' + dd : '오늘'}</b><span>글자 섬과 그림 섬이 처음 만나요. 다른 언어가 섞이면?</span>`;
+}
 
 /* 7 메모 없는 AI */
 { const C = await TF.loadControl(); const g = LAST.islands.grid.ok;

@@ -1,0 +1,1181 @@
+{
+ "at": "2026-10-19T05:46:57+00:00",
+ "model": "claude-haiku-5-5",
+ "gen": 25,
+ "talks": 32,
+ "islands": {
+  "line": {
+   "ok": 12,
+   "talks": 32,
+   "real_ok": 25,
+   "samples": [
+    {
+     "scene": "w8",
+     "msg": "σιλ",
+     "cands": [
+      "n6",
+      "m7",
+      "t4",
+      "w8"
+     ],
+     "guess": "m7",
+     "ok": false
+    },
+    {
+     "scene": "t4",
+     "msg": "φ",
+     "cands": [
+      "v1",
+      "m7",
+      "q8",
+      "t4"
+     ],
+     "guess": "q8",
+     "ok": false
+    },
+    {
+     "scene": "v1",
+     "msg": "ქοι",
+     "cands": [
+      "r9",
+      "w8",
+      "k2",
+      "v1"
+     ],
+     "guess": "v1",
+     "ok": true
+    },
+    {
+     "scene": "k2",
+     "msg": "ολ",
+     "cands": [
+      "z3",
+      "q8",
+      "k2",
+      "f3"
+     ],
+     "guess": "f3",
+     "ok": false
+    },
+    {
+     "scene": "r9",
+     "msg": "σι",
+     "cands": [
+      "m7",
+      "v1",
+      "r9",
+      "q8"
+     ],
+     "guess": "m7",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "σ",
+     "cands": [
+      "w8",
+      "m7",
+      "k2",
+      "n6"
+     ],
+     "guess": "m7",
+     "ok": false
+    },
+    {
+     "scene": "k2",
+     "msg": "ξ",
+     "cands": [
+      "b2",
+      "f3",
+      "k2",
+      "r9"
+     ],
+     "guess": "b2",
+     "ok": false
+    },
+    {
+     "scene": "h5",
+     "msg": "σι",
+     "cands": [
+      "b2",
+      "m7",
+      "n6",
+      "h5"
+     ],
+     "guess": "m7",
+     "ok": false
+    },
+    {
+     "scene": "z3",
+     "msg": "σ",
+     "cands": [
+      "q8",
+      "w8",
+      "m7",
+      "z3"
+     ],
+     "guess": "m7",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "ο",
+     "cands": [
+      "m7",
+      "n6",
+      "f3",
+      "z3"
+     ],
+     "guess": "n6",
+     "ok": true
+    },
+    {
+     "scene": "v1",
+     "msg": "ქზძ",
+     "cands": [
+      "w8",
+      "v1",
+      "h5",
+      "m7"
+     ],
+     "guess": "h5",
+     "ok": false
+    },
+    {
+     "scene": "m7",
+     "msg": "σ",
+     "cands": [
+      "b2",
+      "q8",
+      "f3",
+      "m7"
+     ],
+     "guess": "b2",
+     "ok": false
+    },
+    {
+     "scene": "w8",
+     "msg": "ξλ",
+     "cands": [
+      "w8",
+      "n6",
+      "k2",
+      "q8"
+     ],
+     "guess": "n6",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "ο",
+     "cands": [
+      "f3",
+      "n6",
+      "b2",
+      "w8"
+     ],
+     "guess": "b2",
+     "ok": false
+    },
+    {
+     "scene": "h5",
+     "msg": "σι",
+     "cands": [
+      "v1",
+      "h5",
+      "z3",
+      "w8"
+     ],
+     "guess": "h5",
+     "ok": true
+    },
+    {
+     "scene": "z3",
+     "msg": "φ",
+     "cands": [
+      "z3",
+      "w8",
+      "q8",
+      "h5"
+     ],
+     "guess": "q8",
+     "ok": false
+    },
+    {
+     "scene": "z3",
+     "msg": "σι",
+     "cands": [
+      "z3",
+      "b2",
+      "t4",
+      "h5"
+     ],
+     "guess": "t4",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "ა",
+     "cands": [
+      "v1",
+      "f3",
+      "k2",
+      "n6"
+     ],
+     "guess": "k2",
+     "ok": false
+    },
+    {
+     "scene": "f3",
+     "msg": "σι",
+     "cands": [
+      "z3",
+      "f3",
+      "w8",
+      "v1"
+     ],
+     "guess": "z3",
+     "ok": false
+    },
+    {
+     "scene": "m7",
+     "msg": "ν",
+     "cands": [
+      "h5",
+      "r9",
+      "m7",
+      "k2"
+     ],
+     "guess": "m7",
+     "ok": true
+    },
+    {
+     "scene": "n6",
+     "msg": "ι",
+     "cands": [
+      "f3",
+      "r9",
+      "n6",
+      "b2"
+     ],
+     "guess": "n6",
+     "ok": true
+    },
+    {
+     "scene": "z3",
+     "msg": "φι",
+     "cands": [
+      "z3",
+      "h5",
+      "m7",
+      "n6"
+     ],
+     "guess": "z3",
+     "ok": true
+    },
+    {
+     "scene": "m7",
+     "msg": "σι",
+     "cands": [
+      "m7",
+      "n6",
+      "r9",
+      "q8"
+     ],
+     "guess": "m7",
+     "ok": true
+    },
+    {
+     "scene": "f3",
+     "msg": "ξο",
+     "cands": [
+      "f3",
+      "w8",
+      "t4",
+      "q8"
+     ],
+     "guess": "q8",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "ισ",
+     "cands": [
+      "n6",
+      "h5",
+      "z3",
+      "v1"
+     ],
+     "guess": "n6",
+     "ok": true
+    },
+    {
+     "scene": "m7",
+     "msg": "ξμ",
+     "cands": [
+      "r9",
+      "h5",
+      "b2",
+      "m7"
+     ],
+     "guess": "m7",
+     "ok": true
+    },
+    {
+     "scene": "m7",
+     "msg": "βσ",
+     "cands": [
+      "z3",
+      "r9",
+      "m7",
+      "w8"
+     ],
+     "guess": "m7",
+     "ok": true
+    },
+    {
+     "scene": "h5",
+     "msg": "ο",
+     "cands": [
+      "q8",
+      "m7",
+      "t4",
+      "h5"
+     ],
+     "guess": "q8",
+     "ok": false
+    },
+    {
+     "scene": "m7",
+     "msg": "σι",
+     "cands": [
+      "m7",
+      "t4",
+      "n6",
+      "v1"
+     ],
+     "guess": "m7",
+     "ok": true
+    },
+    {
+     "scene": "t4",
+     "msg": "φ",
+     "cands": [
+      "t4",
+      "k2",
+      "h5",
+      "r9"
+     ],
+     "guess": "r9",
+     "ok": false
+    },
+    {
+     "scene": "b2",
+     "msg": "σ",
+     "cands": [
+      "f3",
+      "b2",
+      "t4",
+      "n6"
+     ],
+     "guess": "n6",
+     "ok": false
+    },
+    {
+     "scene": "b2",
+     "msg": "σ",
+     "cands": [
+      "r9",
+      "f3",
+      "n6",
+      "b2"
+     ],
+     "guess": "b2",
+     "ok": true
+    }
+   ]
+  },
+  "grid": {
+   "ok": 16,
+   "talks": 32,
+   "real_ok": 32,
+   "samples": [
+    {
+     "scene": "n6",
+     "msg": "....1....",
+     "cands": [
+      "n6",
+      "q8",
+      "h5",
+      "w8"
+     ],
+     "guess": "n6",
+     "ok": true
+    },
+    {
+     "scene": "v1",
+     "msg": "մ.մ.ն.ն.ն",
+     "cands": [
+      "v1",
+      "z3",
+      "h5",
+      "n6"
+     ],
+     "guess": "v1",
+     "ok": true
+    },
+    {
+     "scene": "m7",
+     "msg": "....ᛒ....",
+     "cands": [
+      "m7",
+      "q8",
+      "b2",
+      "w8"
+     ],
+     "guess": "b2",
+     "ok": false
+    },
+    {
+     "scene": "v1",
+     "msg": "ժմժ.մ....",
+     "cands": [
+      "v1",
+      "b2",
+      "f3",
+      "w8"
+     ],
+     "guess": "v1",
+     "ok": true
+    },
+    {
+     "scene": "r9",
+     "msg": "ռ.ռ.ռ.ռ.ռ",
+     "cands": [
+      "v1",
+      "r9",
+      "m7",
+      "k2"
+     ],
+     "guess": "r9",
+     "ok": true
+    },
+    {
+     "scene": "n6",
+     "msg": "....ᛗ....",
+     "cands": [
+      "q8",
+      "w8",
+      "n6",
+      "k2"
+     ],
+     "guess": "n6",
+     "ok": true
+    },
+    {
+     "scene": "b2",
+     "msg": "....ռ....",
+     "cands": [
+      "w8",
+      "q8",
+      "b2",
+      "m7"
+     ],
+     "guess": "q8",
+     "ok": false
+    },
+    {
+     "scene": "q8",
+     "msg": "....ᛞ....",
+     "cands": [
+      "v1",
+      "t4",
+      "q8",
+      "m7"
+     ],
+     "guess": "t4",
+     "ok": false
+    },
+    {
+     "scene": "q8",
+     "msg": "1...ռ....",
+     "cands": [
+      "q8",
+      "b2",
+      "r9",
+      "k2"
+     ],
+     "guess": "q8",
+     "ok": true
+    },
+    {
+     "scene": "b2",
+     "msg": "....ㅅ....",
+     "cands": [
+      "k2",
+      "z3",
+      "m7",
+      "b2"
+     ],
+     "guess": "z3",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "....ռ....",
+     "cands": [
+      "w8",
+      "h5",
+      "n6",
+      "q8"
+     ],
+     "guess": "n6",
+     "ok": true
+    },
+    {
+     "scene": "h5",
+     "msg": "....ᛞ....",
+     "cands": [
+      "r9",
+      "n6",
+      "t4",
+      "h5"
+     ],
+     "guess": "n6",
+     "ok": false
+    },
+    {
+     "scene": "b2",
+     "msg": "....ᛞ....",
+     "cands": [
+      "f3",
+      "b2",
+      "z3",
+      "n6"
+     ],
+     "guess": "z3",
+     "ok": false
+    },
+    {
+     "scene": "k2",
+     "msg": "....ᛦ....",
+     "cands": [
+      "m7",
+      "k2",
+      "n6",
+      "f3"
+     ],
+     "guess": "n6",
+     "ok": false
+    },
+    {
+     "scene": "h5",
+     "msg": "....ᛞ....",
+     "cands": [
+      "r9",
+      "n6",
+      "f3",
+      "h5"
+     ],
+     "guess": "n6",
+     "ok": false
+    },
+    {
+     "scene": "z3",
+     "msg": ".ㅏ.....ᛦ.",
+     "cands": [
+      "h5",
+      "z3",
+      "t4",
+      "k2"
+     ],
+     "guess": "t4",
+     "ok": false
+    },
+    {
+     "scene": "b2",
+     "msg": "....ㅅ....",
+     "cands": [
+      "b2",
+      "q8",
+      "z3",
+      "r9"
+     ],
+     "guess": "z3",
+     "ok": false
+    },
+    {
+     "scene": "m7",
+     "msg": "....ռ....",
+     "cands": [
+      "q8",
+      "r9",
+      "m7",
+      "h5"
+     ],
+     "guess": "h5",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "....ㅅ....",
+     "cands": [
+      "f3",
+      "t4",
+      "n6",
+      "r9"
+     ],
+     "guess": "n6",
+     "ok": true
+    },
+    {
+     "scene": "z3",
+     "msg": "....ᛦ....",
+     "cands": [
+      "z3",
+      "n6",
+      "f3",
+      "t4"
+     ],
+     "guess": "n6",
+     "ok": false
+    },
+    {
+     "scene": "m7",
+     "msg": "....ㅅ....",
+     "cands": [
+      "m7",
+      "h5",
+      "r9",
+      "q8"
+     ],
+     "guess": "h5",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "1........",
+     "cands": [
+      "b2",
+      "w8",
+      "h5",
+      "n6"
+     ],
+     "guess": "n6",
+     "ok": true
+    },
+    {
+     "scene": "v1",
+     "msg": "ռ.ռ.շ.ս.ս",
+     "cands": [
+      "z3",
+      "h5",
+      "v1",
+      "r9"
+     ],
+     "guess": "v1",
+     "ok": true
+    },
+    {
+     "scene": "z3",
+     "msg": "....ㅅ....",
+     "cands": [
+      "z3",
+      "w8",
+      "m7",
+      "f3"
+     ],
+     "guess": "z3",
+     "ok": true
+    },
+    {
+     "scene": "v1",
+     "msg": "ռ.ռ.ն....",
+     "cands": [
+      "m7",
+      "r9",
+      "v1",
+      "h5"
+     ],
+     "guess": "v1",
+     "ok": true
+    },
+    {
+     "scene": "k2",
+     "msg": ".ᛃ.......",
+     "cands": [
+      "r9",
+      "z3",
+      "k2",
+      "b2"
+     ],
+     "guess": "r9",
+     "ok": false
+    },
+    {
+     "scene": "r9",
+     "msg": "ᛃ.ᛃ.ᛃ.ᛃ.ᛃ",
+     "cands": [
+      "q8",
+      "r9",
+      "m7",
+      "h5"
+     ],
+     "guess": "r9",
+     "ok": true
+    },
+    {
+     "scene": "h5",
+     "msg": "....ռ....",
+     "cands": [
+      "h5",
+      "k2",
+      "r9",
+      "q8"
+     ],
+     "guess": "r9",
+     "ok": false
+    },
+    {
+     "scene": "z3",
+     "msg": "....ֆ....",
+     "cands": [
+      "h5",
+      "k2",
+      "z3",
+      "q8"
+     ],
+     "guess": "z3",
+     "ok": true
+    },
+    {
+     "scene": "m7",
+     "msg": "ㅂ..ㅂ..ㅂ..",
+     "cands": [
+      "r9",
+      "m7",
+      "w8",
+      "z3"
+     ],
+     "guess": "m7",
+     "ok": true
+    },
+    {
+     "scene": "b2",
+     "msg": "ռռռ......",
+     "cands": [
+      "q8",
+      "m7",
+      "b2",
+      "z3"
+     ],
+     "guess": "b2",
+     "ok": true
+    },
+    {
+     "scene": "f3",
+     "msg": "...ᛒ.ֆ...",
+     "cands": [
+      "v1",
+      "h5",
+      "f3",
+      "b2"
+     ],
+     "guess": "b2",
+     "ok": false
+    }
+   ]
+  },
+  "twin": {
+   "ok": 12,
+   "talks": 32,
+   "real_ok": 30,
+   "samples": [
+    {
+     "scene": "k2",
+     "msg": "σ",
+     "cands": [
+      "r9",
+      "k2",
+      "t4",
+      "b2"
+     ],
+     "guess": "b2",
+     "ok": false
+    },
+    {
+     "scene": "b2",
+     "msg": "σ",
+     "cands": [
+      "n6",
+      "z3",
+      "b2",
+      "m7"
+     ],
+     "guess": "b2",
+     "ok": true
+    },
+    {
+     "scene": "m7",
+     "msg": "σι",
+     "cands": [
+      "m7",
+      "b2",
+      "t4",
+      "k2"
+     ],
+     "guess": "m7",
+     "ok": true
+    },
+    {
+     "scene": "b2",
+     "msg": "σ",
+     "cands": [
+      "t4",
+      "v1",
+      "b2",
+      "q8"
+     ],
+     "guess": "b2",
+     "ok": true
+    },
+    {
+     "scene": "z3",
+     "msg": "ισ",
+     "cands": [
+      "m7",
+      "n6",
+      "z3",
+      "b2"
+     ],
+     "guess": "b2",
+     "ok": false
+    },
+    {
+     "scene": "b2",
+     "msg": "σ",
+     "cands": [
+      "n6",
+      "q8",
+      "b2",
+      "r9"
+     ],
+     "guess": "b2",
+     "ok": true
+    },
+    {
+     "scene": "f3",
+     "msg": "ξσο",
+     "cands": [
+      "n6",
+      "f3",
+      "r9",
+      "q8"
+     ],
+     "guess": "r9",
+     "ok": false
+    },
+    {
+     "scene": "w8",
+     "msg": "ομ",
+     "cands": [
+      "w8",
+      "r9",
+      "t4",
+      "b2"
+     ],
+     "guess": "b2",
+     "ok": false
+    },
+    {
+     "scene": "v1",
+     "msg": "σξ",
+     "cands": [
+      "v1",
+      "h5",
+      "z3",
+      "q8"
+     ],
+     "guess": "q8",
+     "ok": false
+    },
+    {
+     "scene": "m7",
+     "msg": "σι",
+     "cands": [
+      "f3",
+      "m7",
+      "h5",
+      "k2"
+     ],
+     "guess": "m7",
+     "ok": true
+    },
+    {
+     "scene": "b2",
+     "msg": "ν",
+     "cands": [
+      "n6",
+      "z3",
+      "w8",
+      "b2"
+     ],
+     "guess": "b2",
+     "ok": true
+    },
+    {
+     "scene": "z3",
+     "msg": "λι",
+     "cands": [
+      "z3",
+      "n6",
+      "m7",
+      "r9"
+     ],
+     "guess": "m7",
+     "ok": false
+    },
+    {
+     "scene": "q8",
+     "msg": "σι",
+     "cands": [
+      "k2",
+      "n6",
+      "r9",
+      "q8"
+     ],
+     "guess": "q8",
+     "ok": true
+    },
+    {
+     "scene": "m7",
+     "msg": "σι",
+     "cands": [
+      "q8",
+      "t4",
+      "n6",
+      "m7"
+     ],
+     "guess": "q8",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "σ",
+     "cands": [
+      "m7",
+      "f3",
+      "z3",
+      "n6"
+     ],
+     "guess": "m7",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "ο",
+     "cands": [
+      "t4",
+      "h5",
+      "m7",
+      "n6"
+     ],
+     "guess": "n6",
+     "ok": true
+    },
+    {
+     "scene": "z3",
+     "msg": "ιξ",
+     "cands": [
+      "t4",
+      "h5",
+      "r9",
+      "z3"
+     ],
+     "guess": "h5",
+     "ok": false
+    },
+    {
+     "scene": "q8",
+     "msg": "σ",
+     "cands": [
+      "r9",
+      "w8",
+      "m7",
+      "q8"
+     ],
+     "guess": "m7",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "ικ",
+     "cands": [
+      "z3",
+      "w8",
+      "r9",
+      "n6"
+     ],
+     "guess": "n6",
+     "ok": true
+    },
+    {
+     "scene": "k2",
+     "msg": "σι",
+     "cands": [
+      "k2",
+      "q8",
+      "n6",
+      "h5"
+     ],
+     "guess": "n6",
+     "ok": false
+    },
+    {
+     "scene": "h5",
+     "msg": "σ",
+     "cands": [
+      "b2",
+      "w8",
+      "h5",
+      "m7"
+     ],
+     "guess": "m7",
+     "ok": false
+    },
+    {
+     "scene": "z3",
+     "msg": "φ",
+     "cands": [
+      "z3",
+      "n6",
+      "w8",
+      "f3"
+     ],
+     "guess": "n6",
+     "ok": false
+    },
+    {
+     "scene": "f3",
+     "msg": "ξοφ",
+     "cands": [
+      "r9",
+      "f3",
+      "k2",
+      "m7"
+     ],
+     "guess": "r9",
+     "ok": false
+    },
+    {
+     "scene": "h5",
+     "msg": "σι",
+     "cands": [
+      "z3",
+      "h5",
+      "v1",
+      "b2"
+     ],
+     "guess": "z3",
+     "ok": false
+    },
+    {
+     "scene": "h5",
+     "msg": "ι",
+     "cands": [
+      "r9",
+      "n6",
+      "h5",
+      "b2"
+     ],
+     "guess": "n6",
+     "ok": false
+    },
+    {
+     "scene": "k2",
+     "msg": "ξο",
+     "cands": [
+      "t4",
+      "h5",
+      "k2",
+      "z3"
+     ],
+     "guess": "t4",
+     "ok": false
+    },
+    {
+     "scene": "b2",
+     "msg": "σ",
+     "cands": [
+      "b2",
+      "n6",
+      "z3",
+      "v1"
+     ],
+     "guess": "b2",
+     "ok": true
+    },
+    {
+     "scene": "t4",
+     "msg": "φ",
+     "cands": [
+      "z3",
+      "t4",
+      "f3",
+      "q8"
+     ],
+     "guess": "q8",
+     "ok": false
+    },
+    {
+     "scene": "q8",
+     "msg": "σι",
+     "cands": [
+      "h5",
+      "q8",
+      "n6",
+      "m7"
+     ],
+     "guess": "n6",
+     "ok": false
+    },
+    {
+     "scene": "m7",
+     "msg": "ξ",
+     "cands": [
+      "n6",
+      "m7",
+      "q8",
+      "f3"
+     ],
+     "guess": "m7",
+     "ok": true
+    },
+    {
+     "scene": "z3",
+     "msg": "ισ",
+     "cands": [
+      "z3",
+      "b2",
+      "f3",
+      "w8"
+     ],
+     "guess": "f3",
+     "ok": false
+    },
+    {
+     "scene": "n6",
+     "msg": "ι",
+     "cands": [
+      "q8",
+      "n6",
+      "k2",
+      "f3"
+     ],
+     "guess": "n6",
+     "ok": true
+    }
+   ]
+  }
+ }
+}

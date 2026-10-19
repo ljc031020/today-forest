@@ -251,11 +251,17 @@ function eqHTML(k, c){
 /* ════════ 실험 노트 ════════ */
 async function drawNotes(){
   $('#notesChart').innerHTML = TF.okChart({w: 1000, h: 300});
-  const cs = TF.compounds('grid').filter(c => c.op !== '⊃').slice(0, 4);
-  $('#notesEqs').innerHTML = cs.map(eqHTML.bind(null, 'grid')).join('') + `<p class="k-small" style="margin:4px 0 0;font-size:15px">그림 섬 기준. ‘숲은 나무가 여럿’ 같은 건 AI가 원래 아는 상식일 수도 있어요. 놀라운 건 한 AI의 표현이 섬 모두의 규칙으로 굳었다는 거예요.</p>`;
-  $('#notesLen').innerHTML = TF.lengths('grid').map(r => `<div class="bar"><div class="k">${{3:'자주 쓰는 말', 2:'보통', 1:'가끔 쓰는 말'}[r.t]}<small>${r.ex}</small></div><div class="tr"><div class="b" style="width:${r.first / 9 * 75}%"><span>${r.first.toFixed(1)}칸</span></div><div class="b now" style="width:${r.last / 9 * 75}%"><span>${r.last.toFixed(1)}칸</span></div></div></div>`).join('') + '<div class="legend"><span><i style="background:var(--rule)"></i>처음 세 세대</span><span><i style="background:var(--grid)"></i>최근 세 세대</span></div>';
-  $('#notesIsls').innerHTML = TF.ORDER.map(k => `<div class="isl" style="--k:${C[k]}"><h3><i></i>${TF.ISL[k]}</h3><div class="big">${big(W(k, ID.forest), k, 26)}</div><p>‘숲’ · ${TF.ISL_DESC[k]}</p></div>`).join('');
-  $('#notesMeet').innerHTML = TF.met ? `<b>${TF.META.met_gen}세대부터</b> 글자 섬과 그림 섬이 만나 서로의 말을 듣고 있어요. 들은 낯선 글자는 빌려 쓸 수 있어요.` : `<b>10/22</b>에 글자 섬과 그림 섬이 처음 만나요. 비교 섬은 끝까지 아무도 만나지 않아요. 만남이 언어를 어떻게 바꾸는지 비교 섬과 견줘 볼 거예요.`;
+  const SP = TF.split('grid'), all = TF.compounds('grid').filter(c => c.op !== '⊃' && (!SP || c.a !== SP.b));
+  const f0 = all.find(c => c.a === ID.forest), rest = all.filter(c => c !== f0), byS = (x, y) => x.since - y.since;
+  const cs = [f0, rest.filter(c => c.op === '×').sort(byS)[0], rest.filter(c => c.op === '+').sort(byS)[0]].filter(Boolean);
+  for (const c of rest) if (cs.length < 4 && !cs.includes(c)) cs.push(c);
+  $('#notesEqs').innerHTML = (cs.length ? cs.map(eqHTML.bind(null, 'grid')).join('') : '<div class="card k-small" style="font-size:15px">이번 세대엔 합친 단어가 보이지 않아요.</div>') + `<p class="k-small" style="margin:4px 0 0;font-size:15px">그림 섬 기준. ‘숲은 나무가 여럿’ 같은 건 AI가 원래 아는 상식일 수도 있어요. 놀라운 건 그 짜임이 섬 모두가 쓰는 규칙으로 굳었다는 거예요.</p>`;
+  if (SP) $('#notesLen').innerHTML = TF.splitHTML('grid', 16) + `<p class="k-small" style="margin:0;font-size:15px">처음엔 ‘${NAME[SP.a]}’${TF.josa(NAME[SP.a], '을', '를')} ${SP.from}칸으로 길게 썼어요. ${SP.shrank}세대에 ${NAME[SP.a]}${TF.josa(NAME[SP.a], '은', '는')} ${SP.to}칸으로 줄고, ${SP.took}세대부터는 그 긴 말을 ‘${NAME[SP.b]}’${TF.josa(NAME[SP.b], '이', '가')} 이어받았어요.</p>`;
+  else { $('#notesLenH').textContent = '처음보다 말이 짧아졌어요'; $('#notesLen').innerHTML = `<div class="card" style="display:grid;gap:16px">${TF.lengths('grid').map(r => `<div class="bar"><div class="k">${{3:'자주 나오는 그림', 2:'보통', 1:'가끔 나오는 그림'}[r.t]}<small>${r.ex}</small></div><div class="tr"><div class="b" style="width:${r.first / 9 * 75}%"><span>${r.first.toFixed(1)}칸</span></div><div class="b now" style="width:${r.last / 9 * 75}%"><span>${r.last.toFixed(1)}칸</span></div></div></div>`).join('')}</div>`; }
+  const MT = TF.meeting();
+  if (MT) { $('#notesIslsH').textContent = `두 섬이 만난 뒤 (${MT.mg}세대부터)`; $('#notesIsls').className = ''; $('#notesIsls').innerHTML = TF.meetHTML(); }
+  else $('#notesIsls').innerHTML = TF.ORDER.map(k => { const w = W(k, ID.forest); return `<div class="isl" style="--k:${C[k]}"><h3><i></i>${TF.ISL[k]}</h3><div class="big">${big(w, k, 26)}</div><span class="k-small">${TF.scriptsIn(w).map(x => TF.SCRIPT_KO[x]).join('·')}</span><p>‘숲’ · ${TF.ISL_DESC[k]}</p></div>`; }).join('');
+  $('#notesMeet').innerHTML = MT ? '' : `<b>10/22</b>에 글자 섬과 그림 섬이 처음 만나요. 비교 섬은 끝까지 아무도 만나지 않아요. 만남이 언어를 어떻게 바꾸는지 비교 섬과 견줘 볼 거예요.`;
   const Cc = await TF.loadControl();
   $('#notesCmp').innerHTML = TF.ORDER.map(k => { const c = Cc && Cc.islands && Cc.islands[k]; const v = c ? pct(c.ok / c.talks * 32) : null, now = pct(LAST.islands[k].ok);
     return `<div class="bar"><div class="k">${TF.ISL[k]}<small>메모 없음 / 메모 있음</small></div><div class="tr">${v == null ? '<span class="tagp">측정 중</span>' : `<div class="b" style="width:${v * .75}%"><span>${v}%</span></div>`}<div class="b now" style="width:${now * .75}%;background:${C[k]}"><span>${now}%</span></div></div></div>`; }).join('') +
