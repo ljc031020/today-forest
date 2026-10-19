@@ -14,6 +14,9 @@ on:
       probe:
         description: '두 섬 사이 대화만 시험 (yes 입력 시, 기록 안 바뀜)'
         default: 'no'
+      control:
+        description: '메모를 지운 AI 비교 실험 (yes 입력 시, 결과만 control.json에 저장)'
+        default: 'no'
 
 concurrency:
   group: world
@@ -36,6 +39,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           if [ "${{ github.event.inputs.probe }}" = "yes" ]; then python engine/probe.py; exit 0; fi
+          if [ "${{ github.event.inputs.control }}" = "yes" ]; then python engine/control.py; exit 0; fi
           ARGS="--gens ${{ github.event.inputs.gens || '1' }}"
           if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="--auto"; fi
           if [ "${{ github.event.inputs.reset }}" = "yes" ]; then ARGS="$ARGS --reset"; fi
