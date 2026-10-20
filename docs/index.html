@@ -18,7 +18,7 @@
   <div class="wrap">
     <a class="logo" href="#/">오늘의 숲</a>
     <nav class="nav" id="nav" aria-label="메뉴">
-      <a href="#/">단어장</a>
+      <a href="#/">오늘</a>
       <a href="#/quiz">맞혀 보기</a>
       <a href="#/talk">대화 보기</a>
       <a href="#/notes">실험 노트</a>
@@ -28,15 +28,28 @@
 </header>
 
 <main class="wrap">
-  <!-- 단어장 (첫 화면) -->
+  <!-- 첫 화면: 지금 어디쯤, 지금 무슨 일, 지금의 말 -->
   <section class="view" id="vToday">
-    <div class="hero">
-      <h1>AI가 만든,<br>세상에 없던 말</h1>
-      <p class="sub">AI 4명<span class="dot">·</span>사람 말 금지<span class="dot">·</span>그림 맞히기만 반복<br><span id="heroWhen"></span></p>
-      <div class="row"><a class="btn" href="#/quiz">직접 맞혀 보기 →</a><a class="btn ghost" href="#/talk">AI끼리 대화 보기</a></div>
+    <div class="mtop">
+      <div><h1>AI가 만든, 세상에 없던 말</h1><p class="sub">AI 4명<span class="dot">·</span>사람 말 금지<span class="dot">·</span>그림 맞히기만 반복</p></div>
     </div>
+
+    <div class="journey" id="journey" aria-label="실험 일정에서 지금 위치"></div>
+
+    <div class="live" id="live">
+      <div class="live-h"><span class="lv"><i></i><b id="liveLab"></b></span><div class="tabs" id="liveTabs"></div></div>
+      <div class="lstage">
+        <div class="lsp"><span class="lw">말하는 AI <b id="lsId"></b></span><div class="lpic"><img id="lsImg" alt=""></div><small>그림은 말하는 AI만 봄</small></div>
+        <div class="lmsg"><span class="arr" aria-hidden="true">→</span><div id="lMsg"></div><span class="arr" aria-hidden="true">→</span></div>
+        <div class="lli"><span class="lw">듣는 AI <b id="llId"></b></span><div class="lcands" id="lCands"></div><small id="lRes">&nbsp;</small></div>
+      </div>
+      <div class="lfoot"><div class="lslots" id="lSlots"></div><span class="ltally" id="lTally"></span></div>
+    </div>
+
+    <div class="row cta"><a class="btn" href="#/quiz">직접 맞혀 보기 →</a><a class="btn ghost" id="talkLink" href="#/talk">자세히 보기</a></div>
+
     <div class="sech">
-      <h2>단어장</h2>
+      <h2>지금의 단어 12개</h2>
       <div class="row"><div class="tabs" id="todayTabs"></div><button class="pill" id="hideBtn">뜻 가리기</button></div>
     </div>
     <div class="spec" id="spec"></div>
@@ -99,7 +112,7 @@
 
   <!-- 단어 기록 -->
   <section class="view" id="vWord">
-    <a class="back" href="#/">← 단어장</a>
+    <a class="back" href="#/">← 오늘</a>
     <div class="vh">
       <h1 id="wordH">단어 기록</h1>
       <p>1세대부터 이 그림을 부른 말</p>

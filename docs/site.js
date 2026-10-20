@@ -1,8 +1,8 @@
 /* 오늘의 숲 · 사이트
-   #/               단어장 (첫 화면)
+   #/               오늘 (첫 화면: 여정·실제 대화 재생·단어 12개)
    #/quiz           맞혀 보기 (발표 QR이 도착하는 곳)
    #/talk/grid/25   대화 보기 (섬, 세대)
-   #/word/grid/r9   단어 기록 (섬, 그림) — 단어장에서 단어를 누르면
+   #/word/grid/r9   단어 기록 (섬, 그림) — 첫 화면 단어를 누르면
    #/notes          실험 노트 */
 (async function(){
 const $ = s => document.querySelector(s);
@@ -24,24 +24,79 @@ function tabs(el, val, on, extra = []){
 }
 
 /* 시계 */
-const tick = () => { $('#clockpill').innerHTML = TF.nextSlot ? `${NOW}세대<span class="lg"> · 다음 세대까지</span> <b>${TF.countdown()}</b>` : `${NOW}세대`; };
+const tick = () => { const j = document.getElementById('jcd'); if (j) j.textContent = TF.countdown(); $('#clockpill').innerHTML = TF.nextSlot ? `${NOW}세대<span class="lg"> · 다음 세대까지</span> <b>${TF.countdown()}</b>` : `${NOW}세대`; };
 tick(); setInterval(tick, 1000);
 
-/* ════════ 오늘의 언어 ════════ */
-let todayK = 'grid', hideMeaning = false;
+/* ════════ 첫 화면 ════════
+   ① 여정 막대: 시작 → 지금 → 만남 → 발표. 막대 높이 = 세대마다 통한 비율
+   ② 최근 세대의 실제 대화를 계속 재생 (그림 → 글자 → 4장 중 고름 → 통함)
+   ③ 지금의 단어 12개 */
+let todayK = 'grid', liveK = 'grid', hideMeaning = false;
+function drawJourney(k){
+  const end = Math.max(TF.endGen || NOW, NOW), last = Math.max(end, NOW), n = last;
+  const at = g => { const r = TF.trip.find(x => x.gen === g); return r ? r.t : null; };
+  const pos = g => ((g - .5) / n * 100).toFixed(3) + '%';
+  const bars = Array.from({length: n}, (_, i) => { const g = i + 1, row = GENS.find(x => x.gen === g);
+    if (!row) return `<span class="jb fut" title="${g}세대"></span>`;
+    const v = k === 'cross' ? (row.cross ? row.cross.ok / row.cross.talks : 0) : row.islands[k].ok / 32;
+    return `<span class="jb${g === NOW ? ' now' : ''}" style="--h:${Math.max(6, v * 100).toFixed(1)}%" title="${g}세대 ${Math.round(v * 100)}%"></span>`; }).join('');
+  const marks = [[1, '시작', at(1)], [TF.meetGen, '두 섬 만남', at(TF.meetGen)], [TF.endGen, '발표', at(TF.endGen)]].filter(m => m[0] && m[0] <= n)
+    .map(([g, lab, t]) => `<span class="jm${g <= NOW ? ' past' : ''}" style="left:${pos(g)}"><b>${lab}</b>${t ? TF.md(t) : ''}</span>`).join('');
+  const side = NOW / n > .85 ? ' r' : NOW / n < .15 ? ' l' : '';
+  $('#journey').innerHTML = `<div class="jnow${side}" style="left:${pos(NOW)}"><b>지금 ${NOW}세대</b><span>다음 세대까지 <em id="jcd">${TF.countdown()}</em></span></div><div class="jbars" style="--k:${C[k] || 'var(--ink)'}">${bars}</div><div class="jmarks">${marks}</div><p class="jcap">막대 하나 = 1세대 (하루 2번) · 높이 = 서로 알아들은 비율</p>`;
+}
+async function heroLoop(tk){
+  const k = liveK, G = await TF.loadGen(NOW); if (tk !== token) return;
+  const talks = (k === 'cross' ? ((G && G.cross || {}).talks || []) : ((G && G.islands[k] || {}).talks || [])).filter(t => t.msg);
+  const done = [], slots = () => { $('#lSlots').innerHTML = Array.from({length: talks.length}, (_, i) => { const r = done[i]; return `<i class="${r ? (r.ok ? 'ok' : 'no') : (i === done.length ? 'cur' : '')}"></i>`; }).join(''); $('#lTally').textContent = done.length ? `${done.filter(r => r.ok).length} / ${done.length} 통함` : ''; };
+  $('#liveLab').textContent = `${NOW}세대 실제 대화 재생 중`;
+  $('#talkLink').href = `#/talk/${k}/${NOW}`;
+  while (tk === token) {
+    done.length = 0; slots();
+    for (const t of talks) {
+      if (tk !== token) return;
+      const from = t.from || k, to = t.to || k;
+      $('#live').style.setProperty('--c', C[from] || 'var(--ink)');
+      $('#lsId').textContent = t.sp; $('#llId').textContent = t.li;
+      const img = $('#lsImg'); img.classList.remove('on'); img.src = `img/${t.scene}.png`;
+      $('#lMsg').innerHTML = ''; $('#lCands').innerHTML = '<i></i>'.repeat(4); $('#lRes').innerHTML = '&nbsp;'; $('#lRes').className = '';
+      await sleep(250); if (tk !== token) return; img.classList.add('on');
+      await sleep(900); if (tk !== token) return;
+      if (TF.body(from) === 'grid') { $('#lMsg').innerHTML = TF.g3('.........', 30, C[from]); const cells = $('#lMsg').querySelectorAll('i');
+        for (let i = 0; i < 9; i++) { if (t.msg[i] && t.msg[i] !== '.') { cells[i].textContent = t.msg[i]; cells[i].classList.add('pop'); await sleep(90); if (tk !== token) return; } } }
+      else { $('#lMsg').innerHTML = '<span class="g"></span>'; for (const c of t.msg) { $('#lMsg').firstChild.insertAdjacentHTML('beforeend', `<span class="pop" style="display:inline-block">${esc(c)}</span>`); await sleep(160); if (tk !== token) return; } }
+      await sleep(600); if (tk !== token) return;
+      $('#lCands').innerHTML = (t.cands || []).map(c => `<i data-s="${c}"><img src="img/${c}.png" alt=""></i>`).join('');
+      await sleep(700); if (tk !== token) return;
+      const els = [...$('#lCands').children], pick = els.find(e => e.dataset.s === t.guess);
+      pick && pick.classList.add('pick');
+      await sleep(450); if (tk !== token) return;
+      if (t.ok) pick && pick.classList.add('ok'); else { pick && pick.classList.add('no'); const r = els.find(e => e.dataset.s === t.scene); r && r.classList.add('ans'); }
+      $('#lRes').className = t.ok ? 'ok' : 'no'; $('#lRes').textContent = t.ok ? '통함 → 둘 다 메모에 적음' : '안 통함';
+      done.push(t); slots();
+      await sleep(1500);
+    }
+    if (tk !== token) return;
+    $('#lRes').className = ''; $('#lRes').textContent = `${NOW}세대 ${done.length}판 끝. 처음부터 다시`;
+    await sleep(2200);
+  }
+}
 function drawToday(){
-  const d0 = new Date(Date.parse(GENS[0].at) + TF.KST);
-  $('#heroWhen').textContent = `${d0.getUTCMonth() + 1}월 ${d0.getUTCDate()}일 시작 → 지금 ${NOW}세대 (하루 2세대)`;
-  tabs($('#todayTabs'), todayK, k => { todayK = k; drawToday(); });
+  const tk = token;
+  const extra = GENS.some(g => g.cross) ? ['cross'] : [];
+  tabs($('#liveTabs'), liveK, k => { liveK = k; drawToday(); }, extra);
+  drawJourney(liveK);
+  heroLoop(tk);
+  tabs($('#todayTabs'), todayK, k => { todayK = k; drawWords(); });
+  drawWords();
+}
+function drawWords(){
   const prev = GENS[GENS.length - 2];
   $('#spec').innerHTML = SIDS.map(s => { const w = W(todayK, s), p = W(todayK, s, prev);
     return `<a class="wd" href="#/word/${todayK}/${s}" style="--k:${C[todayK]}">${p !== undefined && p !== w ? '<span class="new">바뀜</span>' : ''}<span class="big">${big(w, todayK, 18)}</span><span class="mn" style="visibility:${hideMeaning ? 'hidden' : 'visible'}">${pic(s, 26)}${NAME[s]}</span></a>`; }).join('');
   $('#hideBtn').textContent = hideMeaning ? '뜻 보기' : '뜻 가리기';
-  $('#hideBtn').onclick = () => { hideMeaning = !hideMeaning; drawToday(); };
-  const r = LAST.islands[todayK];
-  const dd = TF.dday(TF.MEET);
-  $('#todayMeta').innerHTML = `<b>${TF.ISL[todayK]}</b> · ${TF.ISL_DESC[todayK]} · 이번 세대 32판 중 ${r.ok}판 통함 · ` +
-    (TF.met ? `${TF.META.met_gen}세대부터 글자 섬 × 그림 섬 만남 중` : `10.22 글자 섬 × 그림 섬 첫 만남 ${dd > 0 ? 'D-' + dd : '오늘'}`) + '<br>단어를 누르면 1세대부터 바뀐 기록이 나와요.';
+  $('#hideBtn').onclick = () => { hideMeaning = !hideMeaning; drawWords(); };
+  $('#todayMeta').innerHTML = `<b>${TF.ISL[todayK]}</b> · ${TF.ISL_DESC[todayK]} · 단어를 누르면 1세대부터 바뀐 기록`;
 }
 
 /* ════════ 직접 해 보기 ════════ */
