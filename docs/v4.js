@@ -60,7 +60,7 @@ async function answer(s, g){
   for (const b of P.children) b.classList.add(b.dataset.s === s ? 'ok' : b.dataset.s === g ? 'no' : 'dim');
   $('#qWord .tiles') && $('#qWord .tiles').classList.add('on');
   const L = TF.lineage(K, s), r = run(L, L.length), from = L.length - r + 1;
-  $('#qMeta').innerHTML = `<b>${NAME[s]}</b><i></i><span>${from === 1 ? '1세대부터 같은 말' : `${from}세대부터 같은 말`}</span>`;
+  $('#qMeta').innerHTML = `<b>${NAME[s]}</b><i></i><span>${from === 1 ? '1세대부터 같은 말' : from === NOW ? '이번 세대에 바뀐 말' : `${from}세대부터 같은 말`}</span>`;
   const comp = TF.compounds(K).find(c => c.a === s && c.op !== '⊃');
   const say = ok ? ['맞았어요.', '정답이에요.', '맞혔어요.'][score.length % 3] : `아쉬워요. 정답은 ‘${NAME[s]}’.`;
   let sub = '';

@@ -4,7 +4,7 @@
    상태: Wordle 칸 — 빈 칸=테두리, 쓴 칸=진한 테두리, 결과=색으로 채움
    글자색: 가장 작은 글자도 4.5:1 이상 (지금 흐린 글씨 2.0:1) */
 :root{
-  --paper:#F3F4F0; --surface:#FFFFFF; --ink:#141A17; --t2:#3F4844; --t3:#5B6560; --line:#D9DED7; --fill:#E8EBE5; --miss:#8B938E;
+  --paper:#F3F4F0; --surface:#FFFFFF; --ink:#141A17; --t2:#3F4844; --t3:#5B6560; --line:#D9DED7; --fill:#E8EBE5; --miss:#6E7671;
   --grid:#0B8457; --line-i:#2450D8; --twin:#8A3F9E; --k:var(--grid);
   --f-ui:"Pretendard Variable",Pretendard,-apple-system,system-ui,"Apple SD Gothic Neo",sans-serif;
   --f-g:"Noto Sans","Noto Sans Georgian","Noto Sans Armenian","Noto Sans Runic","Noto Sans Cherokee","Noto Sans Arabic","Noto Sans KR",sans-serif;
