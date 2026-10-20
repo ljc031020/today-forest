@@ -5,7 +5,7 @@ const KO = {water:'물',fire:'불',tree:'나무',person:'사람',mountain:'산',
 const esc = TF.esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 TF.COLOR = {line:'var(--line)', grid:'var(--grid)', twin:'var(--twin)'};
 TF.ISL = {line:'글자 섬', grid:'그림 섬', twin:'비교 섬'};
-TF.ISL_DESC = {line:'글자를 한 줄로 늘어놓는 섬', grid:'3×3 칸에 글자를 놓는 섬', twin:'글자 섬과 같은 조건, 아무도 만나지 않는 섬'};
+TF.ISL_DESC = {line:'글자를 한 줄로 나열', grid:'3×3 칸에 글자 배치', twin:'글자 섬과 같은 조건 · 만남 없음'};
 TF.ORDER = ['grid', 'line', 'twin'];
 TF.SCRIPT_KO = {greek:'그리스 문자', georgian:'조지아 문자', cherokee:'체로키 문자', arabic:'아랍 문자', armenian:'아르메니아 문자', runic:'룬 문자', hangul:'한글 자모', digit:'숫자'};
 const pad = n => String(n).padStart(3, '0');
@@ -162,12 +162,12 @@ TF.meetHTML = function(q = 22){
   const m = TF.meeting(); if (!m) return '';
   const pc = v => Math.round(v * 100);
   const card = k => { const r = m.isl[k], met = (TF.META.meet || []).includes(k);
-    return `<div class="mrow" style="--k:${TF.COLOR[k]}"><div class="mh"><i></i><b>${TF.ISL[k]}</b><span>${met ? '만남' : '만나지 않음'}</span></div>
-      <div class="mv"><span>남의 글자가 섞인 말</span><b>${pc(r.borrow)}%</b></div>
+    return `<div class="mrow" style="--k:${TF.COLOR[k]}"><div class="mh"><i></i><b>${TF.ISL[k]}</b><span>${met ? '만남' : '만남 없음 (대조군)'}</span></div>
+      <div class="mv"><span>다른 섬 글자 섞인 말</span><b>${pc(r.borrow)}%</b></div>
       <div class="mv"><span>만난 뒤 바뀐 단어</span><b>${r.changed}<small> / ${r.total}</small></b></div>
       <div class="mf">${r.foreign.length ? r.foreign.slice(0, 8).map(c => `<span class="g">${esc(c)}</span>`).join('') : '<em>빌린 글자 없음</em>'}</div></div>`; };
-  return `<div class="meetx"><div class="mchart"><div class="mbig"><span>두 섬 사이 대화가 통한 비율</span><b>${pc(m.first)}% <i>→</i> ${pc(m.recent)}%</b><small>만난 날 → 최근 세 세대 평균</small></div>${TF.crossChart({w: 560, h: 210})}</div>
-    <div class="mrows">${TF.ORDER.map(card).join('')}<p class="mnote">글자 섬과 비교 섬은 조건이 같아요. 둘의 차이만큼이 만남이 바꾼 거예요.</p></div></div>`;
+  return `<div class="meetx"><div class="mchart"><div class="mbig"><span>두 섬 사이 대화 성공률</span><b>${pc(m.first)}% <i>→</i> ${pc(m.recent)}%</b><small>만난 날 → 최근 3세대 평균</small></div>${TF.crossChart({w: 560, h: 210})}</div>
+    <div class="mrows">${TF.ORDER.map(card).join('')}<p class="mnote">글자 섬 · 비교 섬: 조건 같음 → 둘의 차이 = 만남의 영향</p></div></div>`;
 };
 
 /* 말이 나뉘어요: 처음 한 그림의 긴 말이 다른 그림으로 옮겨 간 경우 (예: 물 9칸 → 1칸, 바다가 9칸을 이어받음) */

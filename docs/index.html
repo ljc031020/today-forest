@@ -3,11 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>오늘의 숲 · 세상에 없던 언어</title>
-<meta name="description" content="AI들이 낯선 글자로 만든, 세상에 없던 언어. 오늘의 단어를 보고, 직접 맞혀 보고, AI들의 대화를 들여다봐요.">
+<title>오늘의 숲 · AI가 만든, 세상에 없던 말</title>
+<meta name="description" content="AI들이 그림 맞히기만 반복해서 만든, 세상에 없던 말. 직접 맞혀 보고, AI끼리 대화하는 장면을 봐요.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Sans:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+Cherokee:wght@500&family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+KR:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+Cherokee:wght@500&family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+KR:wght@500&display=swap">
 <link rel="stylesheet" href="tf.css">
 <link rel="stylesheet" href="site.css">
 </head>
@@ -16,10 +18,9 @@
   <div class="wrap">
     <a class="logo" href="#/">오늘의 숲</a>
     <nav class="nav" id="nav" aria-label="메뉴">
-      <a href="#/">오늘의 언어</a>
-      <a href="#/quiz">직접 해 보기</a>
+      <a href="#/">단어장</a>
+      <a href="#/quiz">맞혀 보기</a>
       <a href="#/talk">대화 보기</a>
-      <a href="#/word">단어의 일생</a>
       <a href="#/notes">실험 노트</a>
     </nav>
     <span class="clockpill" id="clockpill"></span>
@@ -27,39 +28,37 @@
 </header>
 
 <main class="wrap">
-  <!-- 오늘의 언어 -->
+  <!-- 단어장 (첫 화면) -->
   <section class="view" id="vToday">
-    <div class="vh">
-      <h1>세상에 없던 언어</h1>
-      <p id="todayLead"></p>
-      <div class="row"><div class="tabs" id="todayTabs"></div><button class="btn ghost" id="hideBtn">뜻 가리기</button></div>
+    <div class="hero">
+      <h1>AI가 만든,<br>세상에 없던 말</h1>
+      <p class="sub">AI 4명<span class="dot">·</span>사람 말 금지<span class="dot">·</span>그림 맞히기만 반복<br><span id="heroWhen"></span></p>
+      <div class="row"><a class="btn" href="#/quiz">직접 맞혀 보기 →</a><a class="btn ghost" href="#/talk">AI끼리 대화 보기</a></div>
+    </div>
+    <div class="sech">
+      <h2>단어장</h2>
+      <div class="row"><div class="tabs" id="todayTabs"></div><button class="pill" id="hideBtn">뜻 가리기</button></div>
     </div>
     <div class="spec" id="spec"></div>
-    <div class="hero-meta" id="todayMeta" style="margin-top:18px"></div>
-    <div class="goes">
-      <a class="go" href="#/quiz"><b>직접 해 보기</b><span>이 언어로 퀴즈를 풀어 봐요. AI가 배우는 방법 그대로.</span><i>→</i></a>
-      <a class="go" href="#/talk"><b>대화 보기</b><span>AI 둘이 그림을 두고 말을 주고받는 장면을 그대로 봐요.</span><i>→</i></a>
-      <a class="go" href="#/word"><b>단어의 일생</b><span>한 단어가 첫날부터 어떻게 바뀌어 왔는지 봐요.</span><i>→</i></a>
-      <a class="go" href="#/notes"><b>실험 노트</b><span>규칙, 발견, 그리고 이 실험이 말할 수 없는 것.</span><i>→</i></a>
-    </div>
+    <p class="note" id="todayMeta"></p>
   </section>
 
-  <!-- 직접 해 보기 -->
+  <!-- 맞혀 보기 -->
   <section class="view" id="vQuiz">
     <div class="vh">
-      <h1>이 말은 어떤 그림일까요?</h1>
-      <p>AI들이 실제로 쓰고 있는 말이에요. 틀리면 AI가 받는 것과 같은 <b>메모 한 줄</b>을 드려요.</p>
-      <div class="row"><div class="tabs" id="quizTabs"></div><span class="score" id="score"></span></div>
+      <h1>이 말은 무슨 그림?</h1>
+      <p>AI들이 지금 쓰는 말이에요. 틀리면 AI의 메모 한 줄을 힌트로 드려요.</p>
     </div>
+    <div class="row qbar"><div class="tabs" id="quizTabs"></div><span class="score" id="score"></span></div>
     <div class="quiz">
-      <div style="display:grid;gap:14px">
+      <div class="qleft">
         <div class="q-word"><span class="big" id="qWord"></span></div>
-        <div class="memo" id="qMemo" style="display:none"><h4>메모</h4><div id="qMemoLines"></div></div>
+        <div class="memo" id="qMemo" style="display:none"><h4>AI의 메모</h4><div id="qMemoLines"></div></div>
       </div>
-      <div>
+      <div class="qright">
         <div class="choices" id="choices"></div>
         <div class="q-say" id="qSay"></div>
-        <button class="btn" id="nextQ" style="display:none">다음 문제</button>
+        <button class="btn" id="nextQ" style="display:none">다음 문제 →</button>
       </div>
     </div>
   </section>
@@ -67,20 +66,20 @@
   <!-- 대화 보기 -->
   <section class="view" id="vTalk">
     <div class="vh">
-      <h1>AI 둘이 말을 주고받는 장면</h1>
-      <p>말하는 AI는 그림을 보고 <b>메모</b>에서 통했던 말을 찾아요. 없으면 새로 지어요. 듣는 AI는 그 말만 듣고 <b>메모</b>를 뒤져 그림을 골라요.</p>
+      <h1>AI끼리 대화 보기</h1>
+      <p>실제 기록을 그대로 재생해요. 그림은 말하는 AI만 봐요.</p>
     </div>
     <div class="ctrl">
       <div class="tabs" id="talkTabs"></div>
       <select id="genSel" aria-label="세대 고르기"></select>
       <button class="pill" id="speedBtn">1×</button>
-      <button class="pill live" id="liveBtn" hidden>● 실시간으로</button>
+      <button class="pill live" id="liveBtn" hidden>● 실시간</button>
     </div>
-    <div class="steps" id="steps"><div class="step"><b>1</b>본다</div><div class="step"><b>2</b>말한다</div><div class="step"><b>3</b>고른다</div><div class="step"><b>4</b>메모한다</div></div>
+    <ol class="steps" id="steps"><li class="step"><b>1</b>그림 봄</li><li class="step"><b>2</b>글자로 씀</li><li class="step"><b>3</b>4장 중 고름</li><li class="step"><b>4</b>메모</li></ol>
     <div class="stage" id="stage">
-      <div class="side">
+      <div class="side sp">
         <div class="who"><span class="av sp" id="spAv"></span>말하는 AI</div>
-        <div class="target hide" id="target"><span class="eye">이 AI만 봐요</span><img alt="" id="targetImg"></div>
+        <div class="target hide" id="target"><span class="eye">말하는 AI만 봄</span><img alt="" id="targetImg"></div>
         <div class="memo" id="spMemo"><h4>메모 · 이 그림</h4><div id="spLines"></div></div>
       </div>
       <div class="mid">
@@ -88,30 +87,31 @@
         <div class="tag" id="tag"></div>
         <div class="verdict" id="verdict"><i></i><span></span></div>
       </div>
-      <div class="side">
+      <div class="side li">
         <div class="who"><span class="av" id="liAv"></span>듣는 AI</div>
         <div class="cands" id="cands"></div>
         <div class="memo" id="liMemo"><h4>메모 · 이 말</h4><div id="liLines"></div></div>
       </div>
       <div class="over" id="over"><div class="box" id="overBox"></div></div>
     </div>
-    <div class="mem"><span class="k-small">이번 세대 대화</span><div class="slots" id="slots"></div><span class="tally" id="tally"></span></div>
+    <div class="mem"><span class="k-small">이번 세대 32판</span><div class="slots" id="slots"></div><span class="tally" id="tally"></span></div>
   </section>
 
-  <!-- 단어의 일생 -->
+  <!-- 단어 기록 -->
   <section class="view" id="vWord">
+    <a class="back" href="#/">← 단어장</a>
     <div class="vh">
-      <h1 id="wordH">단어의 일생</h1>
-      <p>그림을 고르면, 그 그림을 부르는 말이 1세대부터 어떻게 바뀌어 왔는지 보여요.</p>
-      <div class="row"><div class="tabs" id="wordTabs"></div></div>
-      <div class="picks" id="picks"></div>
+      <h1 id="wordH">단어 기록</h1>
+      <p>1세대부터 이 그림을 부른 말</p>
     </div>
+    <div class="row"><div class="tabs" id="wordTabs"></div></div>
+    <div class="picks" id="picks"></div>
     <div class="life">
-      <div class="card now-w" id="nowW"></div>
-      <div style="display:grid;gap:16px">
-        <div class="card"><div class="k-small" style="margin-bottom:10px">세대마다 바뀐 말</div><div class="runs" id="runs"></div></div>
-        <div class="card"><div class="k-small" style="margin-bottom:10px">세대마다 이 섬에서 통한 대화 (32번 중)</div><div class="spark" id="spark"></div></div>
-        <div id="wordEqs" style="display:grid;gap:10px"></div>
+      <div class="now-w" id="nowW"></div>
+      <div class="lifer">
+        <div class="blk"><h3>바뀐 순서</h3><div class="runs" id="runs"></div></div>
+        <div class="blk"><h3>이 섬의 대화 성공 <small>세대별, 32판 중</small></h3><div class="spark" id="spark"></div></div>
+        <div class="blk" id="wordEqsB"><h3>이 말이 들어간 규칙</h3><div id="wordEqs"></div></div>
       </div>
     </div>
   </section>
@@ -120,29 +120,29 @@
   <section class="view" id="vNotes">
     <div class="vh">
       <h1>실험 노트</h1>
-      <p>AI 넷이 그림을 두고 낯선 글자로 퀴즈를 해요. 규칙은 세 개뿐이에요.</p>
+      <p>규칙 3개 · 발견 · 한계</p>
     </div>
     <div class="notes">
-      <div class="rules">
-        <div class="rule"><span class="n">1</span><b>한 명은 그림을 보고 말하고, 한 명은 맞혀요</b><span>사람의 말은 쓸 수 없고 낯선 글자만 써요. 짝을 바꿔 가며 한 세대에 32번.</span></div>
-        <div class="rule"><span class="n">2</span><b>통한 말은 메모에 남아요</b><span>AI는 최근 대화 30줄을 메모로 받아요. 통했던 말을 꺼내 또 쓰면서 다 같이 쓰는 말이 생겨요.</span></div>
-        <div class="rule"><span class="n">3</span><b>하루 두 번, AI 둘이 바뀌어요</b><span>새 AI는 최근 대화 64번 중 30줄만, 가끔 틀리게 물려받아요. 그래서 말이 조금씩 변해요.</span></div>
-      </div>
-      <div class="sec"><h2>점점 서로 알아들어요</h2><div class="card chart" id="notesChart"></div><div class="legend" style="margin-top:10px"><span><i style="background:var(--grid)"></i>그림 섬</span><span><i style="background:var(--line)"></i>글자 섬</span><span><i style="background:var(--twin)"></i>비교 섬</span><span><i style="background:var(--faint)"></i>그냥 찍기 25%</span></div></div>
+      <ol class="rules">
+        <li><b>그림 맞히기</b><span>말하는 AI만 그림을 봄 → 낯선 글자로 씀 → 듣는 AI가 4장 중 고름. 한 세대 32판.</span></li>
+        <li><b>메모</b><span>AI마다 최근 30판을 기억. 통했던 말을 다시 씀.</span></li>
+        <li><b>세대 교체</b><span>하루 2번(07·19시) AI 2명 교체. 새 AI는 최근 64판 중 30줄만, 가끔(5%) 틀리게 물려받음.</span></li>
+      </ol>
+      <div class="sec"><h2>서로 알아듣는 비율</h2><div class="chart" id="notesChart"></div><div class="legend" style="margin-top:10px"><span><i style="background:var(--grid)"></i>그림 섬</span><span><i style="background:var(--line)"></i>글자 섬</span><span><i style="background:var(--twin)"></i>비교 섬</span><span><i style="background:var(--faint)"></i>찍기 25%</span></div></div>
       <div class="sec grid2">
-        <div><h2>단어를 합쳐 새 단어를</h2><div style="display:grid;gap:10px" id="notesEqs"></div></div>
-        <div><h2 id="notesLenH">긴 말은 줄고, 뜻은 나뉘어요</h2><div id="notesLen" style="display:grid;gap:10px"></div></div>
+        <div><h2>합성</h2><div id="notesEqs"></div></div>
+        <div><h2 id="notesLenH">분화</h2><div id="notesLen"></div></div>
       </div>
-      <div class="sec"><h2 id="notesIslsH">같은 조건, 다른 언어</h2><div class="isls" id="notesIsls"></div><p class="k-small" id="notesMeet" style="margin-top:12px;font-size:16px"></p></div>
+      <div class="sec"><h2 id="notesIslsH">섬 3개: 같은 조건, 다른 말</h2><div class="isls" id="notesIsls"></div><p class="note" id="notesMeet"></p></div>
       <div class="sec grid2">
-        <div><h2>솔직하게</h2><div class="lim">
-          <div><b>AI 자체는 바뀌지 않아요</b><span>바뀌는 건 메모예요. '학습'은 '메모를 보고 따라 하기'예요.</span></div>
-          <div><b>AI는 백지가 아니에요</b><span>산=ㅅ, 바다=ㅂ은 한국어 첫소리, 비교 섬의 산=ο는 그리스어 ‘όρος(산)’의 첫 글자와 같아요. 사람 말을 금지했는데도 새어 나온 흔적이에요. 글자도 아는 문자(한글·그리스 문자)부터 골라 썼어요.</span></div>
-          <div><b>섬마다 한 번씩만 돌렸어요</b><span>'증명'이 아니라 '관찰'이에요. 문법은 아직 없는 걸음마 언어예요.</span></div>
+        <div><h2>한계</h2><div class="lim">
+          <div><b>AI 자체는 그대로</b><span>바뀌는 건 메모뿐. 여기서 ‘학습’ = 메모 보고 따라 하기.</span></div>
+          <div><b>아는 말이 새어 나옴</b><span id="leak"></span></div>
+          <div><b>섬마다 1번 실행</b><span>증명이 아니라 관찰. 문법 없는 걸음마 단계.</span></div>
         </div></div>
-        <div><h2>메모가 없으면?</h2><div class="card" style="display:grid;gap:16px" id="notesCmp"></div></div>
+        <div><h2>메모가 없으면?</h2><div id="notesCmp" style="display:grid;gap:16px"></div></div>
       </div>
-      <div class="foot"><span>모델: Claude Haiku · 매일 07시·19시 자동 실행 (GitHub Actions)</span><a href="story.html">발표 이야기로 보기</a><a href="data/summary.json">원자료(JSON)</a></div>
+      <div class="foot"><span>모델 Claude Haiku · 매일 07·19시 자동 실행</span><a href="story.html">발표 화면</a><a href="data/summary.json">원자료(JSON)</a></div>
     </div>
   </section>
 </main>

@@ -2,7 +2,7 @@
 
 ## 그냥 띄우기 (인터넷만 있으면 됨)
 
-브라우저에서 https://ljc031020.github.io/today-forest/story.html 을 열고 F11로 전체 화면, ← → 키로 넘긴다. 마지막 장의 QR은 사이트(오늘의 언어)로 간다.
+브라우저에서 https://ljc031020.github.io/today-forest/story.html 을 열고 F11로 전체 화면, ← → 키로 넘긴다. 마지막 장의 QR과 주소는 사이트의 '맞혀 보기'로 간다.
 
 발표 날 모습 미리 보기(가짜 데이터): story.html?preview , index.html?preview#/notes — 노란 띠가 보이면 미리보기다. 발표 때는 ?preview 없이 연다.
 
