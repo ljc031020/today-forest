@@ -127,6 +127,14 @@ h2{font-size:clamp(36px,4.1vw,56px)}
 .url{font:700 22px/1.25 var(--f-ui);letter-spacing:-.02em;color:#fff}
 .url small{display:block;font-size:15px;font-weight:500;color:rgba(238,240,236,.65);margin-top:6px}
 
+.gen2{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:48px;align-items:start}
+.relayb{border-top:2px solid var(--ink);padding-top:14px}
+.facts{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.facts li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--rule);font-size:17px;line-height:1.4}
+.facts b{font-weight:700;color:var(--grid)}
+.facts span{color:var(--ink2)}
+.punch{margin:0;font-size:20px;color:var(--ink2);background:var(--card);border-radius:var(--r);padding:14px 20px}
+.punch b{color:var(--ink)}
 .dots{position:fixed;right:20px;top:50%;transform:translateY(-50%);display:grid;gap:10px;z-index:5}
 .dots a{width:8px;height:8px;border-radius:50%;background:var(--rule);display:block;transition:transform .2s,background .2s}
 .dots a.on{background:var(--ink);transform:scale(1.4)}
@@ -144,6 +152,7 @@ h2{font-size:clamp(36px,4.1vw,56px)}
   .isls{grid-template-columns:minmax(0,1fr)}
   .isl+.isl{border-left:0;border-top:1px solid var(--rule)}
   .after{grid-template-columns:minmax(0,1fr)}
+  .gen2{grid-template-columns:minmax(0,1fr);gap:24px}
   .cells{justify-content:flex-start}
   .dots{display:none}
 }
@@ -187,14 +196,29 @@ h2{font-size:clamp(36px,4.1vw,56px)}
     </div>
     <div class="after">
       <span class="k">다음 판</span><span><b>메모에서 통했던 말을 다시 씀</b> → 통하는 말만 살아남음</span>
-      <span class="k">하루 두 번</span><span><span id="relayIds"></span> <b>AI 2명 교체</b> · 새 AI는 메모 일부만, 가끔 틀리게 물려받음</span>
     </div>
+  </div>
+</section>
+
+<section class="sc" id="s3b">
+  <div class="inner">
+    <div class="hd"><div class="kick"><b>03</b>세대</div><h2>하루 두 번, AI 2명이 바뀜</h2></div>
+    <div class="gen2">
+      <div class="relayb" id="relayBox"></div>
+      <ul class="facts">
+        <li><b>1세대</b><span>하루 두 번(아침·저녁) 자동 실행 1번</span></li>
+        <li><b>한 번 실행</b><span>섬마다 그림 맞히기 32판</span></li>
+        <li><b>끝나면</b><span>가장 오래 있던 AI 2명 퇴장<br>새 AI 2명 입장</span></li>
+        <li><b>새 AI</b><span>메모 30줄만 물려받음<br>5%는 틀리게 옮겨 적음</span></li>
+      </ul>
+    </div>
+    <p class="punch" id="relayPunch"></p>
   </div>
 </section>
 
 <section class="sc" id="s4">
   <div class="inner">
-    <div class="hd"><div class="kick"><b>03</b>말이 굳는 과정</div><h2 id="s4h"></h2></div>
+    <div class="hd"><div class="kick"><b>04</b>말이 굳는 과정</div><h2 id="s4h"></h2></div>
     <div class="strip"><div class="strip-h"><img src="img/r9.png" alt=""><span id="stripH"></span></div><div class="cells" id="cells"></div></div>
     <div class="two" style="gap:40px;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr)">
       <div class="stat"><span class="k">서로 알아듣는 비율 · 그림 섬</span><span class="v" id="s4v"></span><span class="fn" id="s4n"></span></div>
@@ -205,7 +229,7 @@ h2{font-size:clamp(36px,4.1vw,56px)}
 
 <section class="sc" id="s5">
   <div class="inner">
-    <div class="hd"><div class="kick"><b>04</b>아무도 안 가르친 규칙</div><h2>단어를 합치고, 뜻을 나눔</h2></div>
+    <div class="hd"><div class="kick"><b>05</b>아무도 안 가르친 규칙</div><h2>단어를 합치고, 뜻을 나눔</h2></div>
     <div class="rules2">
       <div class="panel"><h3>합성<small>작은 말을 모아 큰 말</small></h3><div id="eqs"></div><p class="fn" id="hedge"></p></div>
       <div class="panel"><h3 id="splitH">분화<small>긴 말을 다른 뜻에 넘김</small></h3><div id="lenBars"></div><p class="fn" id="splitNote"></p></div>
@@ -215,7 +239,7 @@ h2{font-size:clamp(36px,4.1vw,56px)}
 
 <section class="sc" id="s6">
   <div class="inner">
-    <div class="hd"><div class="kick"><b>05</b><span id="s6k">섬 3개 비교</span></div><h2 id="s6h">같은 조건, 다른 말</h2></div>
+    <div class="hd"><div class="kick"><b>06</b><span id="s6k">섬 3개 비교</span></div><h2 id="s6h">같은 조건, 다른 말</h2></div>
     <div class="isls" id="isls"></div>
     <div class="meet" id="meet"></div>
   </div>
@@ -223,7 +247,7 @@ h2{font-size:clamp(36px,4.1vw,56px)}
 
 <section class="sc" id="s7">
   <div class="inner">
-    <div class="hd"><div class="kick"><b>06</b>한계</div><h2>이 실험이 말할 수 없는 것</h2></div>
+    <div class="hd"><div class="kick"><b>07</b>한계</div><h2>이 실험이 말할 수 없는 것</h2></div>
     <div class="lims">
       <div class="lim">
         <div class="row"><b>AI 자체는 그대로</b><span>바뀌는 건 메모뿐. 여기서 ‘학습’ = 메모 보고 따라 하기</span></div>
@@ -288,8 +312,13 @@ const ft = G && [...G.islands.grid.talks].reverse().find(t => t.scene === ID.for
 const cands = ft ? ft.cands : [ID.forest, ID.tree, ID.mountain, ID.village];
 $('#l3').innerHTML = cands.map(c => `<span class="${c === ID.forest ? 'on' : ''}"><img src="img/${c}.png" alt=""></span>`).join('');
 $('#l4').innerHTML = `<div class="ml use"><img src="img/${ID.forest}.png" alt="숲">${g3(QW, 13)}<em>통함</em></div><div class="ml"><img src="img/${ID.tree}.png" alt="나무">${g3(TREE, 13)}<em>통함</em></div>`;
-const M = await TF.loadMem(NOW);
-{ const e = M && M.islands.grid.end; if (e) $('#relayIds').innerHTML = e.left.map(i => `<span class="av dim">${i}</span>`).join('') + ' → ' + e.born.map(b => `<span class="av new">${b.id}</span>`).join(''); }
+/* 3b 세대: 실제 AI 번호로 계단 */
+{ const rows = await TF.relay('grid', 4);
+  $('#relayBox').innerHTML = TF.relayHTML(rows, 'grid', 12) + '<div class="legend" style="margin-top:12px"><span><i style="background:var(--grid);height:10px;width:10px;border-radius:50%"></i>새로 온 AI</span><span><i style="background:none;border:1.5px dashed var(--ink);height:10px;width:10px;border-radius:50%;opacity:.5"></i>이번 세대 끝나고 떠날 AI</span></div>';
+  const first = rows[0], lastReal = [...rows].reverse().find(r => !r.next);
+  if (first && lastReal && first !== lastReal) {
+    const gone = first.ids.every(i => !lastReal.ids.includes(i)), same = first.word === lastReal.word;
+    $('#relayPunch').innerHTML = gone ? (same ? `${first.gen}세대의 AI는 이제 한 명도 없음. 그래도 ‘숲’은 같은 말 → <b>사람이 다 바뀌어도 남는 말 = 물려받은 언어</b>` : `${first.gen}세대의 AI는 이제 한 명도 없음. ‘숲’은 그사이 흔들림 → <b>옮겨 적는 실수가 말을 바꿈</b>`) : ''; } }
 
 /* 4 굳는 과정 */
 const lin = TF.lineage('grid', ID.forest), nCh = lin.filter((x, i) => i && x.changed).length;

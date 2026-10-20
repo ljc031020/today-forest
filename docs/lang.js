@@ -188,6 +188,29 @@ TF.splitHTML = function(k = 'grid', q = 18){
   return `<div class="split">${lane(sp.a, sp.ra)}${lane(sp.b, sp.rb)}</div>`;
 };
 
+/* 세대 교체 계단: 최근 n세대 동안 섬의 AI 번호가 한 칸씩 밀려나는 모습 + 그때의 '숲' */
+TF.relay = async function(k = 'grid', n = 4){
+  const gens = TF.GENS.slice(-n).map(g => g.gen), rows = [];
+  for (const g of gens) {
+    const M = await TF.loadMem(g), I = M && M.islands[k]; if (!I) continue;
+    const row = TF.GENS.find(x => x.gen === g);
+    rows.push({gen: g, at: Date.parse(row.at), ids: Object.keys(I.start).map(Number).sort((a, b) => a - b), born: Object.fromEntries(Object.entries(I.born || {}).map(([a, b]) => [+a, b])), word: TF.word(k, TF.ID.forest, row), end: I.end});
+  }
+  const last = rows[rows.length - 1];
+  if (last && last.end) rows.push({gen: last.gen + 1, at: TF.nextSlot && TF.nextSlot.gen === last.gen + 1 ? TF.nextSlot.t : null, ids: last.ids.filter(i => !last.end.left.includes(i)).concat(last.end.born.map(b => b.id)).sort((a, b) => a - b), born: Object.fromEntries(last.end.born.map(b => [b.id, last.gen + 1])), word: null, next: true});
+  return rows;
+};
+TF.relayHTML = function(rows, k = 'grid', q = 11){
+  if (!rows.length) return '';
+  const lo = Math.min(...rows.flatMap(r => r.ids)), hi = Math.max(...rows.flatMap(r => r.ids)), n = hi - lo + 1;
+  const slot = t => { const h = TF.hour(t); if (h >= 19) return `${TF.md(t)} 저녁`; if (h >= 7) return `${TF.md(t)} 아침`; return `${TF.md(t - 864e5)} 저녁`; };
+  const line = r => `<div class="rl-lab"><b>${r.gen}세대</b><small>${r.at ? slot(r.at) : ''}${r.next ? ' · 다음' : ''}</small></div>` +
+    Array.from({length: n}, (_, i) => { const id = lo + i; if (!r.ids.includes(id)) return '<span class="rl-c"></span>';
+      const isNew = r.born[id] === r.gen && r !== rows[0]; return `<span class="rl-c"><i class="${isNew ? 'nw' : ''}${r.end && r.end.left.includes(id) ? ' out' : ''}">${id}</i></span>`; }).join('') +
+    `<div class="rl-w">${r.word ? TF.wordHTML(r.word, k, q) : '<span class="rl-q">?</span>'}</div>`;
+  return `<div class="relayx" style="--n:${n}"><div class="rl-h"><span></span><span style="grid-column:2/-2">이 섬의 AI 4명 (번호)</span><span>그때의 ‘숲’</span></div>${rows.map(line).join('<div class="rl-gap"></div>')}</div>`;
+};
+
 /* 한 단어의 일생: 세대마다 그 그림을 부른 말 (바뀐 세대만 진하게) */
 TF.lineage = function(k, s){
   let prev; return TF.GENS.map(g => { const w = TF.word(k, s, g); const ch = w !== prev; prev = w; return {gen: g.gen, w, changed: ch, ok: g.islands[k].ok}; });

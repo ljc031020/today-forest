@@ -106,3 +106,20 @@ p{text-wrap:pretty}
 .la small{font:500 12px/1.2 var(--f-ui);color:var(--mute);text-align:center}
 .lc .g{font-size:30px}
 @media (max-width:900px){.meetx{grid-template-columns:minmax(0,1fr)}.mrow{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"h h" "b c" "f f"}}
+
+/* 세대 교체 계단 */
+.relayx{display:grid;grid-template-columns:96px repeat(var(--n),minmax(0,1fr)) 64px;align-items:center;row-gap:0}
+.rl-h{display:contents}
+.rl-h span{font-size:12px;font-weight:600;color:var(--mute);padding-bottom:8px}
+.rl-h span:last-child{text-align:center}
+.rl-lab{display:grid;line-height:1.2}
+.rl-lab b{font-size:16px;letter-spacing:-.02em}
+.rl-lab small{font-size:12px;color:var(--mute)}
+.rl-c{display:grid;place-items:center;height:46px}
+.rl-c i{font-style:normal;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:700 13px/1 var(--f-ui);border:2px solid var(--ink);background:var(--card)}
+.rl-c i.nw{background:var(--grid);border-color:var(--grid);color:#fff}
+.rl-c i.out{border-style:dashed;opacity:.45}
+.rl-w{display:grid;place-items:center}
+.rl-q{font:800 20px/1 var(--f-ui);color:var(--faint)}
+.rl-gap{grid-column:1/-1;height:6px;border-bottom:1px solid var(--rule);margin-bottom:6px}
+@media (max-width:900px){.relayx{grid-template-columns:58px repeat(var(--n),minmax(0,1fr)) 44px}.rl-c i{width:20px;height:20px;font-size:9px;border-width:1.5px}.rl-c{height:34px}.rl-lab b{font-size:13px}.rl-lab small{display:none}}

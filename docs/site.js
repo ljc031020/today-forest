@@ -254,6 +254,7 @@ function eqHTML(k, c){
 /* ════════ 실험 노트 ════════ */
 async function drawNotes(){
   $('#notesChart').innerHTML = TF.okChart({w: 1000, h: 300});
+  TF.relay('grid', 4).then(rows => { $('#notesRelay').innerHTML = TF.relayHTML(rows, 'grid', 11); });
   const SP = TF.split('grid'), all = TF.compounds('grid').filter(c => c.op !== '⊃' && (!SP || c.a !== SP.b));
   const f0 = all.find(c => c.a === ID.forest), rest = all.filter(c => c !== f0), byS = (x, y) => x.since - y.since;
   const cs = [f0, rest.filter(c => c.op === '×').sort(byS)[0], rest.filter(c => c.op === '+').sort(byS)[0]].filter(Boolean);
