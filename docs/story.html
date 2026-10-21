@@ -3,390 +3,333 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>오늘의 숲 · 세상에 없던 말</title>
-<meta name="description" content="AI들이 그림 맞히기만 반복해서 만든, 세상에 없던 말. 발표용 이야기.">
+<title>오늘의 숲 · 발표</title>
+<meta name="description" content="AI들이 그림 맞히기만 반복해서 만든, 세상에 없던 말. 발표용 슬라이드.">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+Cherokee:wght@500&family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+KR:wght@500&display=swap">
-<link rel="stylesheet" href="tf.css">
 <style>
-html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
-body{font-size:18px}
-.sc{min-height:100vh;scroll-snap-align:start;display:grid;align-content:center;justify-items:center;padding:52px 64px;position:relative}
-.sc .inner{width:min(1160px,100%);display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
-.kick{font:600 15px/1 var(--f-ui);color:var(--mute);display:flex;align-items:center;gap:12px;letter-spacing:-.01em}
-.kick b{font:700 15px/1 var(--f-ui);color:var(--ink);letter-spacing:0}
-.kick b::after{content:"";display:inline-block;width:22px;height:1.5px;background:var(--faint);vertical-align:middle;margin-left:12px}
-.hd{display:grid;gap:14px}
-h1{font-size:clamp(56px,7.4vw,104px)}
-h2{font-size:clamp(36px,4.1vw,56px)}
-.sub{font-size:clamp(19px,1.6vw,23px);line-height:1.5;color:var(--ink2);margin:0;font-weight:500}
-.sub .dot{color:var(--faint);margin:0 .35em}
-.fn{font-size:14px;color:var(--mute);margin:0;line-height:1.5}
-.btn{justify-self:start;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;background:var(--ink);color:var(--paper);font-weight:600;font-size:16px;text-decoration:none}
-.two,.sc .inner.two{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:56px;align-items:center}
+/* 기본 — v4.css에서 필요한 것만 (사이트 화면 규칙과 이름이 겹치지 않게) */
+:root{
+  --paper:#F3F4F0; --surface:#FFFFFF; --ink:#141A17; --t2:#3F4844; --t3:#5B6560; --line:#D9DED7; --fill:#E8EBE5; --miss:#6E7671;
+  --grid:#0B8457; --line-i:#2450D8; --twin:#8A3F9E; --k:var(--grid);
+  --f-ui:"Pretendard Variable",Pretendard,-apple-system,system-ui,"Apple SD Gothic Neo",sans-serif;
+  --f-g:"Noto Sans","Noto Sans Georgian","Noto Sans Armenian","Noto Sans Runic","Noto Sans Cherokee","Noto Sans Arabic","Noto Sans KR",sans-serif;
+  --gut:20px; --max:1120px;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:72px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 var(--f-ui);letter-spacing:0;word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;letter-spacing:inherit;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:8px}
+h1,h2,h3,p{margin:0}
+.cap{font-size:13px;line-height:1.45;color:var(--t3)}
+.dot{width:8px;height:8px;border-radius:50%;background:#D93A2B;box-shadow:0 0 0 0 rgba(217,58,43,.5);animation:beat 2s infinite}
+@keyframes beat{0%{box-shadow:0 0 0 0 rgba(217,58,43,.45)}70%{box-shadow:0 0 0 8px rgba(217,58,43,0)}100%{box-shadow:0 0 0 0 rgba(217,58,43,0)}}
+.tiles{display:inline-grid;gap:calc(var(--q) * .1);grid-template-columns:repeat(var(--cols),var(--q));vertical-align:middle}
+.tiles i{width:var(--q);height:var(--q);border-radius:calc(var(--q) * .16);display:grid;place-items:center;font:500 calc(var(--q) * .6)/1 var(--f-g);font-style:normal;color:var(--ink);background:rgba(20,26,23,.05);transition:background .3s,color .3s,box-shadow .3s}
+.tiles i.f{background:var(--surface);box-shadow:inset 0 0 0 max(2px,calc(var(--q) * .035)) var(--ink)}
+.tiles.on i.f{background:var(--k);color:#fff;box-shadow:none;animation:flip .5s var(--ease) both;animation-delay:calc(var(--n) * 60ms)}
+@keyframes flip{0%{transform:rotateX(0)}45%{transform:rotateX(90deg)}100%{transform:rotateX(0)}}
+.tiles.sm i{background:rgba(20,26,23,.06)}
+.tiles.sm i.f{box-shadow:inset 0 0 0 1.5px var(--k);background:var(--surface)}
+@keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.memo{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;background:#FFFCEB;border-radius:4px 14px 14px 14px;padding:10px 14px;font-size:15px}
+.memo .cap{width:100%;margin-bottom:-4px}
+.memo img{width:28px;height:28px}
+.memo em{font-style:normal;font-weight:600;color:var(--grid);margin-left:auto;font-size:13px}
+.tiles.mini i{font-size:0;border-radius:1.5px;background:rgba(20,26,23,.08);box-shadow:none}
+.tiles.mini i.f{background:rgba(20,26,23,.45)}
+.tiles.mini.hot i.f{background:var(--k)}
+.tiles.xs i.f{box-shadow:inset 0 0 0 1.5px var(--ink)}
+/* 발표 v4 — 피그마 05 페이지(1440×810)를 그대로: 화면에 맞춰 통째로 확대·축소 */
+html,body{height:100%}
+body{overflow:hidden;transition:background .4s}
+body.dk{background:#141A17}
+.deck{position:fixed;left:50%;top:50%;width:1440px;height:810px;transform:translate(-50%,-50%) scale(var(--z,1));transform-origin:center}
+.sl{position:absolute;inset:0;padding:64px 96px 0;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .45s var(--ease),visibility 0s .45s}
+.sl.on{opacity:1;visibility:visible;transition:opacity .45s var(--ease)}
+.sl.dark{color:#fff}
+.kk{font:500 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--t3);letter-spacing:.02em}
+.dark .kk{color:#B8C0BB}
+.tt{font-size:58px;line-height:1.25;font-weight:700;letter-spacing:-.025em;margin-top:18px}
+.sub{font-size:18px;line-height:1.6;color:var(--t2);margin-top:14px}
+.sub b{color:var(--ink)}
+.cd{background:var(--surface);border-radius:28px;padding:28px}
+.ft{position:absolute;left:96px;bottom:56px;font-size:15px;color:var(--t2)}
+.pg{position:absolute;right:40px;bottom:28px;font:600 13px/1 var(--f-ui);color:var(--t3)}
+.dark .pg{color:#8A938E}
+/* 들어올 때: 위에서부터 차례로 */
+.sl .rv{opacity:0;transform:translateY(12px)}
+.sl.on .rv{opacity:1;transform:none;transition:opacity .5s var(--ease),transform .5s var(--ease);transition-delay:calc(var(--d,0) * 90ms + 120ms)}
+.ink{color:var(--ink)}
 
 /* 1 표지 */
-.spec{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.word{background:var(--card);border-radius:var(--r);padding:16px 8px 12px;display:grid;justify-items:center;gap:10px}
-.word .mn{font-size:15px;font-weight:600;color:var(--mute);display:flex;align-items:center;gap:6px;height:22px}
-.word .mn img{width:22px;height:22px}
-.word.hide .mn{visibility:hidden}
+.cov{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:start}
+.cov h1{font-size:80px;line-height:1.18;font-weight:700;letter-spacing:-.03em;margin-top:26px}
+.cov .sub{margin-top:22px}
+.cov .big{display:grid;gap:12px;margin-top:8px;--k:var(--grid)}
+.cov .big .cap{font-size:15px;color:var(--t2)}
+.dict{display:grid;grid-template-columns:repeat(6,1fr);gap:22px 20px;margin-top:auto;margin-bottom:56px}
+.dict .w{display:grid;justify-items:center;gap:8px}
+.dict .w span{font-size:15px;color:var(--t2)}
+.dict.line .tiles{--q:36px!important}
 
 /* 2 퀴즈 */
-.quiz{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);gap:56px;align-items:center}
-.q-left{display:grid;justify-items:center;gap:22px}
-.choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.ch{background:var(--card);border-radius:var(--r);aspect-ratio:1;display:grid;place-items:center;position:relative;transition:transform .15s,box-shadow .2s}
-.ch:hover{transform:translateY(-3px)}
-.ch img{width:76%}
-.ch .nm{position:absolute;bottom:8px;font-size:15px;color:var(--ink);font-weight:700}
-.ch.right{box-shadow:0 0 0 4px var(--ok)}
-.ch.wrong{opacity:.4}
-.q-say{display:grid;gap:4px;min-height:4.2em}
-.q-say b{font-size:24px;font-weight:700;letter-spacing:-.025em}
-.q-say span{font-size:18px;color:var(--ink2)}
-.hidden{display:none!important}
+.qz{display:grid;grid-template-columns:440px minmax(0,1fr);gap:64px;align-items:start;margin-top:52px;--k:var(--grid)}
+.qz .wbox{width:440px;height:440px;border-radius:32px;background:var(--surface);display:grid;place-items:center}
+.qr4{display:grid;grid-template-columns:repeat(2,300px);gap:16px;align-content:start}
+.pk{background:var(--surface);border-radius:20px;height:195px;display:grid;justify-items:center;align-content:center;gap:10px;font-size:16px;font-weight:600;transition:transform .15s var(--ease),box-shadow .2s,opacity .2s,background .2s}
+.pk img{width:120px;height:120px}
+.pk:hover{transform:translateY(-3px)}
+.pk.ok{background:var(--grid);color:#fff}
+.pk.no{box-shadow:inset 0 0 0 3px var(--miss);animation:shake .4s}
+.pk.dim{opacity:.35}
+.qsay{min-height:60px;flex-wrap:wrap;font-size:20px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:14px}
+.qsay small{font-size:17px;font-weight:500;color:var(--t2);letter-spacing:0}
+.qsay .memo{font-size:15px;font-weight:600}
 
 /* 3 한 판 */
-.loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:2px solid var(--ink)}
-.st{display:grid;grid-template-rows:auto 168px auto;gap:12px;padding:18px 18px 0 0;align-content:start}
-.st+.st{padding-left:18px;border-left:1px solid var(--rule)}
-.st .n{font:800 15px/1 var(--f-ui);color:var(--grid)}
-.st .v{display:grid;place-items:center;background:var(--card);border-radius:var(--r)}
-.st h3{font-size:21px;line-height:1.3}
-.st h3 small{display:block;font-size:14px;font-weight:500;color:var(--mute);margin-top:4px;letter-spacing:-.01em}
-.st .v img.one{height:118px}
-.mini4{display:grid;grid-template-columns:repeat(2,58px);gap:8px}
-.mini4 span{width:58px;height:58px;border-radius:10px;background:var(--paper);display:grid;place-items:center}
-.mini4 span img{width:46px}
-.mini4 span.on{box-shadow:0 0 0 3px var(--grid);background:#fff}
-.st .memo{width:88%;padding:12px 14px}
-.after{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 18px;align-items:center;background:var(--card);border-radius:var(--r);padding:16px 20px;font-size:18px}
-.after b{font-weight:700}
-.after .k{font:700 13px/1 var(--f-ui);color:var(--mute);white-space:nowrap}
-.av{width:30px;height:30px;border-radius:50%;display:inline-grid;place-items:center;border:2px solid var(--ink);font:700 12px/1 var(--f-ui);background:var(--card);vertical-align:middle;margin-right:2px}
-.av.dim{opacity:.3}.av.new{border-color:var(--grid);color:var(--grid)}
+.loop{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:36px}
+.loop .cd{padding:24px;height:450px;display:flex;flex-direction:column;gap:20px}
+.sh{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:700}
+.sh b{width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:600}
+.vis{height:190px;border-radius:18px;background:var(--paper);display:grid;place-items:center;--k:var(--grid)}
+.vis>img{width:150px;height:150px}
+.m4{display:grid;grid-template-columns:repeat(2,70px);gap:8px}
+.m4 span{width:70px;height:70px;border-radius:12px;display:grid;place-items:center}
+.m4 span.on{background:var(--grid)}
+.m4 img{width:56px;height:56px}
+.loop p{font-size:16px;color:var(--t2)}
+.chip{display:flex;align-items:center;gap:8px;background:#FFFCEB;border-radius:14px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--grid)}
 
-/* 4 굳는 과정 */
-.strip{display:grid;gap:10px;border-top:2px solid var(--ink);padding-top:16px}
-.strip-h{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px;color:var(--ink2)}
-.strip-h img{width:30px;height:30px}
-.cells{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
-.to{color:var(--faint);font:400 18px/1 var(--f-ui)}
-.cell{display:grid;justify-items:center;gap:6px}
-.cell b{font:600 13px/1 var(--f-ui);color:var(--mute);white-space:nowrap}
-.cell.last{background:var(--card);border-radius:12px;padding:8px;box-shadow:0 0 0 2px var(--grid)}
-.cell.last b{color:var(--ink)}
-.stat{display:grid;gap:6px;align-content:center}
-.stat .k{font-size:17px;font-weight:600;color:var(--ink2)}
-.stat .v{font:800 clamp(52px,5.6vw,80px)/1 var(--f-ui);letter-spacing:-.05em}
-.stat .v i{font-style:normal;font-weight:300;color:var(--faint);margin:0 .12em}
-.chart{background:var(--card);border-radius:var(--r);padding:14px 16px 10px;display:grid;gap:6px}
-.chart svg{width:100%;height:auto;display:block}
+/* 4 세대 */
+.gen{display:grid;grid-template-columns:828px minmax(0,1fr);gap:40px;align-items:center;margin-top:auto;margin-bottom:126px;--k:var(--grid)}
+.rl{display:grid;grid-template-columns:100px minmax(0,1fr) 64px;align-items:center;height:65px;border-top:1px solid var(--line)}
+.rl:first-child{border-top:0}
+.rl>b{font-size:18px}
+.rl.nx>b{color:var(--t3)}
+.ids{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr))}
+.ids i{display:grid;place-items:center}
+.ids u{text-decoration:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:600;border:1.5px solid var(--ink);background:var(--surface)}
+.ids u.nw{background:var(--k);border-color:var(--k);color:#fff}
+.ids u.out{border:1.5px dashed var(--miss);color:var(--miss);background:none}
+.rl.nx u.nw{background:var(--surface);color:var(--ink);border:1.5px dashed var(--k)}
+.rl .wd{display:grid;place-items:center}
+.rl .q{font-size:22px;color:var(--t3)}
+.punch h3{font-size:32px;line-height:1.35;font-weight:700;letter-spacing:-.025em}
+.punch p{font-size:17px;color:var(--t2);margin-top:14px}
 
-/* 5 규칙 */
-.rules2{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:48px;align-items:start}
-.panel{display:grid;gap:10px;align-content:start;border-top:2px solid var(--ink);padding-top:16px}
-.panel h3{font-size:22px}
-.panel h3 small{font-size:15px;font-weight:500;color:var(--mute);margin-left:8px;letter-spacing:-.01em}
+/* 5 배운 흔적 */
+.lrn{display:grid;grid-template-columns:420px minmax(0,1fr);gap:58px;align-items:center;margin-top:auto;margin-bottom:150px;--k:var(--grid)}
+.stat .k{font-size:17px;color:var(--t2)}
+.stat .v{display:flex;align-items:baseline;gap:16px;margin:18px 0 14px;font-weight:700;letter-spacing:-.04em}
+.stat .v span{font-size:68px;color:var(--miss)}
+.stat .v i{font-style:normal;font-size:28px;color:var(--t3)}
+.stat .v b{font-size:104px;line-height:1;color:var(--grid)}
+.stat .n{font-size:16px;color:var(--t2)}
+.strip{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:2px;margin-top:14px}
+.strip .s{display:grid;justify-items:center;gap:8px}
+.strip small{font-size:11px;color:var(--t3);font-weight:500}
+.strip .s.ch small{color:var(--ink);font-weight:700}
+.strip .cd{padding:22px 24px}
+.keys{display:flex;align-items:flex-start;gap:28px;margin-top:22px;padding-left:2px}
+.keys .k1{display:grid;justify-items:center;gap:10px;font-size:15px;color:var(--t2)}
+.keys .k1.now{color:var(--grid);font-weight:700}
+.keys>b{font-size:24px;color:var(--t3);font-weight:400;margin-top:40px}
 
-/* 6 섬 */
-.isls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:2px solid var(--ink)}
-.isl{padding:22px 22px 6px;display:grid;justify-items:start;gap:12px}
-.isl+.isl{border-left:1px solid var(--rule)}
-.isl h3{font-size:22px;display:flex;align-items:center;gap:8px;color:var(--k)}
-.isl h3 i{width:10px;height:10px;border-radius:50%;background:var(--k)}
-.isl .big{font:500 clamp(52px,5.4vw,80px)/1 var(--f-g);min-height:150px;display:grid;align-items:center}
-.isl .sc-n{font-size:13px;font-weight:600;color:var(--mute);background:var(--card);padding:3px 9px;border-radius:999px}
-.isl p{margin:0;font-size:16px;color:var(--ink2)}
-.meet{display:flex;align-items:center;gap:16px;font-size:19px;flex-wrap:wrap;color:var(--ink2)}
-.meet b{font:800 20px/1 var(--f-ui);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:999px;letter-spacing:-.02em}
+/* 6 규칙 */
+.rul{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:36px;align-items:start;--k:var(--grid)}
+.rul h3{font-size:24px;font-weight:700;letter-spacing:-.02em;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.eq{display:flex;align-items:center;gap:20px;padding:18px 0;border-bottom:1px solid var(--line)}
+.eq:last-of-type{border-bottom:0}
+.eq .ep{display:grid;justify-items:center;gap:8px;font-size:15px;color:var(--t2)}
+.eq .ep img{width:40px;height:40px}
+.eq>b{font-size:24px;font-weight:600;color:var(--t2)}
+.eq .since{margin-left:auto;font-size:15px;color:var(--t2)}
+.eq .more{font-size:15px;font-weight:600}
+.rul .note{font-size:15px;color:var(--t2);font-weight:600;margin-top:4px}
 
-/* 7 한계 */
-.lims{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:start}
-.lim{display:grid;border-top:2px solid var(--ink)}
-.lim .row{padding:16px 0;display:grid;gap:4px;border-bottom:1px solid var(--rule)}
-.lim .row b{font-size:21px;font-weight:700;letter-spacing:-.025em}
-.lim .row span{color:var(--ink2);font-size:17px}
-.cmp{display:grid;gap:18px;border-top:2px solid var(--ink);padding-top:16px}
-.cmp h3{font-size:22px}
+/* 7 섬 */
+.isl3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:36px}
+.isl{padding:28px;display:flex;flex-direction:column;gap:18px}
+.isl .ih{display:flex;align-items:center;gap:10px}
+.isl .ih i{width:12px;height:12px;border-radius:50%;background:var(--c)}
+.isl .ih b{font-size:24px;letter-spacing:-.02em}
+.isl .ih span{margin-left:auto;font-size:15px;color:var(--t2)}
+.isl .ih span.c{color:var(--c);font-weight:600}
+.isl .box{height:322px;border-radius:20px;background:var(--paper);display:grid;place-items:center}
+.isl .nm{font-size:17px;font-weight:700}
+.isl .ds{font-size:15px;color:var(--t2);margin-top:-8px}
+/* 만난 뒤 */
+.mt{display:grid;grid-template-columns:300px repeat(3,1fr);gap:18px;margin-top:36px}
+.mt .isl .box{height:190px}
+.mt .kv{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;color:var(--t2)}
+.mt .kv b{font-size:20px;color:var(--ink)}
+.fg{display:flex;flex-wrap:wrap;gap:6px}
+.fg span{min-width:30px;height:30px;padding:0 6px;border-radius:8px;display:grid;place-items:center;font:500 16px/1 var(--f-g);box-shadow:inset 0 0 0 1.5px var(--c)}
+.ms{display:flex;flex-direction:column;justify-content:center;gap:14px}
+.ms .v{white-space:nowrap;font-size:46px;line-height:1.05;font-weight:700;letter-spacing:-.035em}
+.ms .v i{font-style:normal;font-weight:400;color:var(--t3);font-size:30px}
 
-/* 8 끝 */
-#s8{background:var(--ink);color:var(--paper)}
-#s8 .kick,#s8 .kick b{color:rgba(238,240,236,.65)}
-.end,.sc .inner.end{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:56px;align-items:center}
-.clock{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
-.clock b{font:800 48px/1 var(--f-ui);letter-spacing:-.03em}
-.clock span{font-size:16px;color:rgba(238,240,236,.65)}
-.go{display:grid;gap:14px;justify-items:center;text-align:center}
-.qr{background:#fff;border-radius:16px;padding:12px;width:208px}
-.qr img{width:100%;display:block}
-.url{font:700 22px/1.25 var(--f-ui);letter-spacing:-.02em;color:#fff}
-.url small{display:block;font-size:15px;font-weight:500;color:rgba(238,240,236,.65);margin-top:6px}
+/* 8 한계 */
+.lim2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:36px;align-items:start}
+.lim2 .row3>div{padding:22px 0;border-top:1px solid var(--line)}
+.lim2 .row3>div:last-child{padding-bottom:4px}
+.lim2 h3{font-size:24px;font-weight:700;letter-spacing:-.02em}
+.lim2 p{font-size:17px;color:var(--t2);margin-top:6px}
+.cb{display:grid;gap:8px;margin-top:18px;--c:var(--k)}
+.cb .hd{display:flex;justify-content:space-between;font-size:17px;font-weight:700}
+.cb .hd span{color:var(--c)}
+.bt{height:14px;border-radius:7px;background:var(--fill);overflow:hidden}
+.bt i{display:block;height:100%;border-radius:7px;background:var(--c);transform-origin:left;transform:scaleX(0)}
+.bt i.m{background:var(--miss)}
+.sl.on .bt i{transform:none;transition:transform .9s var(--ease) .4s}
+.lim2 .cap{font-size:14px;margin-top:22px;color:var(--t2)}
 
-.gen2{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:48px;align-items:start}
-.relayb{border-top:2px solid var(--ink);padding-top:14px}
-.facts{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
-.facts li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--rule);font-size:17px;line-height:1.4}
-.facts b{font-weight:700;color:var(--grid)}
-.facts span{color:var(--ink2)}
-.punch{margin:0;font-size:20px;color:var(--ink2);background:var(--card);border-radius:var(--r);padding:14px 20px}
-.punch b{color:var(--ink)}
-.dots{position:fixed;right:20px;top:50%;transform:translateY(-50%);display:grid;gap:10px;z-index:5}
-.dots a{width:8px;height:8px;border-radius:50%;background:var(--rule);display:block;transition:transform .2s,background .2s}
-.dots a.on{background:var(--ink);transform:scale(1.4)}
-.dark .dots a{background:rgba(238,240,236,.3)}.dark .dots a.on{background:var(--paper)}
+/* 9 끝 */
+.dark .tt{font-size:80px;line-height:1.18;margin-top:26px}
+.live{display:flex;align-items:center;gap:14px;margin-top:30px;font-size:24px;font-weight:700;color:#E8ECE9}
+.live .dot{width:12px;height:12px}
+.go{display:flex;align-items:center;gap:32px;margin-top:auto;margin-bottom:64px}
+.go .qr{width:196px;height:196px;border-radius:20px;background:#fff;display:grid;place-items:center}
+.go .qr img{width:160px;height:160px}
+.go b{display:block;font-size:24px}
+.go span{display:block;font-size:26px;color:#E8ECE9;margin-top:12px}
+.go small{display:block;font-size:15px;color:#8A938E;margin-top:12px}
 
-@media (max-width:900px){
-  html{scroll-snap-type:none}
-  .sc{min-height:auto;padding:56px 16px}
-  .two,.sc .inner.two,.quiz,.rules2,.lims,.end,.sc .inner.end{grid-template-columns:minmax(0,1fr)!important;gap:28px}
-  .spec{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .choices{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .loop{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  .st:nth-child(3){padding-left:0;border-left:0}
-  .st{padding-bottom:18px}
-  .isls{grid-template-columns:minmax(0,1fr)}
-  .isl+.isl{border-left:0;border-top:1px solid var(--rule)}
-  .after{grid-template-columns:minmax(0,1fr)}
-  .gen2{grid-template-columns:minmax(0,1fr);gap:24px}
-  .cells{justify-content:flex-start}
-  .dots{display:none}
-}
+/* 미리보기 띠 */
+.pvb{position:fixed;top:0;left:0;right:0;z-index:50;background:#FFE58A;color:var(--ink);font-size:13px;padding:7px 16px;text-align:center}
+.pvb a{font-weight:600;margin-left:8px}
+
+/* 넘기기 */
+.nav2{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:6px;z-index:5;opacity:0;transition:opacity .3s}
+body:hover .nav2,.nav2:focus-within{opacity:1}
+.nav2 button{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.nav2 button[aria-current]{background:var(--ink);width:26px;border-radius:5px}
+body.dk .nav2 button{background:#3F4844}
+body.dk .nav2 button[aria-current]{background:#fff}
+
+/* 세로 화면(휴대폰): 슬라이드를 위아래로 쌓아 스크롤 */
+body.stack{overflow:auto}
+body.stack .deck{position:relative;left:auto;top:auto;transform:none;width:auto;height:auto}
+body.stack .sl{position:relative;inset:auto;width:1440px;height:810px;opacity:1;visibility:visible;transform:scale(var(--z));transform-origin:0 0;margin-bottom:calc(810px * (var(--z) - 1) + 12px)}
+body.stack .sl.dark{background:#141A17}
+body.stack .sl .rv{opacity:1;transform:none}
+body.stack .nav2{display:none}
+@media (prefers-reduced-motion:reduce){.sl,.sl .rv,.bt i{transition:none!important}}
 </style>
 </head>
 <body>
+<div class="deck" id="deck">
 
-<section class="sc" id="s1">
-  <div class="inner two">
-    <div class="hd" style="gap:26px">
-      <div class="kick">오늘의 숲</div>
-      <h1 style="font-size:clamp(52px,6.4vw,86px)">AI가 만든,<br>세상에 없던 말</h1>
-      <p class="sub">AI 4명<span class="dot">·</span>사람 말 금지<span class="dot">·</span>그림 맞히기만 반복<br><span id="s1when"></span></p>
-      <button class="btn" id="revealBtn">뜻 보기</button>
+<section class="sl" id="s1" aria-label="표지">
+  <div class="cov">
+    <div>
+      <p class="kk rv">오늘의 숲 · 이정찬 · 2026.10.29</p>
+      <h1 class="rv" style="--d:1">AI가 만든,<br>세상에 없던 말</h1>
+      <p class="sub rv" style="--d:2" id="s1sub"></p>
     </div>
-    <div class="spec" id="spec"></div>
+    <div class="big rv" style="--d:3"><span id="s1big"></span><span class="cap" id="s1cap"></span></div>
   </div>
+  <div class="dict" id="s1dict"></div>
 </section>
 
-<section class="sc" id="s2">
-  <div class="inner">
-    <div class="hd"><div class="kick"><b>01</b>직접 해 보기</div><h2>이 말은 무슨 그림?</h2></div>
-    <div class="quiz">
-      <div class="q-left"><span id="qWord"></span><div class="memo hidden" id="memo" style="--c:var(--grid)"><h4>AI의 메모 한 줄</h4><div class="ml" id="memoLine"></div></div></div>
-      <div style="display:grid;gap:22px">
-        <div class="choices" id="choices"></div>
-        <div class="q-say" id="qSay"><b>넷 중 하나 고르기</b><span>단서 없음. 찍어도 됨</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="sc" id="s3">
-  <div class="inner">
-    <div class="hd"><div class="kick"><b>02</b>AI가 배우는 방식</div><h2>그림 맞히기 한 판</h2></div>
-    <div class="loop">
-      <div class="st"><span class="n">1</span><div class="v"><img class="one" id="l1" alt=""></div><h3>말하는 AI만 그림을 봄</h3></div>
-      <div class="st"><span class="n">2</span><div class="v" id="l2"></div><h3>낯선 글자로만 씀<small id="l2s"></small></h3></div>
-      <div class="st"><span class="n">3</span><div class="v"><div class="mini4" id="l3"></div></div><h3>듣는 AI가 4장 중 고름<small>말만 보고 추측</small></h3></div>
-      <div class="st"><span class="n">4</span><div class="v"><div class="memo" id="l4" style="--c:var(--grid)"></div></div><h3>맞으면 둘 다 메모<small>최근 30판까지 기억</small></h3></div>
-    </div>
-    <div class="after">
-      <span class="k">다음 판</span><span><b>메모에서 통했던 말을 다시 씀</b> → 통하는 말만 살아남음</span>
+<section class="sl" id="s2" aria-label="직접 맞혀 보기">
+  <p class="kk">01 · 직접 맞혀 보기</p>
+  <h2 class="tt">이 말은 무슨 그림?</h2>
+  <p class="sub">AI들이 지금 쓰는 말. 4장 중 하나를 골라 보세요.</p>
+  <div class="qz">
+    <div class="wbox rv" id="s2word"></div>
+    <div style="display:grid;gap:22px">
+      <div class="qr4 rv" style="--d:1" id="s2picks"></div>
+      <div class="qsay" id="s2say"></div>
     </div>
   </div>
 </section>
 
-<section class="sc" id="s3b">
-  <div class="inner">
-    <div class="hd"><div class="kick"><b>03</b>세대</div><h2>하루 두 번, AI 2명이 바뀜</h2></div>
-    <div class="gen2">
-      <div class="relayb" id="relayBox"></div>
-      <ul class="facts">
-        <li><b>1세대</b><span>하루 두 번(아침·저녁) 자동 실행 1번</span></li>
-        <li><b>한 번 실행</b><span>섬마다 그림 맞히기 32판</span></li>
-        <li><b>끝나면</b><span>가장 오래 있던 AI 2명 퇴장<br>새 AI 2명 입장</span></li>
-        <li><b>새 AI</b><span>메모 30줄만 물려받음<br>5%는 틀리게 옮겨 적음</span></li>
-      </ul>
-    </div>
-    <p class="punch" id="relayPunch"></p>
+<section class="sl" id="s3" aria-label="규칙">
+  <p class="kk">02 · 규칙</p>
+  <h2 class="tt">그림 맞히기 한 판</h2>
+  <p class="sub">말하는 AI만 그림을 봐요. 듣는 AI는 낯선 글자만 보고 4장 중에서 골라요.</p>
+  <div class="loop">
+    <div class="cd rv"><div class="sh"><b>1</b>그림 봄</div><div class="vis" id="l1"></div><p>말하는 AI만</p></div>
+    <div class="cd rv" style="--d:1"><div class="sh"><b>2</b>낯선 글자로만 씀</div><div class="vis" id="l2"></div><p id="l2s">사람 말 금지</p></div>
+    <div class="cd rv" style="--d:2"><div class="sh"><b>3</b>4장 중 고름</div><div class="vis"><div class="m4" id="l3"></div></div><p>듣는 AI · 말만 보고 추측</p></div>
+    <div class="cd rv" style="--d:3"><div class="sh"><b>4</b>둘 다 메모</div><div class="vis" id="l4"></div><p>통한 말은 다음 판에 또 씀<br>최근 30판까지 기억</p></div>
+  </div>
+  <p class="ft">한 세대 = 32판 · 하루 두 번(07·19시) 자동 실행</p>
+</section>
+
+<section class="sl" id="s4" aria-label="세대">
+  <p class="kk">03 · 세대</p>
+  <h2 class="tt">하루 두 번, AI 2명이 바뀜</h2>
+  <p class="sub">1세대 = 자동 실행 1번 = 32판. 새 AI는 앞 세대 64판 중 30줄만 물려받고, 가끔(5%) 틀리게 옮겨요.</p>
+  <div class="gen">
+    <div class="cd rv" id="relay" style="padding:20px 28px"></div>
+    <div class="punch rv" style="--d:2" id="punch"></div>
   </div>
 </section>
 
-<section class="sc" id="s4">
-  <div class="inner">
-    <div class="hd"><div class="kick"><b>04</b>말이 굳는 과정</div><h2 id="s4h"></h2></div>
-    <div class="strip"><div class="strip-h"><img src="img/r9.png" alt=""><span id="stripH"></span></div><div class="cells" id="cells"></div></div>
-    <div class="two" style="gap:40px;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr)">
-      <div class="stat"><span class="k">서로 알아듣는 비율 · 그림 섬</span><span class="v" id="s4v"></span><span class="fn" id="s4n"></span></div>
-      <div class="chart"><div id="okChart"></div><div class="legend"><span><i style="background:var(--grid)"></i>그림 섬</span><span><i style="background:var(--line)"></i>글자 섬</span><span><i style="background:var(--twin)"></i>비교 섬</span><span><i style="background:var(--faint)"></i>찍기 25%</span></div></div>
-    </div>
-  </div>
-</section>
-
-<section class="sc" id="s5">
-  <div class="inner">
-    <div class="hd"><div class="kick"><b>05</b>아무도 안 가르친 규칙</div><h2>단어를 합치고, 뜻을 나눔</h2></div>
-    <div class="rules2">
-      <div class="panel"><h3>합성<small>작은 말을 모아 큰 말</small></h3><div id="eqs"></div><p class="fn" id="hedge"></p></div>
-      <div class="panel"><h3 id="splitH">분화<small>긴 말을 다른 뜻에 넘김</small></h3><div id="lenBars"></div><p class="fn" id="splitNote"></p></div>
-    </div>
-  </div>
-</section>
-
-<section class="sc" id="s6">
-  <div class="inner">
-    <div class="hd"><div class="kick"><b>06</b><span id="s6k">섬 3개 비교</span></div><h2 id="s6h">같은 조건, 다른 말</h2></div>
-    <div class="isls" id="isls"></div>
-    <div class="meet" id="meet"></div>
-  </div>
-</section>
-
-<section class="sc" id="s7">
-  <div class="inner">
-    <div class="hd"><div class="kick"><b>07</b>한계</div><h2>이 실험이 말할 수 없는 것</h2></div>
-    <div class="lims">
-      <div class="lim">
-        <div class="row"><b>AI 자체는 그대로</b><span>바뀌는 건 메모뿐. 여기서 ‘학습’ = 메모 보고 따라 하기</span></div>
-        <div class="row"><b>아는 말이 새어 나옴</b><span id="leak"></span></div>
-        <div class="row"><b>섬마다 1번 실행</b><span>증명이 아니라 관찰. 문법 없는 걸음마 단계</span></div>
-      </div>
-      <div class="cmp"><h3>그래도 메모가 하는 일은 분명함</h3><div id="cmpBars" style="display:grid;gap:16px"></div><p class="fn" id="cmpNote"></p></div>
+<section class="sl" id="s5" aria-label="배운 흔적">
+  <p class="kk">04 · 배운 흔적</p>
+  <h2 class="tt" id="s5h"></h2>
+  <p class="sub" id="s5sub"></p>
+  <div class="lrn">
+    <div class="stat rv"><p class="k">서로 알아들은 비율</p><div class="v" id="s5v"></div><p class="n">1세대 → 최근 5세대 평균 (그림 섬)</p></div>
+    <div class="rv" style="--d:1">
+      <div class="cd strip-c" style="padding:22px 24px"><p class="cap" style="font-size:14px;color:var(--t2)">세대마다의 ‘숲’ (초록 = 그 세대에 바뀜)</p><div class="strip" id="s5strip"></div></div>
+      <div class="keys" id="s5keys"></div>
     </div>
   </div>
 </section>
 
-<section class="sc dark" id="s8">
-  <div class="inner end">
-    <div class="hd" style="gap:24px">
-      <div class="kick">오늘의 숲</div>
-      <h1 style="font-size:clamp(48px,6.4vw,92px)">이 말은<br>지금도 자라는 중</h1>
-      <div class="clock"><b id="clockT"></b><span id="clockP"></span></div>
-    </div>
-    <div class="go"><div class="qr"><img src="img/qr.png" alt="맞혀 보기 페이지로 가는 QR"></div><div class="url">ljc031020.github.io/today-forest<small>휴대폰으로 직접 맞혀 보기</small></div></div>
+<section class="sl" id="s6" aria-label="아무도 안 가르친 규칙">
+  <p class="kk">05 · 아무도 안 가르친 규칙</p>
+  <h2 class="tt">단어를 합치고, 뜻을 나눔</h2>
+  <p class="sub" id="s6sub"></p>
+  <div class="rul">
+    <div class="cd rv"><h3>합성</h3><div id="eqs"></div></div>
+    <div class="cd rv" style="--d:1"><h3 id="splitH">분화</h3><div id="split"></div></div>
   </div>
 </section>
 
-<nav class="dots" id="dots" aria-label="장면"></nav>
+<section class="sl" id="s7" aria-label="섬">
+  <p class="kk" id="s7k">06 · 같은 조건, 다른 말</p>
+  <h2 class="tt" id="s7h"></h2>
+  <p class="sub" id="s7sub"></p>
+  <div id="isls"></div>
+</section>
+
+<section class="sl" id="s8" aria-label="한계">
+  <p class="kk">07 · 한계</p>
+  <h2 class="tt">이 실험이 말할 수 없는 것</h2>
+  <p class="sub">그리고 메모를 지우면 어떻게 되나.</p>
+  <div class="lim2">
+    <div class="cd rv"><div class="row3">
+      <div><h3>AI 자체는 그대로</h3><p>바뀌는 건 메모뿐. 여기서 ‘학습’ = 메모 보고 따라 하기.</p></div>
+      <div><h3>아는 말이 새어 나옴</h3><p id="leak"></p></div>
+      <div><h3>섬마다 1번 실행</h3><p>증명이 아니라 관찰. 문법 없는 걸음마 단계.</p></div>
+    </div></div>
+    <div class="cd rv" style="--d:1"><h3>메모가 없으면?</h3><div id="ctrl"></div></div>
+  </div>
+</section>
+
+<section class="sl dark" id="s9" aria-label="끝">
+  <p class="kk">08 · 직접 해 보기</p>
+  <h2 class="tt">이 말은<br>지금도 자라는 중</h2>
+  <p class="live"><span class="dot" aria-hidden="true"></span><span id="clk"></span></p>
+  <div class="go"><div class="qr"><img src="img/qr.png" alt="오늘의 숲 첫 화면으로 가는 QR"></div><div><b>휴대폰으로 직접 맞혀 보기</b><span>ljc031020.github.io/today-forest</span><small>첫 화면에서 바로 문제가 나와요</small></div></div>
+</section>
+
+</div>
+<nav class="nav2" id="nav2" aria-label="슬라이드"></nav>
 <script src="lang.js"></script>
-<script>
-(async function(){
-const $ = s => document.querySelector(s);
-const TF = await window.TF.load();
-const {ID, NAME, SIDS, NOW, LAST, GENS} = TF, esc = TF.esc, g3 = TF.g3;
-const W = (k, s, r) => TF.word(k, s, r);
-const pct = v => Math.round(v / 32 * 100);
-const QW = W('grid', ID.forest), TREE = W('grid', ID.tree);
-const d0 = new Date(Date.parse(GENS[0].at) + TF.KST);
-
-/* 1 표지 */
-$('#s1when').textContent = `${d0.getUTCMonth() + 1}월 ${d0.getUTCDate()}일 시작 → 지금 ${NOW}세대 (하루 2세대)`;
-$('#spec').innerHTML = SIDS.map(s => `<div class="word hide">${g3(W('grid', s), 26)}<span class="mn"><img src="img/${s}.png" alt="">${NAME[s]}</span></div>`).join('');
-$('#revealBtn').onclick = () => { const on = !!$('#spec .word.hide'); document.querySelectorAll('#spec .word').forEach(w => w.classList.toggle('hide', !on)); $('#revealBtn').textContent = on ? '뜻 가리기' : '뜻 보기'; };
-
-/* 2 퀴즈: 숲 → 메모(나무) → 다시 */
-const nTree = TF.nCells(QW);
-$('#qWord').innerHTML = g3(QW, 78);
-$('#choices').innerHTML = [ID.village, ID.forest, ID.mountain, ID.tree].map(s => `<button class="ch" data-s="${s}" aria-label="${NAME[s]}"><img src="img/${s}.png" alt=""><span class="nm"></span></button>`).join('');
-$('#memoLine').innerHTML = `<img src="img/${ID.tree}.png" alt="나무">${g3(TREE, 20)}<span style="font-size:18px;font-weight:600">= 나무</span><em>통함</em>`;
-const say = (b, s) => $('#qSay').innerHTML = `<b>${b}</b><span>${s}</span>`;
-document.querySelectorAll('.ch').forEach(b => b.onclick = () => {
-  const right = b.dataset.s === ID.forest, memo = $('#memo'), first = memo.classList.contains('hidden');
-  document.querySelectorAll('.ch').forEach(x => { x.classList.remove('right', 'wrong'); x.querySelector('.nm').textContent = ''; });
-  b.classList.add(right ? 'right' : 'wrong'); b.querySelector('.nm').textContent = NAME[b.dataset.s];
-  if (first) { memo.classList.remove('hidden'); memo.classList.add('pop');
-    right ? say('정답: 숲', '왜 숲일까? 메모 한 줄 → 나무 = 이 글자') : say('힌트: AI의 메모 한 줄', `나무가 이 글자라면, ${nTree}개는?`); }
-  else right ? say('정답: 숲', '방금 한 것 = AI가 배우는 방식 (메모 보고 추측)') : say('다시 한 번', `나무 글자가 ${nTree}개`);
-});
-
-/* 3 한 판: 실제 메모·대화에서 */
-const by = {}; for (const [c, sc] of TF.META.islands.grid.chars) (by[sc] = by[sc] || []).push(c);
-$('#l1').src = `img/${ID.forest}.png`;
-$('#l2').innerHTML = g3(QW, 34);
-$('#l2s').textContent = Object.keys(by).map(s => TF.SCRIPT_KO[s].replace(' 문자', '').replace(' 자모', '')).join('·') + ` 등 ${TF.META.islands.grid.chars.length}자 중`;
-const G = await TF.loadGen(NOW);
-const ft = G && [...G.islands.grid.talks].reverse().find(t => t.scene === ID.forest && t.cands);
-const cands = ft ? ft.cands : [ID.forest, ID.tree, ID.mountain, ID.village];
-$('#l3').innerHTML = cands.map(c => `<span class="${c === ID.forest ? 'on' : ''}"><img src="img/${c}.png" alt=""></span>`).join('');
-$('#l4').innerHTML = `<div class="ml use"><img src="img/${ID.forest}.png" alt="숲">${g3(QW, 13)}<em>통함</em></div><div class="ml"><img src="img/${ID.tree}.png" alt="나무">${g3(TREE, 13)}<em>통함</em></div>`;
-/* 3b 세대: 실제 AI 번호로 계단 */
-{ const rows = await TF.relay('grid', 4);
-  $('#relayBox').innerHTML = TF.relayHTML(rows, 'grid', 12) + '<div class="legend" style="margin-top:12px"><span><i style="background:var(--grid);height:10px;width:10px;border-radius:50%"></i>새로 온 AI</span><span><i style="background:none;border:1.5px dashed var(--ink);height:10px;width:10px;border-radius:50%;opacity:.5"></i>이번 세대 끝나고 떠날 AI</span></div>';
-  const first = rows[0], lastReal = [...rows].reverse().find(r => !r.next);
-  if (first && lastReal && first !== lastReal) {
-    const gone = first.ids.every(i => !lastReal.ids.includes(i)), same = first.word === lastReal.word;
-    $('#relayPunch').innerHTML = gone ? (same ? `${first.gen}세대의 AI는 이제 한 명도 없음. 그래도 ‘숲’은 같은 말 → <b>사람이 다 바뀌어도 남는 말 = 물려받은 언어</b>` : `${first.gen}세대의 AI는 이제 한 명도 없음. ‘숲’은 그사이 흔들림 → <b>옮겨 적는 실수가 말을 바꿈</b>`) : ''; } }
-
-/* 4 굳는 과정 */
-const lin = TF.lineage('grid', ID.forest), nCh = lin.filter((x, i) => i && x.changed).length;
-const lastCh = [...lin].reverse().find(x => x.changed);
-const since = lastCh ? lastCh.gen : 1, settled = NOW - since + 1 >= 3;
-$('#s4h').textContent = settled ? `‘숲’: ${nCh}번 바뀌고 ${since}세대부터 고정` : `‘숲’: ${nCh}번 바뀜, 지금도 바뀌는 중`;
-$('#stripH').textContent = `그림 섬에서 ‘숲’을 부른 말 · 1세대 → ${NOW}세대`;
-const runs = []; for (const x of lin) { if (x.changed || !runs.length) runs.push({w: x.w, a: x.gen, b: x.gen}); else runs[runs.length - 1].b = x.gen; }
-const MAXR = 9, shown = runs.length > MAXR ? [runs[0], {skip: runs.length - MAXR + 1}, ...runs.slice(-(MAXR - 2))] : runs;
-$('#cells').innerHTML = shown.map((r, i) => r.skip ? `<div class="cell"><span style="font:600 14px/1.3 var(--f-ui);color:var(--mute);text-align:center">…<br>${r.skip}번 더</span></div>` : `<div class="cell${i === shown.length - 1 ? ' last' : ''}">${r.w ? g3(r.w, 17) : '·'}<b>${r.a === r.b ? r.a : r.a + '–' + r.b}세대</b></div>`).join('<span class="to">→</span>');
-$('#okChart').innerHTML = TF.okChart({w: 680, h: 232});
-{ const r5 = GENS.slice(-5), avg5 = r5.reduce((a, g) => a + g.islands.grid.ok, 0) / r5.length;
-  $('#s4v').innerHTML = `${pct(GENS[0].islands.grid.ok)}%<i>→</i>${pct(avg5)}%`;
-  $('#s4n').textContent = '1세대 → 최근 5세대 평균 · 한 세대 32판'; }
-
-/* 5 규칙 */
-{ const SP = TF.split('grid'), all = TF.compounds('grid').filter(c => c.op !== '⊃' && (!SP || c.a !== SP.b));
-  const f0 = all.find(c => c.a === ID.forest), rest = all.filter(c => c !== f0), byS = (x, y) => x.since - y.since;
-  const cs = [f0, rest.filter(c => c.op === '×').sort(byS)[0], rest.filter(c => c.op === '+').sort(byS)[0]].filter(Boolean);
-  for (const c of rest) if (cs.length < 3 && !cs.includes(c)) cs.push(c);
-  const pic = s => `<div class="pic"><img src="img/${s}.png" alt="">${NAME[s]}</div>`;
-  $('#eqs').innerHTML = cs.map(c => `<div class="eq">${c.parts.map(p => pic(p) + g3(W('grid', p), 20)).join('<span class="op">+</span>')}${c.op === '×' ? `<span class="op">× ${c.n}</span>` : ''}<span class="op">=</span>${g3(W('grid', c.a), 20)}${pic(c.a)}<span class="say">${c.since}세대~</span></div>`).join('') || '<p class="fn">이번 세대엔 합친 말이 안 보임</p>';
-  const first = cs[0];
-  $('#hedge').textContent = first ? `* ‘${NAME[first.a]} = ${NAME[first.parts[0]]} 여럿’은 AI의 상식일 수 있음. 다만 섬 전체가 같은 규칙으로 씀 (${first.since}세대~)` : '';
-  if (SP) { $('#lenBars').innerHTML = TF.splitHTML('grid', 17);
-    $('#splitNote').textContent = `${NAME[SP.a]}: ${SP.from}칸 → ${SP.to}칸 (${SP.shrank}세대) · 긴 말은 ${NAME[SP.b]}${TF.josa(NAME[SP.b], '이', '가')} 가져감 (${SP.took}세대)`; }
-  else { $('#splitH').innerHTML = '짧아짐<small>처음 3세대 → 최근 3세대</small>'; $('#lenBars').innerHTML = TF.lengths('grid').map(r => `<div class="bar"><div class="k">${{3:'자주 나오는 그림', 2:'보통', 1:'가끔 나오는 그림'}[r.t]}<small>${r.ex}</small></div><div class="tr"><div class="b" style="width:${r.first / 9 * 78}%"><span>${r.first.toFixed(1)}칸</span></div><div class="b now" style="width:${r.last / 9 * 78}%"><span>${r.last.toFixed(1)}칸</span></div></div></div>`).join(''); } }
-
-/* 6 섬 */
-const MT = TF.meeting();
-if (MT) {
-  $('#s6k').textContent = '두 섬의 만남';
-  $('#s6h').textContent = MT.recent > MT.first ? `만난 지 ${MT.days}세대: 서로의 말을 배우는 중` : `만난 지 ${MT.days}세대: 아직 서로 낯섦`;
-  $('#isls').className = ''; $('#isls').innerHTML = TF.meetHTML(); $('#meet').innerHTML = '';
-} else {
-  $('#isls').innerHTML = TF.ORDER.map(k => { const w = W(k, ID.forest); return `<div class="isl" style="--k:${TF.COLOR[k]}"><h3><i></i>${TF.ISL[k]}</h3><div class="big">${TF.wordHTML(w, k, 34)}</div><span class="sc-n">‘숲’ · ${TF.scriptsIn(w).map(x => TF.SCRIPT_KO[x]).join('·')}</span><p>${TF.ISL_DESC[k]}</p></div>`; }).join('');
-  const dd = TF.dday(TF.MEET);
-  $('#meet').innerHTML = TF.met ? `<b>만남 시작</b><span>${TF.META.met_gen}세대부터 글자 섬 × 그림 섬</span>` : `<b>10.22 ${dd > 0 ? 'D-' + dd : '오늘'}</b><span>글자 섬 × 그림 섬 첫 만남 → 말이 섞일까?</span>`;
-}
-
-/* 7 한계 */
-{ const g = TF.word('grid', ID.mountain), sea = TF.word('grid', ID.sea), tm = TF.word('twin', ID.mountain), bits = [];
-  if (g && g.includes('ㅅ')) bits.push('산 = ㅅ'); if (sea && sea.includes('ㅂ')) bits.push('바다 = ㅂ');
-  let t = bits.length ? `${bits.join(', ')} (한국어 첫소리)` : '';
-  if (tm && tm.startsWith('ο')) t += `${t ? ' · ' : ''}산 = ο (그리스어 όρος)`;
-  $('#leak').textContent = t || '모양이 닮은 글자부터 고름'; }
-{ const C = await TF.loadControl(); const CG = C && GENS.find(x => x.gen === C.gen) || LAST, g = CG.islands.grid.ok;
-  const rows = [['그냥 찍기', 25, ''], ['메모 없는 AI', C && C.islands && C.islands.grid ? pct(C.islands.grid.ok / C.islands.grid.talks * 32) : null, ''], [`메모 30줄 (${CG.gen}세대)`, pct(g), 'now']];
-  $('#cmpBars').innerHTML = rows.map(([k, v, c]) => `<div class="bar"><div class="k">${k}</div><div class="tr">${v == null ? '<span class="tagp">측정 중</span>' : `<div class="b ${c}" style="width:${v * 0.78}%"><span>${v}%</span></div>`}</div></div>`).join('');
-  $('#cmpNote').textContent = C && C.islands ? `그림 섬 · ${C.gen}세대 · 같은 AI, 같은 규칙에서 메모만 지우고 ${C.islands.grid.talks}판` : '메모만 지운 비교 실험 준비 중'; }
-
-/* 8 끝 */
-const tick = () => { $('#clockT').textContent = TF.countdown(); $('#clockP').textContent = TF.nextSlot ? `${NOW}세대 → ${TF.nextSlot.gen}세대까지` : ''; };
-tick(); setInterval(tick, 1000);
-
-/* 넘기기 */
-const secs = [...document.querySelectorAll('.sc')];
-$('#dots').innerHTML = secs.map((s, i) => `<a href="#${s.id}" aria-label="${i + 1}번째 장면"></a>`).join('');
-const dots = [...document.querySelectorAll('#dots a')];
-const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { const i = secs.indexOf(e.target); dots.forEach((d, j) => d.classList.toggle('on', i === j)); document.body.classList.toggle('dark', e.target.id === 's8'); } }), {threshold: .55});
-secs.forEach(s => io.observe(s));
-const cur = () => { let best = 0, bd = 1e9; secs.forEach((s, i) => { const d = Math.abs(s.getBoundingClientRect().top); if (d < bd) { bd = d; best = i; } }); return best; };
-addEventListener('keydown', e => {
-  const n = ['ArrowRight','ArrowDown','PageDown',' '].includes(e.key) ? 1 : ['ArrowLeft','ArrowUp','PageUp'].includes(e.key) ? -1 : 0;
-  if (!n || (e.key === ' ' && e.target.closest('button'))) return; e.preventDefault();
-  secs[Math.max(0, Math.min(secs.length - 1, cur() + n))].scrollIntoView({behavior: 'smooth'});
-});
-})();
-</script>
+<script src="story.js"></script>
 </body>
 </html>
