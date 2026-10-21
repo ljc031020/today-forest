@@ -90,9 +90,9 @@ TF.relay('grid', 4).then(rows => {
 { const MT = TF.meeting(), meetK = TF.META.meet || [];
   if (MT) {
     $('#s7k').textContent = '06 · 두 섬의 만남';
-    $('#s7h').textContent = MT.recent > MT.first ? `만난 지 ${MT.days}세대, 서로의 말을 배우는 중` : `만난 지 ${MT.days}세대, 아직 서로 낯섦`;
+    $('#s7h').textContent = MT.days < 2 ? '처음 만난 두 섬, 아직 서로 낯섦' : MT.recent > MT.first ? `만난 지 ${MT.days}세대, 서로의 말을 배우는 중` : `만난 지 ${MT.days}세대, 아직 서로 낯섦`;
     $('#s7sub').textContent = `${MT.mg}세대부터 글자 섬과 그림 섬이 섞여 대화. 비교 섬은 안 만남 → 둘의 차이 = 만남의 영향.`;
-    $('#isls').innerHTML = `<div class="mt"><div class="cd ms rv"><p class="cap" style="font-size:15px;color:var(--t2)">두 섬 사이 대화 성공</p><p class="v">${pct(MT.first)}%<i> → </i>${pct(MT.recent)}%</p><p class="cap" style="font-size:14px;color:var(--t2)">만난 날 → 최근 3세대 평균</p></div>` +
+    $('#isls').innerHTML = `<div class="mt"><div class="cd ms rv"><p class="cap" style="font-size:15px;color:var(--t2)">두 섬 사이 대화 성공</p>${MT.days > 1 ? `<p class="v">${pct(MT.first)}%<i> → </i>${pct(MT.recent)}%</p><p class="cap" style="font-size:14px;color:var(--t2)">만난 날 → 최근 3세대 평균</p>` : `<p class="v">${pct(MT.first)}%</p><p class="cap" style="font-size:14px;color:var(--t2)">만난 첫 세대 · ${TF.LAST.cross.talks}판 중 ${TF.LAST.cross.ok}판 · 찍기 25%</p>`}</div>` +
       TF.ORDER.map((k, i) => { const r = MT.isl[k], met = meetK.includes(k); return `<div class="cd isl rv" style="--c:${COL[k]};--k:${COL[k]};--d:${i + 1};padding:24px"><div class="ih"><i></i><b>${TF.ISL[k]}</b><span class="${met ? 'c' : ''}">${met ? '만남' : '만남 없음 (기준)'}</span></div><div class="box">${tiles(W(F, k), isGrid(k) ? 34 : 50, 'on', k)}</div><div class="kv"><span>다른 섬 글자 섞인 말</span><b>${pct(r.borrow)}%</b></div><div class="kv"><span>만난 뒤 바뀐 단어</span><b>${r.changed} / ${r.total}</b></div><div class="fg">${r.foreign.length ? r.foreign.slice(0, 8).map(c => `<span>${esc(c)}</span>`).join('') : '<em class="cap" style="font-style:normal">빌린 글자 없음</em>'}</div></div>`; }).join('') + '</div>';
   } else {
     const dd = TF.dday(TF.MEET);

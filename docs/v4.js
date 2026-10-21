@@ -206,10 +206,11 @@ function liMemoHTML(mem, msg){
   $('#liCap').textContent = same ? `메모 · 이 말이 쓰였던 줄` : rows.length ? '메모 · 똑같은 말은 없음 → 비슷한 줄로 추측' : '메모 · 처음 듣는 말';
   return rows.length ? rows.map((e, i) => lineHTML(e, {use: i === 0})).join('') : '<div class="ml none">비슷한 줄도 없음 → 찍기</div>';
 }
+let SLOTS = 32;   // 섬 안 대화 32판, 두 섬 사이는 그 세대에 실제로 한 판 수
 function drawSlots(list){
-  $('#tSlots').innerHTML = Array.from({length: 32}, (_, i) => { const r = list[i]; return `<i class="${r ? (r.ok ? 'ok' : 'no') : (i === list.length ? 'cur' : '')}"></i>`; }).join('');
+  $('#tSlots').innerHTML = Array.from({length: SLOTS}, (_, i) => { const r = list[i]; return `<i class="${r ? (r.ok ? 'ok' : 'no') : (i === list.length ? 'cur' : '')}"></i>`; }).join('');
   const ok = list.filter(r => r.ok).length;
-  $('#tTally').textContent = list.length ? `${list.length} / 32 · 통함 ${ok}` : '';
+  $('#tTally').textContent = list.length ? `${list.length} / ${SLOTS} · 통함 ${ok}` : '';
 }
 function clearStage(){
   $('#seen').classList.add('hide'); $('#msg').innerHTML = ''; $('#msgCap').innerHTML = '&nbsp;';
@@ -273,6 +274,7 @@ async function talkView(){
   const [G, M] = await Promise.all([TF.loadGen(gen), TF.loadMem(gen)]); if (tk !== token) return;
   let talks = k === 'cross' ? ((G && G.cross || {}).talks || []) : ((G && G.islands[k]) || {}).talks || [];
   talks = talks.map(t => ({from: k, to: k, ...t})).filter(t => t.msg);
+  SLOTS = k === 'cross' ? talks.length || 16 : 32; drawSlots([]);
   const ctx = {gen, done: [], born: {}, mem: {}};
   const fill = kk => { const MI = M && M.islands[kk]; if (!MI) return; for (const [id, arr] of Object.entries(MI.start)) { const mu = new Set((MI.mut || {})[id] || []); ctx.mem[id] = arr.map((x, i) => ({...toEntry(x, kk), mut: mu.has(i)})); } Object.assign(ctx.born, Object.fromEntries(Object.entries(MI.born || {}).map(([a, b]) => [+a, b]))); };
   if (k === 'cross') (TF.META.meet || []).forEach(fill); else fill(k);
@@ -347,6 +349,8 @@ async function drawNotes(){
     if (TF.meetGen) h += `<line x1="${x(TF.meetGen)}" x2="${x(TF.meetGen)}" y1="20" y2="${y(0)}" stroke="var(--ink)" stroke-dasharray="4 4"/><text x="${x(TF.meetGen)}" y="14" font-size="12" fill="var(--ink)" text-anchor="middle">만남 · ${TF.meetGen}세대 (${TF.md(TF.MEET)})</text>`;
     for (const k of ['twin', 'line', 'grid']) h += `<path d="${GENS.map((g, i) => `${i ? 'L' : 'M'}${x(g.gen).toFixed(1)},${y(g.islands[k].ok / g.islands[k].talks).toFixed(1)}`).join('')}" fill="none" stroke="${HEX[k]}" stroke-width="${k === 'grid' ? 3 : 2}" stroke-linejoin="round"/>`;
     if (GENS.some(g => g.cross)) h += `<path d="${GENS.filter(g => g.cross).map((g, i) => `${i ? 'L' : 'M'}${x(g.gen).toFixed(1)},${y(g.cross.ok / g.cross.talks).toFixed(1)}`).join('')}" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-dasharray="1 0"/>`;
+    { const cr = GENS.filter(g => g.cross); for (const g of cr) h += `<circle cx="${x(g.gen)}" cy="${y(g.cross.ok / g.cross.talks)}" r="5" fill="var(--ink)"/>`;
+      const lc = cr[cr.length - 1]; if (lc) h += `<text x="${x(lc.gen) - 10}" y="${y(lc.cross.ok / lc.cross.talks) + 4}" font-size="13" font-weight="700" fill="var(--ink)" text-anchor="end">두 섬 사이 ${Math.round(lc.cross.ok / lc.cross.talks * 100)}%</text>`; }
     const ends = TF.ORDER.map(k => [k, TF.LAST.islands[k].ok / TF.LAST.islands[k].talks]).sort((a, b) => b[1] - a[1]);
     if (!mob()) { let py = -99; for (const [k, v] of ends) { let ly = Math.max(y(v) + 4, py + 18); py = ly; h += `<text x="${Wd}" y="${ly}" font-size="14" font-weight="700" fill="${HEX[k]}" text-anchor="end">${TF.ISL[k]} ${Math.round(v * 100)}%</text>`; } }
     for (const g of [1, Math.round(NOW / 2), NOW]) h += `<text x="${x(g)}" y="${H - 8}" font-size="12" fill="var(--t3)" text-anchor="middle">${g}세대</text>`;
@@ -368,7 +372,7 @@ async function drawNotes(){
     $('#islH').innerHTML = `두 섬의 만남 (${MT.mg}세대~). <span>섞이면 말이 어떻게 되나.</span>`;
     $('#islCap').textContent = '글자 섬 · 비교 섬: 조건이 같음 → 둘의 차이 = 만남의 영향';
     const pc = v => Math.round(v * 100);
-    $('#isls').innerHTML = `<div class="meet"><div class="card mstat"><p class="cap">두 섬 사이 대화 성공률</p><b class="bign">${pc(MT.first)}% <i>→</i> ${pc(MT.recent)}%</b><p class="cap">만난 날 → 최근 3세대 평균 · ${MT.days}세대째</p></div>` +
+    $('#isls').innerHTML = `<div class="meet"><div class="card mstat"><p class="cap">두 섬 사이 대화 성공률</p>${MT.days > 1 ? `<b class="bign">${pc(MT.first)}% <i>→</i> ${pc(MT.recent)}%</b><p class="cap">만난 날 → 최근 3세대 평균 · ${MT.days}세대째</p>` : `<b class="bign">${pc(MT.first)}%</b><p class="cap">만난 첫 세대 · ${TF.LAST.cross.talks}판 중 ${TF.LAST.cross.ok}판 통함 (찍기 25%)</p>`}</div>` +
       TF.ORDER.map(k => { const r2 = MT.isl[k], met = (TF.META.meet || []).includes(k); return `<div class="card isl" style="--c:${COL[k]}"><div class="ih"><i></i><b>${TF.ISL[k]}</b><span class="cap">${met ? '만남' : '만남 없음 (기준)'}</span></div><div class="box">${tiles(W(F, undefined, k), isGrid(k) ? 30 : 48, 'on', k)}</div><div class="kv"><span>다른 섬 글자 섞인 말</span><b>${pc(r2.borrow)}%</b></div><div class="kv"><span>만난 뒤 바뀐 단어</span><b>${r2.changed} / ${r2.total}</b></div><div class="fg">${r2.foreign.length ? r2.foreign.slice(0, 8).map(c => `<span>${esc(c)}</span>`).join('') : '<span class="cap">빌린 글자 없음</span>'}</div></div>`; }).join('') + `</div>`;
   } else {
     $('#islH').innerHTML = `섬 3개, 같은 조건, 다른 말. <span>같은 AI·같은 규칙인데 ‘숲’이 섬마다 달라요.</span>`;
