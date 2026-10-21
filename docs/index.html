@@ -4,163 +4,152 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>오늘의 숲 · AI가 만든, 세상에 없던 말</title>
-<meta name="description" content="AI들이 그림 맞히기만 반복해서 만든, 세상에 없던 말. 직접 맞혀 보고, AI끼리 대화하는 장면을 봐요.">
+<meta name="description" content="AI 4명이 그림 맞히기만 하며 만든, 세상에 없던 말. 무슨 그림인지 맞혀 보세요.">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+Cherokee:wght@500&family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+KR:wght@500&display=swap">
-<link rel="stylesheet" href="tf.css">
-<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="v4.css">
 </head>
 <body>
-<header class="top">
+<header class="top" id="top">
   <div class="wrap">
     <a class="logo" href="#/">오늘의 숲</a>
     <nav class="nav" id="nav" aria-label="메뉴">
       <a href="#/">오늘</a>
-      <a href="#/quiz">맞혀 보기</a>
-      <a href="#/talk">대화 보기</a>
+      <a href="#/talk">대화</a>
       <a href="#/notes">실험 노트</a>
+      <a href="story.html">발표</a>
     </nav>
-    <span class="clockpill" id="clockpill"></span>
+    <span class="clock"><span class="dot" aria-hidden="true"></span><span id="clock"></span></span>
   </div>
 </header>
 
 <main class="wrap">
-  <!-- 첫 화면: 지금 어디쯤, 지금 무슨 일, 지금의 말 -->
-  <section class="view" id="vToday">
-    <div class="mtop">
-      <div><h1>AI가 만든, 세상에 없던 말</h1><p class="sub">AI 4명<span class="dot">·</span>사람 말 금지<span class="dot">·</span>그림 맞히기만 반복</p></div>
+<!-- ══════ 오늘 ══════ -->
+<div class="view" id="vToday">
+  <section class="hero" id="quiz" aria-labelledby="lead">
+    <div class="hero-h">
+      <p class="lead" id="lead">AI 4명이 그림 맞히기만 하며 만든 말이에요. 사람 말은 금지.<br><span>하루 두 번 AI가 바뀌어도 말은 이어져요.</span></p>
+      <div class="seg" id="seg" role="group" aria-label="섬 고르기"></div>
     </div>
-
-    <div class="journey" id="journey" aria-label="실험 일정에서 지금 위치"></div>
-
-    <div class="live" id="live">
-      <div class="live-h"><span class="lv"><i></i><b id="liveLab"></b></span><div class="tabs" id="liveTabs"></div></div>
-      <div class="lstage">
-        <div class="lsp"><span class="lw">말하는 AI <b id="lsId"></b></span><div class="lpic"><img id="lsImg" alt=""></div><small>그림은 말하는 AI만 봄</small></div>
-        <div class="lmsg"><span class="arr" aria-hidden="true">→</span><div id="lMsg"></div><span class="arr" aria-hidden="true">→</span></div>
-        <div class="lli"><span class="lw">듣는 AI <b id="llId"></b></span><div class="lcands" id="lCands"></div><small id="lRes">&nbsp;</small></div>
+    <div class="hero-g">
+      <div class="spec">
+        <div class="spec-top"><span class="eyebrow" id="edition"></span><span class="eyebrow" id="qno"></span></div>
+        <div id="qWord"></div>
+        <div class="meta" id="qMeta" aria-live="polite"></div>
       </div>
-      <div class="lfoot"><div class="lslots" id="lSlots"></div><span class="ltally" id="lTally"></span></div>
-    </div>
-
-    <div class="row cta"><a class="btn" href="#/quiz">직접 맞혀 보기 →</a><a class="btn ghost" id="talkLink" href="#/talk">자세히 보기</a></div>
-
-    <div class="sech">
-      <h2>지금의 단어 12개</h2>
-      <div class="row"><div class="tabs" id="todayTabs"></div><button class="pill" id="hideBtn">뜻 가리기</button></div>
-    </div>
-    <div class="spec" id="spec"></div>
-    <p class="note" id="todayMeta"></p>
-  </section>
-
-  <!-- 맞혀 보기 -->
-  <section class="view" id="vQuiz">
-    <div class="vh">
-      <h1>이 말은 무슨 그림?</h1>
-      <p>AI들이 지금 쓰는 말이에요. 틀리면 AI의 메모 한 줄을 힌트로 드려요.</p>
-    </div>
-    <div class="row qbar"><div class="tabs" id="quizTabs"></div><span class="score" id="score"></span></div>
-    <div class="quiz">
-      <div class="qleft">
-        <div class="q-word"><span class="big" id="qWord"></span></div>
-        <div class="memo" id="qMemo" style="display:none"><h4>AI의 메모</h4><div id="qMemoLines"></div></div>
-      </div>
-      <div class="qright">
-        <div class="choices" id="choices"></div>
-        <div class="q-say" id="qSay"></div>
-        <button class="btn" id="nextQ" style="display:none">다음 문제 →</button>
+      <div>
+        <p class="ask" id="ask">이 말은 무슨 그림일까요?</p>
+        <div class="picks" id="picks"></div>
+        <div class="res" id="res" aria-live="polite"></div>
       </div>
     </div>
   </section>
 
-  <!-- 대화 보기 -->
-  <section class="view" id="vTalk">
-    <div class="vh">
-      <h1>AI끼리 대화 보기</h1>
-      <p>실제 기록을 그대로 재생해요. 그림은 말하는 AI만 봐요.</p>
-    </div>
-    <div class="ctrl">
-      <div class="tabs" id="talkTabs"></div>
-      <select id="genSel" aria-label="세대 고르기"></select>
-      <button class="pill" id="speedBtn">1×</button>
-      <button class="pill live" id="liveBtn" hidden>● 실시간</button>
-    </div>
-    <ol class="steps" id="steps"><li class="step"><b>1</b>그림 봄</li><li class="step"><b>2</b>글자로 씀</li><li class="step"><b>3</b>4장 중 고름</li><li class="step"><b>4</b>메모</li></ol>
-    <div class="stage" id="stage">
-      <div class="side sp">
-        <div class="who"><span class="av sp" id="spAv"></span>말하는 AI</div>
-        <div class="target hide" id="target"><span class="eye">말하는 AI만 봄</span><img alt="" id="targetImg"></div>
-        <div class="memo" id="spMemo"><h4>메모 · 이 그림</h4><div id="spLines"></div></div>
-      </div>
-      <div class="mid">
-        <div class="msg" id="msg"></div>
-        <div class="tag" id="tag"></div>
-        <div class="verdict" id="verdict"><i></i><span></span></div>
-      </div>
-      <div class="side li">
-        <div class="who"><span class="av" id="liAv"></span>듣는 AI</div>
-        <div class="cands" id="cands"></div>
-        <div class="memo" id="liMemo"><h4>메모 · 이 말</h4><div id="liLines"></div></div>
-      </div>
-      <div class="over" id="over"><div class="box" id="overBox"></div></div>
-    </div>
-    <div class="mem"><span class="k-small">이번 세대 32판</span><div class="slots" id="slots"></div><span class="tally" id="tally"></span></div>
-  </section>
-
-  <!-- 단어 기록 -->
-  <section class="view" id="vWord">
-    <a class="back" href="#/">← 오늘</a>
-    <div class="vh">
-      <h1 id="wordH">단어 기록</h1>
-      <p>1세대부터 이 그림을 부른 말</p>
-    </div>
-    <div class="row"><div class="tabs" id="wordTabs"></div></div>
-    <div class="picks" id="picks"></div>
-    <div class="life">
-      <div class="now-w" id="nowW"></div>
-      <div class="lifer">
-        <div class="blk"><h3>바뀐 순서</h3><div class="runs" id="runs"></div></div>
-        <div class="blk"><h3>이 섬의 대화 성공 <small>세대별, 32판 중</small></h3><div class="spark" id="spark"></div></div>
-        <div class="blk" id="wordEqsB"><h3>이 말이 들어간 규칙</h3><div id="wordEqs"></div></div>
+  <section class="sec" id="how" aria-labelledby="howH">
+    <div class="sec-h"><h2 id="howH"></h2><p class="cap" id="howCap"></p></div>
+    <div class="scrub">
+      <div class="sbox"><span class="badge" id="sBadge"></span><div id="sWord"></div></div>
+      <div class="ctrl">
+        <div class="gnum"><b id="sGen"></b><span id="sWhen"></span></div>
+        <div class="trans">
+          <button class="play" id="play" aria-label="재생"></button>
+          <div class="track" id="track" role="slider" tabindex="0" aria-label="세대" aria-valuemin="1"><div class="band" id="band"><span>첫날 연속 실행</span></div><div class="bar"></div><div class="fillb" id="fillb"></div><div id="ticks"></div><div class="knob" id="knob"></div><div class="ends"><span>1세대</span><span id="endLab"></span></div></div>
+        </div>
+        <svg class="spark" id="spark" aria-label="세대별 서로 알아들은 비율"></svg>
+        <div><p class="cap" style="margin-bottom:8px">바뀐 순간</p><div class="evs" id="evs"></div></div>
       </div>
     </div>
   </section>
 
-  <!-- 실험 노트 -->
-  <section class="view" id="vNotes">
-    <div class="vh">
-      <h1>실험 노트</h1>
-      <p>규칙 3개 · 발견 · 한계</p>
-    </div>
-    <div class="notes">
-      <ol class="rules">
-        <li><b>그림 맞히기</b><span>말하는 AI만 그림을 봄 → 낯선 글자로 씀 → 듣는 AI가 4장 중 고름. 한 세대 32판.</span></li>
-        <li><b>메모</b><span>AI마다 최근 30판을 기억. 통했던 말을 다시 씀.</span></li>
-        <li><b>세대 교체</b><span>하루 2번(07·19시) AI 2명 교체. 새 AI는 최근 64판 중 30줄만, 가끔(5%) 틀리게 물려받음.</span></li>
-      </ol>
-      <div class="sec"><h2>세대: 하루 두 번, AI 2명 교체</h2><div id="notesRelay"></div><p class="note">초록 = 새로 온 AI · 점선 = 그 세대 끝나고 떠날 AI · 오른쪽 = 그때 그림 섬의 ‘숲’</p></div>
-      <div class="sec"><h2>서로 알아듣는 비율</h2><div class="chart" id="notesChart"></div><div class="legend" style="margin-top:10px"><span><i style="background:var(--grid)"></i>그림 섬</span><span><i style="background:var(--line)"></i>글자 섬</span><span><i style="background:var(--twin)"></i>비교 섬</span><span><i style="background:var(--faint)"></i>찍기 25%</span></div></div>
-      <div class="sec grid2">
-        <div><h2>합성</h2><div id="notesEqs"></div></div>
-        <div><h2 id="notesLenH">분화</h2><div id="notesLen"></div></div>
-      </div>
-      <div class="sec"><h2 id="notesIslsH">섬 3개: 같은 조건, 다른 말</h2><div class="isls" id="notesIsls"></div><p class="note" id="notesMeet"></p></div>
-      <div class="sec grid2">
-        <div><h2>한계</h2><div class="lim">
-          <div><b>AI 자체는 그대로</b><span>바뀌는 건 메모뿐. 여기서 ‘학습’ = 메모 보고 따라 하기.</span></div>
-          <div><b>아는 말이 새어 나옴</b><span id="leak"></span></div>
-          <div><b>섬마다 1번 실행</b><span>증명이 아니라 관찰. 문법 없는 걸음마 단계.</span></div>
-        </div></div>
-        <div><h2>메모가 없으면?</h2><div id="notesCmp" style="display:grid;gap:16px"></div></div>
-      </div>
-      <div class="foot"><span>모델 Claude Haiku · 매일 07·19시 자동 실행</span><a href="story.html">발표 화면</a><a href="data/summary.json">원자료(JSON)</a></div>
+  <section class="sec" aria-labelledby="liveH">
+    <div class="sec-h"><h2 id="liveH"></h2></div>
+    <div class="live">
+      <div class="lrow" id="lrow"></div>
+      <div style="display:grid;gap:10px"><div class="slots" id="slots"></div><div class="row" style="justify-content:space-between"><span class="cap" id="tally"></span><a class="btn s weak" id="liveLink" href="#/talk">대화 전체 보기</a></div></div>
     </div>
   </section>
+
+  <section class="sec" aria-labelledby="dictH">
+    <div class="sec-h dh"><h2 id="dictH"></h2><div class="seg" id="hideSeg" role="group" aria-label="뜻"><button aria-pressed="true" data-v="0">뜻 보기</button><button aria-pressed="false" data-v="1">가리기</button></div></div>
+    <div class="dict" id="dict"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="tripH">
+    <div class="sec-h"><h2 id="tripH"></h2></div>
+    <div class="trip" id="trip"></div>
+  </section>
+</div>
+
+<!-- ══════ 대화 보기 ══════ -->
+<div class="view" id="vTalk">
+  <div class="vhead">
+    <h1 class="vt">AI끼리 대화 보기. <span>실제 기록을 그대로 다시 틀어요. 그림은 말하는 AI만 봐요.</span></h1>
+    <div class="row ctl"><div class="seg" id="talkSeg" role="group" aria-label="섬"></div><label class="sel"><select id="genSel" aria-label="세대 고르기"></select></label><button class="btn m weak" id="speedBtn">1×</button></div>
+  </div>
+  <ol class="steps" id="steps"><li><b>1</b>그림 봄</li><li><b>2</b>낯선 글자로 씀</li><li><b>3</b>4장 중 고름</li><li><b>4</b>둘 다 메모</li></ol>
+  <div class="stage" id="stage">
+    <div class="col">
+      <div class="who"><span class="av ink" id="spAv"></span><b>말하는 AI</b><span class="badge new" id="spNew" hidden>이번 세대에 새로 옴</span></div>
+      <div class="seen hide" id="seen"><span class="cap">말하는 AI만 봄</span><img id="seenImg" alt=""></div>
+      <div class="memo2" id="spMemo"><p class="cap" id="spCap">메모 · 이 그림</p><div id="spLines"></div></div>
+    </div>
+    <div class="mid">
+      <p class="cap" id="msgCap">&nbsp;</p>
+      <div id="msg" class="msg"></div>
+      <span class="tagx" id="tag"></span>
+      <span class="verdict" id="verdict"></span>
+    </div>
+    <div class="col">
+      <div class="who"><span class="av" id="liAv"></span><b>듣는 AI</b><span class="badge new" id="liNew" hidden>이번 세대에 새로 옴</span></div>
+      <div class="cands" id="cands"></div>
+      <div class="memo2" id="liMemo"><p class="cap" id="liCap">메모 · 이 말</p><div id="liLines"></div></div>
+    </div>
+    <div class="over" id="over"><div class="obox" id="overBox"></div></div>
+  </div>
+  <div class="tbot"><span class="cap" id="tGenLab">이번 세대 32판</span><div class="slots big" id="tSlots"></div><span class="cap" id="tTally"></span></div>
+</div>
+
+<!-- ══════ 단어 기록 ══════ -->
+<div class="view" id="vWord">
+  <a class="back" href="#/">← 오늘</a>
+  <div class="vhead"><h1 class="vt" id="wordH"></h1><div class="seg" id="wordSeg" role="group" aria-label="섬"></div></div>
+  <div class="wpick" id="wpick"></div>
+  <div class="wmain">
+    <div class="wnow" id="wnow"></div>
+    <div class="wright">
+      <div class="card"><p class="cap">세대마다의 모양 (진한 칸 = 그 세대에 바뀜)</p><div class="strip" id="strip"></div></div>
+      <div class="card runs" id="runs"></div>
+    </div>
+  </div>
+  <div class="card"><p class="cap"><b class="ink">이 섬의 대화 성공</b> 세대별, 32판 중</p><svg class="wspark" id="wspark"></svg><p class="cap" id="wsparkCap"></p></div>
+</div>
+
+<!-- ══════ 실험 노트 ══════ -->
+<div class="view" id="vNotes">
+  <div class="vhead"><h1 class="vt">실험 노트. <span id="notesSub"></span></h1></div>
+  <div class="rules">
+    <div class="card"><b class="n">1</b><h3>그림 맞히기</h3><p>말하는 AI만 그림을 봄 → 낯선 글자로만 씀 → 듣는 AI가 4장 중 고름. 한 세대 32판.</p></div>
+    <div class="card"><b class="n">2</b><h3>메모</h3><p>AI마다 최근 30판을 기억. 통했던 말을 다시 씀.</p></div>
+    <div class="card"><b class="n">3</b><h3>세대 교체</h3><p>하루 2번(07·19시) AI 2명 교체. 새 AI는 최근 64판 중 30줄만, 가끔(5%) 틀리게 물려받음.</p></div>
+  </div>
+  <section class="nsec"><div class="sec-h"><h2>세대: 하루 두 번, AI 2명 교체. <span>사람이 다 바뀌어도 남는 말 = 물려받은 언어.</span></h2><p class="cap">초록 = 새로 온 AI · 점선 = 그 세대 끝나고 떠날 AI · 오른쪽 = 그때 그림 섬의 ‘숲’</p></div><div class="card" id="relay"></div><p class="punch" id="relayPunch"></p></section>
+  <section class="nsec"><div class="sec-h"><h2>서로 알아듣는 비율. <span>세대마다 32판 중 몇 판이 통했나.</span></h2></div><div class="card"><svg class="chart" id="chart"></svg></div></section>
+  <section class="nsec"><div class="sec-h"><h2>단어를 합치고, 뜻을 나눔. <span>아무도 가르치지 않았는데 생긴 규칙.</span></h2><p class="cap">그림 섬 기준 · ‘숲 = 나무 여럿’ 같은 건 AI의 상식일 수 있음. 다만 섬 전체가 같은 규칙으로 씀</p></div>
+    <div class="two"><div class="card"><h3>합성</h3><div id="eqs"></div></div><div class="card"><h3 id="splitH">분화</h3><div id="split"></div></div></div></section>
+  <section class="nsec"><div class="sec-h"><h2 id="islH"></h2><p class="cap" id="islCap"></p></div><div id="isls"></div></section>
+  <section class="nsec"><div class="sec-h"><h2>이 실험이 말할 수 없는 것. <span>그리고 메모를 지우면 어떻게 되나.</span></h2></div>
+    <div class="two">
+      <div class="card lim"><div><h3>AI 자체는 그대로</h3><p>바뀌는 건 메모뿐. 여기서 ‘학습’ = 메모 보고 따라 하기.</p></div><div><h3>아는 말이 새어 나옴</h3><p id="leak"></p></div><div><h3>섬마다 1번 실행</h3><p>증명이 아니라 관찰. 문법 없는 걸음마 단계.</p></div></div>
+      <div class="card"><h3>메모가 없으면?</h3><div id="ctrl"></div></div>
+    </div></section>
+</div>
+
+<div class="foot"><span>모델 Claude Haiku · 매일 07·19시 자동 실행</span><a href="data/summary.json">원자료(JSON)</a><a href="v3.html">이전 버전</a></div>
 </main>
 <script src="lang.js"></script>
-<script src="site.js"></script>
+<script src="v4.js"></script>
 </body>
 </html>
