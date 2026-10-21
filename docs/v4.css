@@ -383,7 +383,9 @@ h2 span{color:var(--t3);font-weight:600}
   .rn{grid-template-columns:40px 86px minmax(0,1fr);gap:10px}
   .rn .cap{display:none}
   .strip .tiles{--q:3px!important;gap:0}
-  .strip small{font-size:8px}
+  .strip small{font-size:9px}
+  .strip .sc:nth-child(even) small{visibility:hidden}
+  .strip .sc:last-child small{visibility:visible}
   .who .badge{font-size:11px}
   .track .band span{top:-18px;left:0}
   .rl{grid-template-columns:76px minmax(0,1fr) 54px}

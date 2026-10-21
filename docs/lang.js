@@ -9,16 +9,17 @@ TF.ISL_DESC = {line:'글자를 한 줄로 나열', grid:'3×3 칸에 글자 배�
 TF.ORDER = ['grid', 'line', 'twin'];
 TF.SCRIPT_KO = {greek:'그리스 문자', georgian:'조지아 문자', cherokee:'체로키 문자', arabic:'아랍 문자', armenian:'아르메니아 문자', runic:'룬 문자', hangul:'한글 자모', digit:'숫자'};
 const pad = n => String(n).padStart(3, '0');
-/* ?preview : 시험 모드(가짜 응답)로 만든 '발표 날' 데이터로 미리 보기 */
+/* ?preview : 시험 모드(가짜 응답)로 만든 '발표 날' 데이터로 미리 보기 — 사이트에선 데이터를 지웠고, 없으면 실제 데이터로 */
 TF.PREVIEW = new URLSearchParams(location.search).has('preview');
-const D = TF.PREVIEW ? 'preview/data/' : 'data/';
+let D = TF.PREVIEW ? 'preview/data/' : 'data/';
 const T0 = Date.now();
 TF.now = () => TF.PREVIEW && TF.LAST ? Date.parse(TF.LAST.at) + 3 * 3600e3 + (Date.now() - T0) : Date.now();
 const cache = {};
 const getJSON = TF.getJSON = u => cache[u] || (cache[u] = fetch(u, {cache:'no-store'}).then(r => r.ok ? r.json() : null).catch(() => null));
 
 TF.load = async function(){
-  const S = await getJSON(D + 'summary.json');
+  let S = await getJSON(D + 'summary.json');
+  if (!S && TF.PREVIEW) { TF.PREVIEW = false; D = 'data/'; S = await getJSON(D + 'summary.json'); }
   TF.S = S; TF.META = S.meta; TF.GENS = S.gens; TF.LAST = S.gens[S.gens.length - 1]; TF.NOW = TF.LAST.gen;
   TF.ID = S.meta.scenes; TF.NAME = {}; TF.EN = {};
   for (const [en, id] of Object.entries(TF.ID)) { TF.NAME[id] = KO[en] || en; TF.EN[id] = en; }
@@ -101,6 +102,7 @@ function buildTrip(){
   TF.met = !!TF.META.met_gen;
 }
 TF.countdown = () => { if (!TF.nextSlot) return ''; let s = Math.max(0, Math.floor((TF.nextSlot.t - TF.now()) / 1000)); const h = Math.floor(s / 3600); s %= 3600; return `${h}:${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; };
+TF.overdue = () => !!TF.nextSlot && TF.now() >= TF.nextSlot.t;   // 예약 시각은 지났는데 아직 기록이 안 올라옴 (GitHub 예약 실행이 밀릴 때)
 TF.dday = t => { const a = new Date(TF.now() + KST), b = new Date(t + KST); return Math.round((Date.UTC(b.getUTCFullYear(), b.getUTCMonth(), b.getUTCDate()) - Date.UTC(a.getUTCFullYear(), a.getUTCMonth(), a.getUTCDate())) / 864e5); };
 
 /* 통한 비율 그래프 (SVG 문자열) */

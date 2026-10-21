@@ -146,7 +146,7 @@ body.dk{background:#141A17}
 /* 6 규칙 */
 .rul{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:36px;align-items:start;--k:var(--grid)}
 .rul h3{font-size:24px;font-weight:700;letter-spacing:-.02em;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.eq{display:flex;align-items:center;gap:20px;padding:18px 0;border-bottom:1px solid var(--line)}
+.eq{display:flex;align-items:center;gap:20px;padding:14px 0;border-bottom:1px solid var(--line)}
 .eq:last-of-type{border-bottom:0}
 .eq .ep{display:grid;justify-items:center;gap:8px;font-size:15px;color:var(--t2)}
 .eq .ep img{width:40px;height:40px}
@@ -222,10 +222,13 @@ body.stack .sl{position:relative;inset:auto;width:1440px;height:810px;opacity:1;
 body.stack .sl.dark{background:#141A17}
 body.stack .sl .rv{opacity:1;transform:none}
 body.stack .nav2{display:none}
+.rot{display:none}
+body.stack .rot{display:block;position:sticky;top:0;z-index:6;background:var(--ink);color:#fff;font-size:13px;font-weight:600;text-align:center;padding:9px 16px}
 @media (prefers-reduced-motion:reduce){.sl,.sl .rv,.bt i{transition:none!important}}
 </style>
 </head>
 <body>
+<p class="rot">휴대폰을 가로로 돌리면 한 장씩 넘기는 발표 화면이 돼요</p>
 <div class="deck" id="deck">
 
 <section class="sl" id="s1" aria-label="표지">

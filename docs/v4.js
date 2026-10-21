@@ -37,7 +37,7 @@ const runsOf = L => { const out = []; for (const x of L) { if (!out.length || x.
 const segHTML = (cur, extra = []) => TF.ORDER.concat(extra).map(k => `<button aria-pressed="${k === cur}" data-k="${k}" style="--c:${COL[k]}"><i></i>${k === 'cross' ? '두 섬 사이' : TF.ISL[k]}</button>`).join('');
 
 /* 상단 시계 */
-const tick = () => { $('#clock').innerHTML = TF.nextSlot ? `<b>${NOW}세대</b><span class="lg"> · 다음 세대까지</span> ${TF.countdown()}` : `<b>${NOW}세대</b>`; };
+const tick = () => { $('#clock').innerHTML = TF.overdue() ? `<b>${NOW}세대</b><span class="lg"> · </span> 다음 세대 만드는 중` : TF.nextSlot ? `<b>${NOW}세대</b><span class="lg"> · 다음 세대까지</span> ${TF.countdown()}` : `<b>${NOW}세대</b>`; };
 tick(); setInterval(tick, 1000);
 addEventListener('scroll', () => $('#top').classList.toggle('sc', scrollY > 8), {passive: true});
 
@@ -289,9 +289,9 @@ async function talkView(){
     await wait(7000); if (tk !== token) return;
   }
   if (gen < NOW) { talkG = gen + 1; location.hash = `#/talk/${k}/${talkG}`; return; }
-  overlay(`<b class="bign" id="cdn">${TF.countdown()}</b><p>${TF.nextSlot ? `다음 ${TF.nextSlot.gen}세대 · ${TF.md(TF.nextSlot.t)} ${TF.hour(TF.nextSlot.t)}시` : ''}</p><div class="row" style="justify-content:center"><button class="btn pri" id="again">다시 보기</button><a class="btn weak" href="#/word/${k === 'cross' ? 'grid' : k}/${ID.forest}">‘숲’ 기록 보기</a></div>`);
+  overlay(`<b class="bign" id="cdn">${TF.overdue() ? "만드는 중" : TF.countdown()}</b><p>${TF.nextSlot ? `다음 ${TF.nextSlot.gen}세대 · ${TF.md(TF.nextSlot.t)} ${TF.hour(TF.nextSlot.t)}시` : ''}</p><div class="row" style="justify-content:center"><button class="btn pri" id="again">다시 보기</button><a class="btn weak" href="#/word/${k === 'cross' ? 'grid' : k}/${ID.forest}">‘숲’ 기록 보기</a></div>`);
   $('#again').onclick = () => talkView();
-  while (tk === token) { const el = $('#cdn'); if (el) el.textContent = TF.countdown(); await sleep(500); }
+  while (tk === token) { const el = $('#cdn'); if (el) el.textContent = TF.overdue() ? "만드는 중" : TF.countdown(); await sleep(500); }
 }
 function drawTalk(){
   const extra = GENS.some(g => g.cross) ? ['cross'] : [];

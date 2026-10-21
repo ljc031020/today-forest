@@ -113,7 +113,7 @@ TF.relay('grid', 4).then(rows => {
     `<p class="cap">회색 = 메모 없음 · 색 = 메모 30줄 · 같은 AI, 섬마다 32판${C && C.gen ? ` (${C.gen}세대)` : ''} · 찍기 25%</p>`; }
 
 /* 9 끝 — 실시간 */
-const tick = () => { $('#clk').textContent = TF.nextSlot ? `다음 세대까지 ${TF.countdown()} (실시간) · 매일 07·19시에 새 세대` : `${NOW}세대에서 실험 끝`; };
+const tick = () => { $('#clk').textContent = TF.overdue() ? '지금 다음 세대를 만드는 중 · 매일 07·19시에 새 세대' : TF.nextSlot ? `다음 세대까지 ${TF.countdown()} (실시간) · 매일 07·19시에 새 세대` : `${NOW}세대에서 실험 끝`; };
 tick(); setInterval(tick, 1000);
 
 /* ── 넘기기 ── */
