@@ -3,6 +3,7 @@ name: 하루 넘기기
 on:
   schedule:
     - cron: '17 * * * *'   # 매시간 확인. 07시·19시(KST) 차례가 지났는데 안 돌았으면 그때 돈다
+    - cron: '47 * * * *'   # GitHub가 예약 실행을 자주 건너뛰어서 한 번 더 (--auto라 이미 돈 차례면 그냥 끝남)
   workflow_dispatch:
     inputs:
       gens:
