@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오늘의 숲 · 기획 제안</title>
+<meta name="description" content="2026-2 디지털 스페이스 중간 평가 — 기말까지 진행할 프로젝트 기획 제안">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+Cherokee:wght@500&family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+KR:wght@500&display=swap">
+<style>
+/* 기획 제안 10장 — 발표 화면(story.html)과 같은 v4 규칙. 1440×810 한 장 = PDF 한 쪽 */
+:root{
+  --paper:#F3F4F0; --surface:#FFFFFF; --ink:#141A17; --t2:#3F4844; --t3:#5B6560; --line:#D9DED7; --fill:#E8EBE5; --miss:#6E7671;
+  --grid:#0B8457; --line-i:#2450D8; --twin:#8A3F9E; --k:var(--grid); --memo:#FFFCEB;
+  --f-ui:"Pretendard Variable",Pretendard,-apple-system,system-ui,"Apple SD Gothic Neo",sans-serif;
+  --f-g:"Noto Sans","Noto Sans Georgian","Noto Sans Armenian","Noto Sans Runic","Noto Sans Cherokee","Noto Sans Arabic","Noto Sans KR",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 var(--f-ui);word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;overflow:hidden;transition:background .4s}
+body.dk{background:#141A17}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+.tiles{display:inline-grid;gap:calc(var(--q) * .1);grid-template-columns:repeat(var(--cols),var(--q));vertical-align:middle}
+.tiles i{width:var(--q);height:var(--q);border-radius:calc(var(--q) * .16);display:grid;place-items:center;font:500 calc(var(--q) * .6)/1 var(--f-g);font-style:normal;color:var(--ink);background:rgba(20,26,23,.05)}
+.tiles i.f{background:var(--surface);box-shadow:inset 0 0 0 max(1.5px,calc(var(--q) * .035)) var(--ink)}
+.tiles.on i.f{background:var(--k);color:#fff;box-shadow:none}
+.tiles.mini i{font-size:0;border-radius:1.5px;background:rgba(20,26,23,.08);box-shadow:none}
+.tiles.mini i.f{background:rgba(20,26,23,.45)}
+.tiles.mini.hot i.f{background:var(--k)}
+
+.deck{position:fixed;left:50%;top:50%;width:1440px;height:810px;transform:translate(-50%,-50%) scale(var(--z,1));transform-origin:center}
+.sl{position:absolute;inset:0;padding:60px 96px 0;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility 0s .4s;background:var(--paper)}
+.sl.on{opacity:1;visibility:visible;transition:opacity .4s var(--ease)}
+.sl.dark{background:#141A17;color:#fff}
+.kk{font:500 14px/1 var(--mono);color:var(--t3);letter-spacing:.02em}
+.dark .kk{color:#B8C0BB}
+.tt{font-size:52px;line-height:1.25;font-weight:700;letter-spacing:-.025em;margin-top:16px}
+.tt span{color:var(--t3)}
+.sub{font-size:18px;line-height:1.6;color:var(--t2);margin-top:12px}
+.sub b{color:var(--ink)}
+.cd{background:var(--surface);border-radius:24px;padding:26px}
+.cd h3{font-size:20px;font-weight:700;letter-spacing:-.02em}
+.cd p{font-size:15px;line-height:1.55;color:var(--t2)}
+.cap{font-size:13px;line-height:1.45;color:var(--t3)}
+.src{position:absolute;left:96px;right:96px;bottom:24px;font-size:11.5px;line-height:1.5;color:var(--t3)}
+.pg{position:absolute;right:40px;top:60px;font:500 13px/1 var(--mono);color:var(--t3)}
+.dark .pg{color:#8A938E}
+.tag{display:inline-block;font:600 12px/1 var(--f-ui);padding:6px 9px;border-radius:999px;background:var(--fill);color:var(--t2)}
+.tag.g{background:var(--grid);color:#fff}
+.tag.k{background:var(--ink);color:#fff}
+.row{display:flex;align-items:center;gap:12px}
+.ar{font-size:26px;color:var(--t3);font-weight:400}
+
+/* 1 표지 */
+.cov{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:48px;margin-top:6px}
+.cov h1{font-size:96px;line-height:1.1;font-weight:700;letter-spacing:-.035em;margin-top:40px}
+.cov .q{font-size:30px;line-height:1.4;font-weight:700;letter-spacing:-.02em;margin-top:30px}
+.cov .q span{color:var(--t3)}
+.cov .meta{display:flex;gap:8px;margin-top:28px;flex-wrap:wrap}
+.cov .big{display:grid;gap:12px;justify-items:start;margin-top:40px}
+.cov .big .cap{font-size:14px;color:var(--t2)}
+.cft{margin-bottom:48px;display:flex;gap:40px;font-size:15px;color:var(--t2)}
+.cft b{color:var(--ink);font-weight:700;margin-right:8px}
+.cdict{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;margin-top:auto;margin-bottom:34px;padding-top:26px;border-top:1px solid var(--line)}
+.cdict .w{display:grid;justify-items:center;gap:7px}
+.cdict .w span{font-size:13px;color:var(--t2)}
+.fill{margin-top:auto!important;margin-bottom:auto}
+
+/* 2 사례 */
+.cases{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
+.case{display:flex;flex-direction:column;gap:10px;min-height:330px}
+.case p{font-size:16px}
+.case .yr{font:600 13px/1 var(--mono);color:var(--t3)}
+.case h3{font-size:21px}
+.case .by{font-size:14px;color:var(--t3);margin-top:-4px}
+.case .pt{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);font-size:14px;font-weight:600;color:var(--ink)}
+.gap{display:flex;align-items:center;gap:18px;margin-top:20px;background:var(--ink);color:#fff;border-radius:20px;padding:20px 26px}
+.gap b{font-size:20px;letter-spacing:-.02em}
+.gap span{color:#C9D0CB;font-size:16px}
+
+/* 3 연구 */
+.tl{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:30px}
+.tl .it{display:flex;flex-direction:column;gap:8px}
+.tl .yr{font:700 22px/1 var(--f-ui);letter-spacing:-.02em}
+.tl .who{font-size:13px;color:var(--t3)}
+.tl .what{font-size:15px;line-height:1.5;color:var(--t2)}
+.tl .ty{font-size:12px;font-weight:600;color:var(--t3)}
+.tl .ty.ai{color:var(--grid)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.mini2 h3{font-size:17px}
+.mini2 .yr{font:600 12px/1 var(--mono);color:var(--t3)}
+
+/* 4 컨셉 */
+.vs{display:grid;grid-template-columns:1fr 64px 1fr;align-items:stretch;margin-top:30px}
+.vs .ar2{display:grid;place-items:center;font-size:30px;color:var(--t3)}
+.vs .cd{display:flex;flex-direction:column;gap:14px}
+.vs .cd.me{box-shadow:inset 0 0 0 2px var(--grid)}
+.who3{display:flex;gap:8px;flex-wrap:wrap}
+.who3 span{font-size:15px;font-weight:600;padding:8px 12px;border-radius:12px;background:var(--paper)}
+.who3 span.ai{background:var(--grid);color:#fff}
+.rules{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px}
+.rules div{background:var(--surface);border-radius:18px;padding:16px 18px}
+.rules b{display:block;font-size:24px;letter-spacing:-.02em}
+.rules span{font-size:13.5px;color:var(--t2);line-height:1.45;display:block;margin-top:4px}
+
+/* 5·6 결과 */
+.res{display:grid;grid-template-columns:400px minmax(0,1fr);gap:40px;margin-top:34px;align-items:start}
+.stat .k{font-size:16px;color:var(--t2)}
+.stat .v{display:flex;align-items:baseline;gap:14px;margin:12px 0 10px;font-weight:700;letter-spacing:-.04em}
+.stat .v span{font-size:60px;color:var(--miss)}
+.stat .v i{font-style:normal;font-size:26px;color:var(--t3)}
+.stat .v b{font-size:104px;line-height:1;color:var(--grid)}
+.stat .n{font-size:14px;color:var(--t2)}
+.strip{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:2px;margin-top:12px}
+.strip .s{display:grid;justify-items:center;gap:6px}
+.strip small{font-size:10px;color:var(--t3);font-weight:500}
+.strip .s.ch small{color:var(--ink);font-weight:700}
+.keys{display:flex;align-items:flex-start;gap:22px;margin-top:20px}
+.keys .k1{display:grid;justify-items:center;gap:8px;font-size:14px;color:var(--t2)}
+.keys .k1.now{color:var(--grid);font-weight:700}
+.keys>b{font-size:22px;color:var(--t3);font-weight:400;margin-top:34px}
+.say{margin-top:22px;font-size:20px;font-weight:700;letter-spacing:-.02em}
+.say span{color:var(--t3);font-weight:600}
+.cb{display:grid;gap:7px;margin-top:16px}
+.cb .hd{display:flex;justify-content:space-between;font-size:16px;font-weight:700}
+.cb .hd span{color:var(--c)}
+.bt{height:12px;border-radius:6px;background:var(--fill);overflow:hidden}
+.bt i{display:block;height:100%;border-radius:6px;background:var(--c)}
+.bt i.m{background:var(--miss)}
+.cross{display:flex;align-items:flex-end;gap:14px;height:230px;margin-top:18px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.cross .c{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px;height:100%}
+.cross .c i{width:100%;max-width:64px;border-radius:10px 10px 4px 4px;background:var(--ink)}
+.cross .c b{font-size:20px;letter-spacing:-.02em}
+.cross .c small{font-size:13px;color:var(--t3)}
+.cross .base{position:relative}
+
+/* 7 결론·한계 */
+.concl{margin-top:30px;background:var(--ink);color:#fff;border-radius:24px;padding:32px 36px}
+.concl p{font-size:30px;line-height:1.42;font-weight:700;letter-spacing:-.025em}
+.concl p span{color:#9FD9BE}
+.concl small{display:block;margin-top:14px;font-size:14px;color:#B8C0BB}
+.lim{display:grid;grid-template-columns:1fr 1fr auto;gap:16px;margin-top:18px;align-items:stretch}
+.chars{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.chars i{font:500 17px/1 var(--f-g);font-style:normal;width:28px;height:28px;display:grid;place-items:center;border-radius:6px;background:var(--paper)}
+.leak{display:flex;gap:18px;margin-top:6px}
+.leak div{display:grid;gap:6px;justify-items:start}
+.leak .tiles{--q:30px}
+.next{display:flex;flex-direction:column;justify-content:center;gap:8px;background:var(--grid);color:#fff;border-radius:24px;padding:26px;width:280px}
+.next small{font-size:13px;opacity:.85}
+.next b{font-size:22px;line-height:1.35;letter-spacing:-.02em}
+
+/* 8 선·점 섬 */
+.dots{display:grid;grid-template-columns:330px minmax(0,1fr);gap:22px;margin-top:28px}
+.dots .how{display:flex;flex-direction:column;gap:16px}
+.glyphs{display:flex;gap:14px;align-items:center}
+.glyphs svg{background:var(--paper);border-radius:14px}
+.how ul,.dsg ul{margin:0;padding-left:18px;font-size:15px;line-height:1.6;color:var(--t2)}
+.dsg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.dsg .cd{padding:22px;display:flex;flex-direction:column;gap:10px}
+.dsg .n{width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.cond{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr 1fr;gap:0;align-items:stretch;background:var(--surface);border-radius:20px;overflow:hidden}
+.cond>div{padding:16px 20px;border-left:1px solid var(--line);font-size:15px;color:var(--t2)}
+.cond>div:first-child{border-left:0;font-weight:700;color:var(--ink);display:flex;align-items:center}
+.cond b{color:var(--ink)}
+.hyp{margin-top:14px;font-size:16px;color:var(--t2)}
+.hyp b{color:var(--ink)}
+
+/* 9 결과물·일정 */
+.out{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.out .cd{display:flex;flex-direction:column;gap:12px;min-height:250px}
+.out .cd p{font-size:16px}
+.out .nb{font:700 13px/1 var(--mono);color:var(--grid)}
+.out .vis{height:104px;border-radius:14px;background:var(--paper);display:flex;align-items:center;justify-content:center;gap:10px}
+.sch{display:grid;grid-template-columns:repeat(4,1fr);margin-top:30px;border-top:2px solid var(--ink)}
+.sch div{padding:14px 18px 0 0}
+.sch div+div{padding-left:18px;border-left:1px solid var(--line)}
+.sch b{display:block;font:700 14px/1 var(--mono);color:var(--t3)}
+.sch h3{font-size:18px;margin-top:10px;letter-spacing:-.02em}
+.sch p{font-size:15px;color:var(--t2);margin-top:6px;line-height:1.5}
+.sch .now b{color:var(--grid)}
+
+/* 10 끝 */
+.end{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;margin-top:auto;margin-bottom:70px;align-items:end}
+.dark .tt{font-size:60px;line-height:1.3;margin-top:44px}
+.dark .tt span{color:#8FCFB2}
+.dark .sub{color:#C9D0CB;font-size:20px}
+.go{display:flex;align-items:center;gap:26px}
+.go .qr{width:170px;height:170px;border-radius:18px;background:#fff;display:grid;place-items:center}
+.go .qr img{width:140px;height:140px}
+.go b{display:block;font-size:20px}
+.go span{display:block;font-size:15px;color:#B8C0BB;margin-top:8px}
+.live{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:600;color:#E8ECE9}
+.live .dot{width:10px;height:10px;border-radius:50%;background:#D93A2B}
+
+/* 넘기기 */
+.nav2{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:6px;z-index:5;opacity:0;transition:opacity .3s}
+body:hover .nav2{opacity:1}
+.nav2 button{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.nav2 button[aria-current]{background:var(--ink);width:24px;border-radius:5px}
+/* 인쇄(PDF): 10장을 한 쪽씩 */
+@page{size:1440px 810px;margin:0}
+body.print{overflow:visible;height:auto;background:var(--paper)}
+body.print .deck{position:static;transform:none;width:1440px;height:auto}
+body.print .sl{position:relative;inset:auto;width:1440px;height:810px;opacity:1;visibility:visible;break-after:page;overflow:hidden}
+body.print .nav2{display:none}
+/* 세로 화면 */
+body.stack{overflow:auto}
+body.stack .deck{position:relative;left:auto;top:auto;transform:none;width:auto;height:auto}
+body.stack .sl{position:relative;inset:auto;width:1440px;height:810px;opacity:1;visibility:visible;transform:scale(var(--z));transform-origin:0 0;margin-bottom:calc(810px * (var(--z) - 1) + 10px)}
+body.stack .nav2{display:none}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- 1 표지 -->
+<section class="sl" aria-label="표지">
+  <p class="kk">2026-2 디지털 스페이스 · 중간 평가 · 기획 제안</p>
+  <div class="cov">
+    <div>
+      <h1>오늘의 숲</h1>
+      <p class="q">디자이너가 손을 떼면,<br>문자는 스스로 뜻을 가질 수 있을까? <span>— 그렇다면 모양까지도?</span></p>
+      <div class="meta"><span class="tag k">AI 에이전트 실험</span><span class="tag">생성 문자</span><span class="tag">실시간 웹</span><span class="tag">타이포그래피</span></div>
+    </div>
+    <div class="big"><span id="cvBig"></span><span class="cap" id="cvCap"></span></div>
+  </div>
+  <div class="cdict" id="cvDict"></div>
+  <div class="cft"><span><b>이정찬</b>디자인컨버전스학과</span><span id="cvNow"></span></div>
+</section>
+
+<!-- 2 출발점·사례 -->
+<section class="sl" aria-label="출발점과 사례">
+  <p class="kk">01 · 출발점</p>
+  <h2 class="tt">세상에 없는 문자를 만들고 싶었다. <span>그런데 직접 그리면, 결국 내가 아는 모양이 나온다.</span></h2>
+  <div class="fill" style="padding-bottom:40px"><div class="cases">
+    <div class="cd case"><span class="yr">1987–1991 · 설치·책</span><h3>천서 (A Book from the Sky)</h3><span class="by">쉬빙 (Xu Bing)</span><p>강희자전 부수를 조합해 만든 가짜 한자 약 4,000자를 나무 활자로 새겨 인쇄.</p><span class="pt">아무도 읽을 수 없게 설계</span></div>
+    <div class="cd case"><span class="yr">1981 · 책</span><h3>코덱스 세라피니아누스</h3><span class="by">루이지 세라피니</span><p>상상 속 세계의 백과사전. 그림 설명이 전부 지어낸 문자로 쓰여 있음.</p><span class="pt">뜻이 없는 문자</span></div>
+    <div class="cd case"><span class="yr">2016 · 영화</span><h3>컨택트 (Arrival)의 외계 문자</h3><span class="by">마르틴 베르트랑, 파트리스 베르메트 · 언어학 자문 제시카 쿤</span><p>원형 표의문자 약 100개를 디자인, 71개가 영화에 등장.</p><span class="pt">뜻은 사람이 정함</span></div>
+    <div class="cd case"><span class="yr">2023 · 게임</span><h3>세나르의 노래</h3><span class="by">Rundisc</span><p>지어낸 언어들을 몸짓과 그림 단서로 해독하는 퍼즐 게임.</p><span class="pt">해독은 사람, 문자는 디자이너</span></div>
+  </div>
+  <div class="gap"><b>공통점: 모양도, 뜻도 디자이너가 정했다.</b><span>→ 뜻이 '저절로' 생기는 문자는 아무도 만들지 않았다. 만들려면 디자이너가 빠져야 한다.</span></div></div>
+  <p class="src">출처: Wikipedia “A Book from the Sky” · “Codex Seraphinianus” · “Heptapod languages” · “Chants of Sennaar”</p>
+  <span class="pg">02</span>
+</section>
+
+<!-- 3 연구·AI 사례 -->
+<section class="sl" aria-label="리서치">
+  <p class="kk">02 · 리서치: 디자이너 없는 디자인</p>
+  <h2 class="tt">뜻이 저절로 생기는 과정은, <span>이미 연구되고 있다.</span></h2>
+  <div class="fill" style="padding-bottom:30px"><div class="tl" style="margin-top:0">
+    <div class="it cd"><span class="ty">사람 실험</span><span class="yr">2003</span><span class="who">Fay, Garrod 외 · CogSci</span><p class="what">둘이 그림 맞히기를 반복하면, 그림이 닮은꼴을 잃고 <b class="ink">기호</b>가 됨</p></div>
+    <div class="it cd"><span class="ty">사람 실험</span><span class="yr">2008</span><span class="who">Kirby, Cornish, Smith · PNAS</span><p class="what">가짜 언어를 사람에게서 사람으로 옮기자, 점점 배우기 쉽고 <b class="ink">규칙</b>이 생김. “설계자 없는 설계”</p></div>
+    <div class="it cd"><span class="ty ai">AI 실험</span><span class="yr">2017</span><span class="who">Lazaridou 외 · ICLR</span><p class="what">AI 둘이 그림 맞히기만으로 <b class="ink">자기들만의 기호</b>를 만듦</p></div>
+    <div class="it cd"><span class="ty ai">AI 실험</span><span class="yr">2022</span><span class="who">Qiu 외 · NeurIPS</span><p class="what">AI가 <b class="ink">그림을 그려</b> 소통하게 하자, 그림이 점점 약속된 기호로 바뀜</p></div>
+    <div class="it cd"><span class="ty ai">AI 사례</span><span class="yr">2025</span><span class="who">GibberLink · ElevenLabs 해커톤 대상</span><p class="what">AI끼리 서로를 알아보면 <b class="ink">사람이 알아들을 수 없는 소리 신호</b>로 전환</p></div>
+  </div>
+  <div class="two">
+    <div class="cd mini2"><h3>연구는 ‘생기는지’를 증명했다</h3><p>그림이 기호가 되고, 전달하면 규칙이 생긴다. 하지만 결과는 논문의 그래프로만 남는다.</p></div>
+    <div class="cd mini2" style="box-shadow:inset 0 0 0 2px var(--grid)"><h3>그 과정을 사람이 보고 만질 수 있게 — 이 프로젝트의 자리</h3><p>AI끼리의 약속은 이미 생기고 있다 (2017 협상 봇의 줄임말, 2025 GibberLink). 문제는 사람이 그 과정을 볼 수 없다는 것.</p></div>
+  </div></div>
+  <p class="src">출처: Fay·Garrod·Lee·Oberlander (2003) Understanding Interactive Graphical Communication · Kirby·Cornish·Smith (2008) PNAS 105(31) · Lazaridou·Peysakhovich·Baroni (2017) Multi-Agent Cooperation and the Emergence of (Natural) Language · Qiu 외 (2022) Emergent Graphical Conventions in a Visual Communication Game · Wikipedia “Gibberlink” · TechXplore (2021) Facebook 협상 봇 팩트체크</p>
+  <span class="pg">03</span>
+</section>
+
+<!-- 4 컨셉 -->
+<section class="sl" aria-label="컨셉">
+  <p class="kk">03 · 컨셉 — Integrated AI-Driven Design</p>
+  <h2 class="tt">AI가 문자를 만들고, <span>나는 문자가 생겨나는 규칙을 디자인한다.</span></h2>
+  <div class="vs">
+    <div class="cd"><span class="tag">지금까지의 없는 문자</span><h3>디자이너가 모양과 뜻을 정함</h3><div class="who3"><span>모양 = 디자이너</span><span>뜻 = 디자이너</span><span>규칙 = 디자이너</span></div><p>그래서 결국 디자이너가 아는 모양과 뜻에서 벗어나기 어렵다.</p></div>
+    <div class="ar2">→</div>
+    <div class="cd me"><span class="tag g">오늘의 숲</span><h3>디자이너는 규칙만, 나머지는 AI 에이전트들이</h3><div class="who3"><span class="ai">모양 = AI</span><span class="ai">뜻 = AI끼리 소통</span><span>규칙 = 디자이너</span></div><p>AI 에이전트 4명씩 사는 섬 3개. 사람 말은 금지, 그림 맞히기만 허용. 나는 아무것도 하지 않아도 매일 데이터가 쌓인다.</p></div>
+  </div>
+  <div class="rules">
+    <div><b>그림 맞히기</b><span>말하는 AI만 그림을 봄 → 낯선 글자로만 씀 → 듣는 AI가 4장 중 고름</span></div>
+    <div><b>메모 30줄</b><span>통했던 말을 기억하고 다음 판에 다시 씀 = 이 실험의 ‘학습’</span></div>
+    <div><b>세대 교체</b><span>하루 두 번(07·19시) AI 2명 교체. 새 AI는 메모만 물려받음</span></div>
+    <div><b>5% 실수</b><span>메모를 옮겨 적을 때 글자를 가끔 틀림 → 말이 변하는 원인</span></div>
+    <div><b>자동 실행</b><span>Claude Haiku · GitHub Actions · 결과는 웹에 실시간 공개</span></div>
+  </div>
+  <span class="pg">04</span>
+</section>
+
+<!-- 5 결과 1 -->
+<section class="sl" aria-label="진행 결과 1">
+  <p class="kk">04 · 진행 중 결과 ① 뜻이 생겼다</p>
+  <h2 class="tt" id="r1h"></h2>
+  <p class="sub">처음엔 아무 글자나 쓰다가, 서로 통한 말만 살아남았다. 모양은 계속 바뀌었는데도 소통은 유지됐다.</p>
+  <div class="res fill">
+    <div class="stat"><p class="k">서로 알아들은 비율 · 그림 섬</p><div class="v" id="r1v"></div><p class="n">1세대 → 최근 5세대 평균 · 찍으면 25%</p></div>
+    <div>
+      <div class="cd" style="padding:20px 22px"><p class="cap" style="color:var(--t2)">세대마다 ‘숲’을 부른 말 (초록 = 그 세대에 바뀜)</p><div class="strip" id="r1strip"></div></div>
+      <div class="keys" id="r1keys"></div>
+    </div>
+  </div>
+  <span class="pg">05</span>
+</section>
+
+<!-- 6 결과 2 -->
+<section class="sl" aria-label="진행 결과 2">
+  <p class="kk">05 · 진행 중 결과 ② 기록이 말을 붙잡는다</p>
+  <h2 class="tt">메모를 지우면, 같은 AI도 말을 잃는다.</h2>
+  <p class="sub">AI 모델은 그대로다. 바뀌는 건 물려받은 메모뿐. 그래서 이 실험의 ‘학습’은 메모 보고 따라 하기다.</p>
+  <div class="two fill" style="grid-template-columns:1.05fr 1fr">
+    <div class="cd"><h3>메모가 없으면?</h3><div id="ctrl"></div><p class="cap" id="ctrlCap" style="margin-top:14px"></p></div>
+    <div class="cd"><h3>두 섬이 만나면? <span style="color:var(--t3);font-weight:600" id="crossSub"></span></h3><div class="cross" id="cross"></div><p class="cap" style="margin-top:12px" id="crossCap"></p></div>
+  </div>
+  <span class="pg">06</span>
+</section>
+
+<!-- 7 중간 결론·한계 -->
+<section class="sl" aria-label="중간 결론과 한계">
+  <p class="kk">06 · 중간 결론, 그리고 한계</p>
+  <h2 class="tt">뜻은 생겼다. <span>그런데 모양은 빌려 왔다.</span></h2>
+  <div class="fill"><div class="concl" style="margin-top:0"><p>아무도 뜻을 정해 주지 않아도, 서로 통하려는 시도만으로 뜻은 생긴다. <span>다만 고정된 모양이 아니라 계속 바뀌는 약속으로, 그리고 기록이 이어질 때만.</span></p><small id="conclN"></small></div>
+  <div class="lim">
+    <div class="cd"><h3>모양은 내가 준 기존 문자 40개에서 골랐다</h3><p>룬·아르메니아·한글 자모·숫자 (그림 섬 기준)</p><div class="chars" id="chars"></div></div>
+    <div class="cd"><h3>사람의 말이 새어 나왔다</h3><p id="leakP">‘세상에 없는 말’을 만들라고 했는데</p><div class="leak" id="leak"></div></div>
+    <div class="next"><small>기말까지의 질문</small><b>모양까지 AI에게 맡기면, 진짜 세상에 없는 문자가 나올까?</b></div>
+  </div></div>
+  <span class="pg">07</span>
+</section>
+
+<!-- 8 기말 기획: 선·점 섬 -->
+<section class="sl" aria-label="기말 기획">
+  <p class="kk">07 · 기말 기획 ① 선과 점 섬</p>
+  <h2 class="tt">기존 문자를 빼고, <span>점과 선만 준다.</span></h2>
+  <div class="dots fill" style="margin-top:0">
+    <div class="cd how"><h3>글자 만드는 방법</h3><div class="glyphs" id="glyphs"></div><ul><li>점 9개(3×3) 중 두 점을 이으면 한 획</li><li>글자 하나 = 획 최대 4개, 말 하나 = 글자 최대 3개</li><li>나머지 규칙(그림 맞히기·메모·세대)은 그대로</li></ul><p class="cap">수치는 11월 시험 운영에서 확정</p></div>
+    <div>
+      <div class="dsg">
+        <div class="cd"><span class="n">1</span><h3>통하나</h3><p>서로 알아듣는 비율. 기존 문자 섬과 같은 속도로 오르는지</p></div>
+        <div class="cd"><span class="n">2</span><h3>굳나</h3><p>세대가 바뀌어도 같은 글자 모양이 유지되는 비율</p></div>
+        <div class="cd"><span class="n">3</span><h3>새로운가</h3><p>만든 글자를 기존 문자 수천 자와 이미지로 비교해 가장 닮은 글자와의 유사도</p></div>
+        <div class="cond"><div>비교</div><div><b>기존 문자 섬</b> (지금 3개 계속 운영) — 기준</div><div><b>선과 점 섬 × 3</b> — 같은 조건으로 따로 3번 → 우연인지 확인</div></div>
+      </div>
+      <p class="hyp"><b>가설:</b> 처음엔 아는 글자(ㄱ, L, X)를 그리다가, 소통을 거치며 단순해진 고유 기호로 굳을 것. 틀려도 결과다 — 그러면 “AI는 결국 아는 모양으로 돌아간다”가 결론.</p>
+    </div>
+  </div>
+  <span class="pg">08</span>
+</section>
+
+<!-- 9 기말 결과물·일정 -->
+<section class="sl" aria-label="결과물과 일정">
+  <p class="kk">08 · 기말 기획 ② 결과물과 일정</p>
+  <h2 class="tt">실험은 웹에서 자라고, <span>결과는 문자로 남긴다.</span></h2>
+  <div class="fill"><div class="out" style="margin-top:0">
+    <div class="cd"><span class="nb">01 · 웹</span><h3>실시간 사이트 확장</h3><div class="vis" id="o1"></div><p>지금 사이트(맞혀 보기·대화 보기·실험 노트)에 선과 점 섬과 두 조건 비교 화면 추가</p></div>
+    <div class="cd"><span class="nb">02 · 타이포그래피</span><h3>문자 표본</h3><div class="vis" id="o2"></div><p>AI가 만든 글자를 정리한 서체 견본 포스터 + 실제로 쓸 수 있는 폰트 파일</p></div>
+    <div class="cd"><span class="nb">03 · 기록</span><h3>말의 사전</h3><div class="vis" id="o3"></div><p>글자 하나하나가 언제 생겨서 어떻게 바뀌었는지, 세대별 계보로 엮은 사전</p></div>
+  </div>
+  <div class="sch">
+    <div class="now"><b>~ 10/29</b><h3>중간 · 기획 확정</h3><p>기존 문자 섬 33세대 운영 중, 두 섬 만남 시작</p></div>
+    <div><b>11월 1–2주</b><h3>선과 점 섬 설계·시험</h3><p>표현 방식, 지시문, 닮음 측정 방법, 비용 계산</p></div>
+    <div><b>11월 중순 – 12월 초</b><h3>본 운영</h3><p>하루 2세대 × 약 3주 ≈ 40세대, 3번 반복</p></div>
+    <div><b>12월</b><h3>분석 · 결과물</h3><p>두 조건 비교, 문자 표본·사전 제작, 기말 발표</p></div>
+  </div></div>
+  <span class="pg">09</span>
+</section>
+
+<!-- 10 끝 -->
+<section class="sl dark" aria-label="마무리">
+  <p class="kk">09 · 그래서</p>
+  <h2 class="tt">디자이너가 빠져도 뜻은 생겼다.<br><span>이제 모양까지 맡겨 본다.</span></h2>
+  <p class="sub" style="margin-top:20px">이 프로젝트의 목표: AI에게 맡긴 문자가 어디까지 새로울 수 있는지 확인하고, 그 과정을 누구나 볼 수 있게 만드는 것.</p>
+  <div class="end">
+    <p class="live"><span class="dot"></span><span id="endLive"></span></p>
+    <div class="go"><div class="qr"><img src="img/qr.png" alt="오늘의 숲 사이트 QR"></div><div><b>지금 이 순간의 말</b><span>QR로 직접 맞혀 보기</span></div></div>
+  </div>
+  <span class="pg">10</span>
+</section>
+
+</div>
+<nav class="nav2" id="nav2" aria-label="슬라이드"></nav>
+<script src="lang.js"></script>
+<script src="proposal.js"></script>
+</body>
+</html>
