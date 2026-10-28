@@ -241,6 +241,27 @@ body.stack .nav2{display:none}
 .find .cb{margin-top:10px}
 .tt em{font-style:normal;color:var(--grid)}
 .fn{position:absolute;left:96px;right:96px;bottom:26px;font-size:13px;line-height:1.5;color:var(--t3)}
+
+.prog{display:grid;grid-template-columns:420px minmax(0,1fr);gap:28px;align-items:start}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nums div{background:var(--surface);border-radius:18px;padding:16px 18px}
+.nums b{display:block;font-size:34px;line-height:1.1;letter-spacing:-.03em}
+.nums span{font-size:13.5px;color:var(--t2)}
+.tline{margin-top:14px;background:var(--surface);border-radius:18px;padding:14px 18px;display:grid;gap:7px}
+.tline div{display:grid;grid-template-columns:52px 1fr;gap:10px;font-size:14px;color:var(--t2);line-height:1.45}
+.tline div b{font:700 13px/1.45 var(--mono);color:var(--ink)}
+.tline div.fb{color:var(--ink)}
+.tline div.fb span{background:#FFF4D6;border-radius:4px;padding:0 4px}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.shots figure{margin:0;background:var(--surface);border-radius:16px;padding:8px 8px 10px;display:grid;gap:6px}
+.shots img{width:100%;border-radius:10px;display:block;border:1px solid var(--line)}
+.shots figcaption{font-size:13px;color:var(--t2);padding:0 4px}
+.shots figcaption b{color:var(--ink);margin-right:6px}
+.close{margin-top:18px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;background:var(--ink);color:#fff;border-radius:20px;padding:18px 24px}
+.close p{font-size:21px;line-height:1.45;font-weight:700;letter-spacing:-.02em}
+.close p span{color:#9FD9BE}
+.close .q2{display:flex;align-items:center;gap:12px;font-size:13px;color:#B8C0BB}
+.close .q2 img{width:78px;height:78px;background:#fff;border-radius:10px;padding:5px}
 </style>
 </head>
 <body>
@@ -330,6 +351,36 @@ body.stack .nav2{display:none}
   <span class="pg">05</span>
 </section>
 
+<!-- 6 진행 과정 -->
+<section class="sl" aria-label="진행 과정">
+  <p class="kk">05 · 지금까지 진행한 것 — 10/12 첫 실행부터</p>
+  <h2 class="tt">실험을 만들어 돌리고, <span>누구나 볼 수 있게 열었다.</span></h2>
+  <div class="prog fill" style="padding-bottom:20px">
+    <div>
+      <div class="nums">
+        <div><b id="pGen"></b><span>세대 · 하루 2번 자동 실행</span></div>
+        <div><b id="pTalk"></b><span>AI끼리 나눈 대화(판)</span></div>
+        <div><b id="pAI"></b><span>태어난 AI · 섬 3곳</span></div>
+        <div><b>4개</b><span>공개 화면 · 실시간 웹</span></div>
+      </div>
+      <div class="tline">
+        <div><b>10/12</b><span>엔진·사이트 완성, 첫 실행</span></div>
+        <div class="fb"><b>10/15</b><span>1차 컨펌 — <span>“직관적이지 않다, 학습이 안 보인다”</span></span></div>
+        <div><b>10/21</b><span>사이트 개편 — 첫 화면을 퀴즈로, 실제 대화를 다시 보기</span></div>
+        <div class="fb"><b>10/22</b><span>두 섬의 만남 시작 · 2차 컨펌 — <span>“so what이 없다”</span></span></div>
+        <div><b>10/29</b><span>오늘 — 목표를 ‘문자 한 벌’로 확정</span></div>
+      </div>
+    </div>
+    <div class="shots">
+      <figure><img src="img/prop/s_today.jpg" alt=""><figcaption><b>맞혀 보기</b>AI의 말을 사람이 직접 풀어 봄</figcaption></figure>
+      <figure><img src="img/prop/s_talk.jpg" alt=""><figcaption><b>대화 다시 보기</b>실제 기록을 4단계로 재생</figcaption></figure>
+      <figure><img src="img/prop/s_word.jpg" alt=""><figcaption><b>단어 기록</b>한 말이 세대마다 바뀐 과정</figcaption></figure>
+      <figure><img src="img/prop/s_notes.jpg" alt=""><figcaption><b>실험 노트</b>성공률·비교 실험·한계</figcaption></figure>
+    </div>
+  </div>
+  <span class="pg">06</span>
+</section>
+
 <!-- 6 중간 결과 -->
 <section class="sl" aria-label="중간 결과">
   <p class="kk" id="r1k"></p>
@@ -340,12 +391,12 @@ body.stack .nav2{display:none}
     <div class="cd"><span class="no">03</span><h3>기록이 끊기면<br>말도 무너졌다</h3><p>같은 AI에게 메모만 지웠더니 성공률이 절반으로. 뜻은 AI의 머리가 아니라 기록에 남는다.</p><div class="ev" id="f3"></div></div>
   </div>
   <p class="fn" id="r1fn"></p>
-  <span class="pg">06</span>
+  <span class="pg">07</span>
 </section>
 
 <!-- 7 결론·한계 -->
 <section class="sl" aria-label="중간 결론과 한계">
-  <p class="kk">06 · 중간 결론, 그리고 한계</p>
+  <p class="kk">07 · 중간 결론, 그리고 한계</p>
   <h2 class="tt">뜻은 생겼다. <span>그런데 모양은 빌려 왔다.</span></h2>
   <div class="fill"><div class="concl" style="margin-top:0"><p>아무도 뜻을 정해 주지 않아도, 서로 통하려는 시도만으로 뜻은 생긴다. <span>다만 고정된 모양이 아니라 계속 바뀌는 약속으로, 그리고 기록이 이어질 때만.</span></p><small id="conclN"></small></div>
   <div class="lim">
@@ -353,12 +404,12 @@ body.stack .nav2{display:none}
     <div class="cd"><h3>사람의 말이 새어 나왔다</h3><p>‘세상에 없는 말’을 만들라고 했는데도</p><div class="leak" id="leak"></div></div>
     <div class="next"><small>기말까지의 질문</small><b>모양까지 AI에게 맡기면, 정말 세상에 없는 문자가 나올까?</b></div>
   </div></div>
-  <span class="pg">07</span>
+  <span class="pg">08</span>
 </section>
 
 <!-- 8 기말 ① 실험 -->
 <section class="sl" aria-label="기말 계획 실험">
-  <p class="kk">07 · 기말 계획 ① 실험</p>
+  <p class="kk">08 · 기말 계획 ① 실험</p>
   <h2 class="tt">기존 문자를 빼고, <span>점과 선만 준다.</span></h2>
   <div class="dots fill" style="margin-top:0">
     <div class="cd how"><h3>새 섬: 선과 점 섬</h3><div class="glyphs" id="glyphs"></div><ul><li>점 9개(3×3) 중 두 점을 이으면 한 획</li><li>글자 하나는 최대 4획, 말 하나는 최대 3글자</li><li>그림 맞히기·메모·세대 교체는 그대로</li></ul><p class="cap">세부 수치는 11월 시험 운영에서 확정</p></div>
@@ -372,12 +423,12 @@ body.stack .nav2{display:none}
       <p class="hyp"><b>가설:</b> 처음엔 아는 글자(ㄱ, L, X)를 그리다가, 소통을 거치며 단순한 고유 기호로 굳을 것. 가설이 틀려도 결과가 된다 — “AI는 결국 아는 모양으로 돌아간다.”</p>
     </div>
   </div>
-  <span class="pg">08</span>
+  <span class="pg">09</span>
 </section>
 
 <!-- 9 기말 ② 결과물 -->
 <section class="sl" aria-label="기말 결과물과 일정">
-  <p class="kk">08 · 기말 계획 ② 12월에 보여 줄 것</p>
+  <p class="kk">09 · 기말 계획 ② 12월에 보여 줄 것</p>
   <h2 class="tt">12월에는 <em>AI가 만든 문자 한 벌</em>을 보여 준다.</h2>
   <div class="fill"><div class="out" style="margin-top:0">
     <div class="cd" style="box-shadow:inset 0 0 0 2px var(--grid)"><span class="nb">01 · 타이포그래피</span><h3>문자 표본</h3><div class="vis" id="o2"></div><p>AI가 만든 글자를 정리한 서체 견본 포스터와, 실제로 쓸 수 있는 폰트 파일</p></div>
@@ -389,21 +440,12 @@ body.stack .nav2{display:none}
     <div><b>11월 1–2주</b><h3>선과 점 섬 설계·시험</h3><p>표현 방식, 지시문, 닮음 측정 방법, 비용</p></div>
     <div><b>11월 중순 – 12월 초</b><h3>본 운영</h3><p>하루 2세대 × 약 3주 ≈ 40세대, 3번 반복</p></div>
     <div><b>12월</b><h3>분석 · 결과물</h3><p>두 조건 비교, 문자 표본·사전 제작, 기말 발표</p></div>
-  </div></div>
-  <span class="pg">09</span>
-</section>
-
-<!-- 10 마무리 -->
-<section class="sl dark" aria-label="마무리">
-  <p class="kk">09 · 정리</p>
-  <h2 class="tt">디자이너가 빠져도 뜻은 생겼다.<br><span>이제 모양까지 맡겨, 세상에 없는 문자 한 벌을 만든다.</span></h2>
-  <p class="sub" style="margin-top:22px">중간 — 뜻이 생기는 것을 확인 &nbsp;→&nbsp; 기말 — 모양까지 AI가 만든 문자를 서체로 완성</p>
-  <div class="end">
-    <p class="live"><span class="dot"></span><span id="endLive"></span></p>
-    <div class="go"><div class="qr"><img src="img/qr.png" alt="오늘의 숲 사이트 QR"></div><div><b>지금 이 순간의 말</b><span>QR로 직접 맞혀 보기</span></div></div>
   </div>
+  <div class="close"><p>디자이너가 빠져도 뜻은 생겼다.<br><span>이제 모양까지 맡겨, 디자이너 없이 태어난 문자 한 벌을 만든다.</span></p><div class="q2"><img src="img/qr.png" alt="사이트 QR"><span id="endLive"></span></div></div></div>
   <span class="pg">10</span>
 </section>
+
+
 
 </div>
 <nav class="nav2" id="nav2" aria-label="슬라이드"></nav>

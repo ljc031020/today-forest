@@ -45,8 +45,13 @@ $('#g1s').textContent = `진행 중 · ${NOW}세대째`;
 $('#g2').innerHTML = `${glyph([[1, 3], [3, 9]], 56)}<b class="ar" style="font-size:18px">↔</b><span class="chars" style="margin:0"><i>ㄱ</i><i>7</i><i>Γ</i></span><span class="cap">닮았나?</span>`;
 $('#g3').innerHTML = EX.map(e => glyph(e, 50)).join('') + '<span class="cap">예시</span>';
 
+/* 진행 과정 */
+$('#pGen').textContent = `${NOW}세대`;
+$('#pTalk').textContent = GENS.reduce((a, g) => a + Object.values(g.islands).reduce((x, v) => x + v.talks, 0) + (g.cross ? g.cross.talks : 0), 0).toLocaleString('ko-KR');
+$('#pAI').textContent = `${(4 + 2 * NOW) * 3}명`;
+
 /* 6 중간 결과 */
-$('#r1k').textContent = `05 · 중간 결과 — ${TF.md(Date.parse(GENS[0].at))}부터 ${NOW}세대`;
+$('#r1k').textContent = `06 · 중간 결과 — ${TF.md(Date.parse(GENS[0].at))}부터 ${NOW}세대`;
 $('#f1').innerHTML = `<span>${pct(first)}%</span><i>→</i><b>${pct(pre)}%</b>`;
 $('#f1c').textContent = `그림 섬 · 1세대 → ${preFrom}–${preTo}세대 평균 · 찍으면 25%`;
 $('#f2p').textContent = `‘숲’을 부르는 말은 ${NOW}세대 동안 ${nCh}번 바뀌었다. 그동안에도 서로 알아들었다.`;
@@ -81,7 +86,7 @@ $('#o1').innerHTML = `<span class="tag g">그림 섬</span><span class="tag" sty
 $('#schNow').textContent = MG ? `기존 문자 섬 ${NOW}세대째 운영, 두 섬 만남 ${NOW - MG + 1}세대째` : `기존 문자 섬 ${NOW}세대째 운영`;
 
 /* 10 끝 */
-$('#endLive').textContent = `지금 ${NOW}세대 · 매일 07·19시에 새 세대`;
+$('#endLive').innerHTML = `지금 ${NOW}세대<br>QR로 직접 맞혀 보기`;
 
 /* ── 넘기기 / 인쇄 ── */
 const S = [...document.querySelectorAll('.sl')];
