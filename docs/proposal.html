@@ -214,6 +214,33 @@ body.stack{overflow:auto}
 body.stack .deck{position:relative;left:auto;top:auto;transform:none;width:auto;height:auto}
 body.stack .sl{position:relative;inset:auto;width:1440px;height:810px;opacity:1;visibility:visible;transform:scale(var(--z));transform-origin:0 0;margin-bottom:calc(810px * (var(--z) - 1) + 10px)}
 body.stack .nav2{display:none}
+
+/* v2 — 목표 장, 결과 장 */
+.goal{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;align-items:stretch;margin-top:34px}
+.goal .ar2{display:grid;place-items:center;font-size:26px;color:var(--t3)}
+.goal .cd{display:flex;flex-direction:column;gap:12px;min-height:250px}
+.goal .vb{font-size:34px;font-weight:700;letter-spacing:-.03em}
+.goal .cd p{font-size:16px}
+.goal .st{margin-top:auto}
+.goal .vis{height:70px;border-radius:14px;background:var(--paper);display:flex;align-items:center;justify-content:center;gap:10px}
+.why{margin-top:22px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;background:var(--ink);color:#fff;border-radius:20px;padding:22px 28px}
+.why b{font:600 13px/1 var(--mono);color:#9FD9BE;letter-spacing:.04em}
+.why p{font-size:19px;line-height:1.5;font-weight:600;letter-spacing:-.015em}
+.why p span{color:#B8C0BB;font-weight:500}
+.find{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.find .cd{display:flex;flex-direction:column;gap:12px;min-height:400px}
+.find .no{font:700 13px/1 var(--mono);color:var(--grid)}
+.find h3{font-size:22px;line-height:1.35}
+.find .ev{margin-top:auto;padding-top:16px;border-top:1px solid var(--line)}
+.find .big2{display:flex;align-items:baseline;gap:10px;font-weight:700;letter-spacing:-.04em}
+.find .big2 span{font-size:44px;color:var(--miss)}
+.find .big2 i{font-style:normal;font-size:22px;color:var(--t3)}
+.find .big2 b{font-size:72px;line-height:1;color:var(--grid)}
+.find .keys{margin-top:0;gap:10px}
+.find .keys>b{font-size:16px;margin-top:22px}
+.find .cb{margin-top:10px}
+.tt em{font-style:normal;color:var(--grid)}
+.fn{position:absolute;left:96px;right:96px;bottom:26px;font-size:13px;line-height:1.5;color:var(--t3)}
 </style>
 </head>
 <body>
@@ -221,12 +248,12 @@ body.stack .nav2{display:none}
 
 <!-- 1 표지 -->
 <section class="sl" aria-label="표지">
-  <p class="kk">2026-2 디지털 스페이스 · 중간 평가 · 기획 제안</p>
+  <p class="kk">2026-2 디지털 스페이스 · 중간 평가 · 기말 프로젝트 기획 제안</p>
   <div class="cov">
     <div>
       <h1>오늘의 숲</h1>
-      <p class="q">디자이너가 손을 떼면,<br>문자는 스스로 뜻을 가질 수 있을까? <span>— 그렇다면 모양까지도?</span></p>
-      <div class="meta"><span class="tag k">AI 에이전트 실험</span><span class="tag">생성 문자</span><span class="tag">실시간 웹</span><span class="tag">타이포그래피</span></div>
+      <p class="q">디자이너가 손을 떼면,<br>문자는 스스로 태어날 수 있을까?</p>
+      <div class="meta"><span class="tag k">AI 에이전트</span><span class="tag">생성 문자</span><span class="tag">실시간 웹</span><span class="tag">타이포그래피</span></div>
     </div>
     <div class="big"><span id="cvBig"></span><span class="cap" id="cvCap"></span></div>
   </div>
@@ -234,141 +261,143 @@ body.stack .nav2{display:none}
   <div class="cft"><span><b>이정찬</b>디자인컨버전스학과</span><span id="cvNow"></span></div>
 </section>
 
-<!-- 2 출발점·사례 -->
-<section class="sl" aria-label="출발점과 사례">
-  <p class="kk">01 · 출발점</p>
-  <h2 class="tt">세상에 없는 문자를 만들고 싶었다. <span>그런데 직접 그리면, 결국 내가 아는 모양이 나온다.</span></h2>
-  <div class="fill" style="padding-bottom:40px"><div class="cases">
-    <div class="cd case"><span class="yr">1987–1991 · 설치·책</span><h3>천서 (A Book from the Sky)</h3><span class="by">쉬빙 (Xu Bing)</span><p>강희자전 부수를 조합해 만든 가짜 한자 약 4,000자를 나무 활자로 새겨 인쇄.</p><span class="pt">아무도 읽을 수 없게 설계</span></div>
-    <div class="cd case"><span class="yr">1981 · 책</span><h3>코덱스 세라피니아누스</h3><span class="by">루이지 세라피니</span><p>상상 속 세계의 백과사전. 그림 설명이 전부 지어낸 문자로 쓰여 있음.</p><span class="pt">뜻이 없는 문자</span></div>
-    <div class="cd case"><span class="yr">2016 · 영화</span><h3>컨택트 (Arrival)의 외계 문자</h3><span class="by">마르틴 베르트랑, 파트리스 베르메트 · 언어학 자문 제시카 쿤</span><p>원형 표의문자 약 100개를 디자인, 71개가 영화에 등장.</p><span class="pt">뜻은 사람이 정함</span></div>
-    <div class="cd case"><span class="yr">2023 · 게임</span><h3>세나르의 노래</h3><span class="by">Rundisc</span><p>지어낸 언어들을 몸짓과 그림 단서로 해독하는 퍼즐 게임.</p><span class="pt">해독은 사람, 문자는 디자이너</span></div>
+<!-- 2 목표 (so what) -->
+<section class="sl" aria-label="목표">
+  <p class="kk">01 · 이 프로젝트가 하려는 것</p>
+  <h2 class="tt">디자이너 없이 태어난 <em>문자 한 벌</em>을 만든다.</h2>
+  <p class="sub">AI 에이전트들이 소통만으로 문자의 뜻과 모양을 스스로 만들게 하고, 그 문자가 정말 세상에 없는 것인지 확인한 뒤, <b>서체와 사전으로 남긴다.</b></p>
+  <div class="fill"><div class="goal" style="margin-top:0">
+    <div class="cd"><span class="vb">① 만든다</span><p>AI들이 사람 말 없이 그림 맞히기만으로 문자에 뜻을 붙인다.</p><div class="vis" id="g1"></div><span class="st"><span class="tag g" id="g1s"></span></span></div>
+    <div class="ar2">→</div>
+    <div class="cd"><span class="vb">② 확인한다</span><p>만들어진 글자가 기존 문자를 얼마나 닮았는지 잰다. 정말 새로운가?</p><div class="vis" id="g2"></div><span class="st"><span class="tag">기말 · 11–12월</span></span></div>
+    <div class="ar2">→</div>
+    <div class="cd"><span class="vb">③ 남긴다</span><p>AI가 만든 문자를 서체 견본·폰트·말의 사전으로 정리해 공개한다.</p><div class="vis" id="g3"></div><span class="st"><span class="tag">기말 · 12월</span></span></div>
   </div>
-  <div class="gap"><b>공통점: 모양도, 뜻도 디자이너가 정했다.</b><span>→ 뜻이 '저절로' 생기는 문자는 아무도 만들지 않았다. 만들려면 디자이너가 빠져야 한다.</span></div></div>
-  <p class="src">출처: Wikipedia “A Book from the Sky” · “Codex Seraphinianus” · “Heptapod languages” · “Chants of Sennaar”</p>
+  <div class="why"><b>WHY</b><p>디자이너가 그리면 결국 아는 모양이 나온다. 그래서 디자이너를 빼고, 무엇이 태어나는지 본다. <span>기호의 뜻은 만드는 사람이 아니라 쓰는 사람들 사이에서 생긴다는 것을, 직접 만들어서 보여 준다.</span></p></div></div>
   <span class="pg">02</span>
 </section>
 
-<!-- 3 연구·AI 사례 -->
-<section class="sl" aria-label="리서치">
-  <p class="kk">02 · 리서치: 디자이너 없는 디자인</p>
-  <h2 class="tt">뜻이 저절로 생기는 과정은, <span>이미 연구되고 있다.</span></h2>
-  <div class="fill" style="padding-bottom:30px"><div class="tl" style="margin-top:0">
-    <div class="it cd"><span class="ty">사람 실험</span><span class="yr">2003</span><span class="who">Fay, Garrod 외 · CogSci</span><p class="what">둘이 그림 맞히기를 반복하면, 그림이 닮은꼴을 잃고 <b class="ink">기호</b>가 됨</p></div>
-    <div class="it cd"><span class="ty">사람 실험</span><span class="yr">2008</span><span class="who">Kirby, Cornish, Smith · PNAS</span><p class="what">가짜 언어를 사람에게서 사람으로 옮기자, 점점 배우기 쉽고 <b class="ink">규칙</b>이 생김. “설계자 없는 설계”</p></div>
-    <div class="it cd"><span class="ty ai">AI 실험</span><span class="yr">2017</span><span class="who">Lazaridou 외 · ICLR</span><p class="what">AI 둘이 그림 맞히기만으로 <b class="ink">자기들만의 기호</b>를 만듦</p></div>
-    <div class="it cd"><span class="ty ai">AI 실험</span><span class="yr">2022</span><span class="who">Qiu 외 · NeurIPS</span><p class="what">AI가 <b class="ink">그림을 그려</b> 소통하게 하자, 그림이 점점 약속된 기호로 바뀜</p></div>
-    <div class="it cd"><span class="ty ai">AI 사례</span><span class="yr">2025</span><span class="who">GibberLink · ElevenLabs 해커톤 대상</span><p class="what">AI끼리 서로를 알아보면 <b class="ink">사람이 알아들을 수 없는 소리 신호</b>로 전환</p></div>
+<!-- 3 리서치 ① -->
+<section class="sl" aria-label="리서치 1">
+  <p class="kk">02 · 리서치 ① 없는 문자를 만든 작품들</p>
+  <h2 class="tt">없는 문자는 많았다. <span>모양도 뜻도 디자이너가 정했다.</span></h2>
+  <div class="fill" style="padding-bottom:40px"><div class="cases">
+    <div class="cd case"><span class="yr">1987–1991 · 설치·책</span><h3>천서 (A Book from the Sky)</h3><span class="by">쉬빙 (Xu Bing)</span><p>강희자전 부수를 조합한 가짜 한자 약 4,000자를 나무 활자로 새겨 인쇄.</p><span class="pt">읽을 수 없게 설계한 문자</span></div>
+    <div class="cd case"><span class="yr">1981 · 책</span><h3>코덱스 세라피니아누스</h3><span class="by">루이지 세라피니</span><p>상상 속 세계의 백과사전. 모든 설명이 지어낸 문자로 쓰임.</p><span class="pt">뜻이 없는 문자</span></div>
+    <div class="cd case"><span class="yr">2016 · 영화</span><h3>컨택트 (Arrival)의 외계 문자</h3><span class="by">마르틴 베르트랑, 파트리스 베르메트 · 언어학 자문 제시카 쿤</span><p>원형 표의문자 약 100개를 디자인, 그중 71개가 영화에 등장.</p><span class="pt">뜻을 사람이 정한 문자</span></div>
+    <div class="cd case"><span class="yr">2023 · 게임</span><h3>세나르의 노래</h3><span class="by">Rundisc</span><p>지어낸 언어들을 몸짓과 그림 단서로 해독하는 퍼즐 게임.</p><span class="pt">해독은 사람, 문자는 디자이너</span></div>
   </div>
-  <div class="two">
-    <div class="cd mini2"><h3>연구는 ‘생기는지’를 증명했다</h3><p>그림이 기호가 되고, 전달하면 규칙이 생긴다. 하지만 결과는 논문의 그래프로만 남는다.</p></div>
-    <div class="cd mini2" style="box-shadow:inset 0 0 0 2px var(--grid)"><h3>그 과정을 사람이 보고 만질 수 있게 — 이 프로젝트의 자리</h3><p>AI끼리의 약속은 이미 생기고 있다 (2017 협상 봇의 줄임말, 2025 GibberLink). 문제는 사람이 그 과정을 볼 수 없다는 것.</p></div>
-  </div></div>
-  <p class="src">출처: Fay·Garrod·Lee·Oberlander (2003) Understanding Interactive Graphical Communication · Kirby·Cornish·Smith (2008) PNAS 105(31) · Lazaridou·Peysakhovich·Baroni (2017) Multi-Agent Cooperation and the Emergence of (Natural) Language · Qiu 외 (2022) Emergent Graphical Conventions in a Visual Communication Game · Wikipedia “Gibberlink” · TechXplore (2021) Facebook 협상 봇 팩트체크</p>
+  <div class="gap"><b>뜻이 저절로 생긴 문자는 없다.</b><span>→ 그런 문자를 만들려면, 디자이너가 빠져야 한다.</span></div></div>
+  <p class="src">출처: Wikipedia “A Book from the Sky” · “Codex Seraphinianus” · “Heptapod languages” · “Chants of Sennaar”</p>
   <span class="pg">03</span>
 </section>
 
-<!-- 4 컨셉 -->
-<section class="sl" aria-label="컨셉">
-  <p class="kk">03 · 컨셉 — Integrated AI-Driven Design</p>
-  <h2 class="tt">AI가 문자를 만들고, <span>나는 문자가 생겨나는 규칙을 디자인한다.</span></h2>
-  <div class="vs">
-    <div class="cd"><span class="tag">지금까지의 없는 문자</span><h3>디자이너가 모양과 뜻을 정함</h3><div class="who3"><span>모양 = 디자이너</span><span>뜻 = 디자이너</span><span>규칙 = 디자이너</span></div><p>그래서 결국 디자이너가 아는 모양과 뜻에서 벗어나기 어렵다.</p></div>
-    <div class="ar2">→</div>
-    <div class="cd me"><span class="tag g">오늘의 숲</span><h3>디자이너는 규칙만, 나머지는 AI 에이전트들이</h3><div class="who3"><span class="ai">모양 = AI</span><span class="ai">뜻 = AI끼리 소통</span><span>규칙 = 디자이너</span></div><p>AI 에이전트 4명씩 사는 섬 3개. 사람 말은 금지, 그림 맞히기만 허용. 나는 아무것도 하지 않아도 매일 데이터가 쌓인다.</p></div>
+<!-- 4 리서치 ② -->
+<section class="sl" aria-label="리서치 2">
+  <p class="kk">03 · 리서치 ② 디자이너 없는 디자인</p>
+  <h2 class="tt">뜻이 저절로 생기는 과정은, <span>연구로 확인됐다.</span></h2>
+  <div class="fill" style="padding-bottom:30px"><div class="tl" style="margin-top:0">
+    <div class="it cd"><span class="ty">사람 실험</span><span class="yr">2003</span><span class="who">Fay, Garrod 외 · CogSci</span><p class="what">두 사람이 그림 맞히기를 반복하면, 그림이 닮은꼴을 잃고 <b class="ink">기호</b>가 된다.</p></div>
+    <div class="it cd"><span class="ty">사람 실험</span><span class="yr">2008</span><span class="who">Kirby, Cornish, Smith · PNAS</span><p class="what">가짜 언어를 사람에서 사람으로 전달하면, 배우기 쉬워지고 <b class="ink">규칙</b>이 생긴다. “설계자 없는 설계”</p></div>
+    <div class="it cd"><span class="ty ai">AI 실험</span><span class="yr">2017</span><span class="who">Lazaridou 외 · ICLR</span><p class="what">AI 둘이 그림 맞히기만으로 <b class="ink">자기들만의 기호</b>를 만든다.</p></div>
+    <div class="it cd"><span class="ty ai">AI 실험</span><span class="yr">2022</span><span class="who">Qiu 외 · NeurIPS</span><p class="what">AI가 <b class="ink">그림을 그려</b> 소통하면, 그림이 점점 약속된 기호로 바뀐다.</p></div>
+    <div class="it cd"><span class="ty ai">AI 사례</span><span class="yr">2025</span><span class="who">GibberLink · ElevenLabs 해커톤 대상</span><p class="what">AI끼리 서로를 알아보면 <b class="ink">사람이 알아들을 수 없는 소리 신호</b>로 바꿔 대화한다.</p></div>
   </div>
-  <div class="rules">
-    <div><b>그림 맞히기</b><span>말하는 AI만 그림을 봄 → 낯선 글자로만 씀 → 듣는 AI가 4장 중 고름</span></div>
-    <div><b>메모 30줄</b><span>통했던 말을 기억하고 다음 판에 다시 씀 = 이 실험의 ‘학습’</span></div>
-    <div><b>세대 교체</b><span>하루 두 번(07·19시) AI 2명 교체. 새 AI는 메모만 물려받음</span></div>
-    <div><b>5% 실수</b><span>메모를 옮겨 적을 때 글자를 가끔 틀림 → 말이 변하는 원인</span></div>
-    <div><b>자동 실행</b><span>Claude Haiku · GitHub Actions · 결과는 웹에 실시간 공개</span></div>
-  </div>
+  <div class="two">
+    <div class="cd mini2"><h3>연구가 보여준 것</h3><p>그림 맞히기를 반복하면 그림이 기호가 되고, 전달하면 규칙이 생긴다. AI끼리도 마찬가지다.</p></div>
+    <div class="cd mini2" style="box-shadow:inset 0 0 0 2px var(--grid)"><h3>비어 있는 자리 → 이 프로젝트</h3><p>결과는 논문의 그래프로만 남는다. 그 과정을 눈으로 보고, 실제로 쓸 수 있는 문자로 남긴 작업은 찾기 어렵다.</p></div>
+  </div></div>
+  <p class="src">출처: Fay·Garrod·Lee·Oberlander (2003) Understanding Interactive Graphical Communication · Kirby·Cornish·Smith (2008) PNAS 105(31) · Lazaridou·Peysakhovich·Baroni (2017) Multi-Agent Cooperation and the Emergence of (Natural) Language · Qiu 외 (2022) Emergent Graphical Conventions in a Visual Communication Game · Wikipedia “Gibberlink”</p>
   <span class="pg">04</span>
 </section>
 
-<!-- 5 결과 1 -->
-<section class="sl" aria-label="진행 결과 1">
-  <p class="kk">04 · 진행 중 결과 ① 뜻이 생겼다</p>
-  <h2 class="tt" id="r1h"></h2>
-  <p class="sub">처음엔 아무 글자나 쓰다가, 서로 통한 말만 살아남았다. 모양은 계속 바뀌었는데도 소통은 유지됐다.</p>
-  <div class="res fill">
-    <div class="stat"><p class="k">서로 알아들은 비율 · 그림 섬</p><div class="v" id="r1v"></div><p class="n">1세대 → 최근 5세대 평균 · 찍으면 25%</p></div>
-    <div>
-      <div class="cd" style="padding:20px 22px"><p class="cap" style="color:var(--t2)">세대마다 ‘숲’을 부른 말 (초록 = 그 세대에 바뀜)</p><div class="strip" id="r1strip"></div></div>
-      <div class="keys" id="r1keys"></div>
-    </div>
+<!-- 5 컨셉 -->
+<section class="sl" aria-label="컨셉">
+  <p class="kk">04 · 컨셉 — Integrated AI-Driven Design</p>
+  <h2 class="tt">AI가 문자를 만들고, <span>나는 그 규칙을 디자인한다.</span></h2>
+  <div class="vs">
+    <div class="cd"><span class="tag">지금까지의 없는 문자</span><h3>디자이너가 모양과 뜻을 정한다</h3><div class="who3"><span>모양 = 디자이너</span><span>뜻 = 디자이너</span><span>규칙 = 디자이너</span></div><p>디자이너가 아는 모양과 뜻에서 벗어나기 어렵다.</p></div>
+    <div class="ar2">→</div>
+    <div class="cd me"><span class="tag g">오늘의 숲</span><h3>디자이너는 규칙만, 나머지는 AI 에이전트가</h3><div class="who3"><span class="ai">모양 = AI</span><span class="ai">뜻 = AI끼리의 소통</span><span>규칙 = 디자이너</span></div><p>AI 에이전트 4명씩 사는 섬 3곳. 사람 말은 금지, 그림 맞히기만 허용. 사람이 손대지 않아도 매일 데이터가 쌓인다.</p></div>
+  </div>
+  <div class="rules">
+    <div><b>그림 맞히기</b><span>말하는 AI만 그림을 본다 → 낯선 글자로만 쓴다 → 듣는 AI가 4장 중 고른다</span></div>
+    <div><b>메모 30줄</b><span>통한 말을 기억해 다음 판에 다시 쓴다. 이 실험에서의 ‘학습’</span></div>
+    <div><b>세대 교체</b><span>하루 두 번(07·19시) AI 2명이 바뀐다. 새 AI는 메모만 물려받는다</span></div>
+    <div><b>5% 실수</b><span>메모를 옮겨 적을 때 가끔 글자를 틀린다. 말이 변하는 원인</span></div>
+    <div><b>자동 실행</b><span>Claude Haiku · GitHub Actions · 결과는 웹에 실시간 공개</span></div>
   </div>
   <span class="pg">05</span>
 </section>
 
-<!-- 6 결과 2 -->
-<section class="sl" aria-label="진행 결과 2">
-  <p class="kk">05 · 진행 중 결과 ② 기록이 말을 붙잡는다</p>
-  <h2 class="tt">메모를 지우면, 같은 AI도 말을 잃는다.</h2>
-  <p class="sub">AI 모델은 그대로다. 바뀌는 건 물려받은 메모뿐. 그래서 이 실험의 ‘학습’은 메모 보고 따라 하기다.</p>
-  <div class="two fill" style="grid-template-columns:1.05fr 1fr">
-    <div class="cd"><h3>메모가 없으면?</h3><div id="ctrl"></div><p class="cap" id="ctrlCap" style="margin-top:14px"></p></div>
-    <div class="cd"><h3>두 섬이 만나면? <span style="color:var(--t3);font-weight:600" id="crossSub"></span></h3><div class="cross" id="cross"></div><p class="cap" style="margin-top:12px" id="crossCap"></p></div>
+<!-- 6 중간 결과 -->
+<section class="sl" aria-label="중간 결과">
+  <p class="kk" id="r1k"></p>
+  <h2 class="tt">뜻은 생겼다. <span>지금까지 확인한 세 가지.</span></h2>
+  <div class="find fill" style="padding-bottom:44px">
+    <div class="cd"><span class="no">01</span><h3>처음 보는 글자에<br>뜻이 붙었다</h3><p>아무 글자나 쓰던 AI들이, 서로 통한 말만 남기며 알아듣기 시작했다.</p><div class="ev"><div class="big2" id="f1"></div><p class="cap" id="f1c"></p></div></div>
+    <div class="cd"><span class="no">02</span><h3>모양이 바뀌어도<br>뜻은 이어졌다</h3><p id="f2p"></p><div class="ev"><div class="keys" id="f2"></div></div></div>
+    <div class="cd"><span class="no">03</span><h3>기록이 끊기면<br>말도 무너졌다</h3><p>같은 AI에게 메모만 지웠더니 성공률이 절반으로. 뜻은 AI의 머리가 아니라 기록에 남는다.</p><div class="ev" id="f3"></div></div>
   </div>
+  <p class="fn" id="r1fn"></p>
   <span class="pg">06</span>
 </section>
 
-<!-- 7 중간 결론·한계 -->
+<!-- 7 결론·한계 -->
 <section class="sl" aria-label="중간 결론과 한계">
   <p class="kk">06 · 중간 결론, 그리고 한계</p>
   <h2 class="tt">뜻은 생겼다. <span>그런데 모양은 빌려 왔다.</span></h2>
   <div class="fill"><div class="concl" style="margin-top:0"><p>아무도 뜻을 정해 주지 않아도, 서로 통하려는 시도만으로 뜻은 생긴다. <span>다만 고정된 모양이 아니라 계속 바뀌는 약속으로, 그리고 기록이 이어질 때만.</span></p><small id="conclN"></small></div>
   <div class="lim">
-    <div class="cd"><h3>모양은 내가 준 기존 문자 40개에서 골랐다</h3><p>룬·아르메니아·한글 자모·숫자 (그림 섬 기준)</p><div class="chars" id="chars"></div></div>
-    <div class="cd"><h3>사람의 말이 새어 나왔다</h3><p id="leakP">‘세상에 없는 말’을 만들라고 했는데</p><div class="leak" id="leak"></div></div>
-    <div class="next"><small>기말까지의 질문</small><b>모양까지 AI에게 맡기면, 진짜 세상에 없는 문자가 나올까?</b></div>
+    <div class="cd"><h3>모양은 내가 준 기존 문자 40자에서 골랐다</h3><p>룬·아르메니아 문자·한글 자모·숫자 (그림 섬)</p><div class="chars" id="chars"></div></div>
+    <div class="cd"><h3>사람의 말이 새어 나왔다</h3><p>‘세상에 없는 말’을 만들라고 했는데도</p><div class="leak" id="leak"></div></div>
+    <div class="next"><small>기말까지의 질문</small><b>모양까지 AI에게 맡기면, 정말 세상에 없는 문자가 나올까?</b></div>
   </div></div>
   <span class="pg">07</span>
 </section>
 
-<!-- 8 기말 기획: 선·점 섬 -->
-<section class="sl" aria-label="기말 기획">
-  <p class="kk">07 · 기말 기획 ① 선과 점 섬</p>
+<!-- 8 기말 ① 실험 -->
+<section class="sl" aria-label="기말 계획 실험">
+  <p class="kk">07 · 기말 계획 ① 실험</p>
   <h2 class="tt">기존 문자를 빼고, <span>점과 선만 준다.</span></h2>
   <div class="dots fill" style="margin-top:0">
-    <div class="cd how"><h3>글자 만드는 방법</h3><div class="glyphs" id="glyphs"></div><ul><li>점 9개(3×3) 중 두 점을 이으면 한 획</li><li>글자 하나 = 획 최대 4개, 말 하나 = 글자 최대 3개</li><li>나머지 규칙(그림 맞히기·메모·세대)은 그대로</li></ul><p class="cap">수치는 11월 시험 운영에서 확정</p></div>
+    <div class="cd how"><h3>새 섬: 선과 점 섬</h3><div class="glyphs" id="glyphs"></div><ul><li>점 9개(3×3) 중 두 점을 이으면 한 획</li><li>글자 하나는 최대 4획, 말 하나는 최대 3글자</li><li>그림 맞히기·메모·세대 교체는 그대로</li></ul><p class="cap">세부 수치는 11월 시험 운영에서 확정</p></div>
     <div>
       <div class="dsg">
-        <div class="cd"><span class="n">1</span><h3>통하나</h3><p>서로 알아듣는 비율. 기존 문자 섬과 같은 속도로 오르는지</p></div>
-        <div class="cd"><span class="n">2</span><h3>굳나</h3><p>세대가 바뀌어도 같은 글자 모양이 유지되는 비율</p></div>
-        <div class="cd"><span class="n">3</span><h3>새로운가</h3><p>만든 글자를 기존 문자 수천 자와 이미지로 비교해 가장 닮은 글자와의 유사도</p></div>
-        <div class="cond"><div>비교</div><div><b>기존 문자 섬</b> (지금 3개 계속 운영) — 기준</div><div><b>선과 점 섬 × 3</b> — 같은 조건으로 따로 3번 → 우연인지 확인</div></div>
+        <div class="cd"><span class="n">1</span><h3>통하는가</h3><p>서로 알아듣는 비율. 기존 문자 섬만큼 오르는지</p></div>
+        <div class="cd"><span class="n">2</span><h3>굳는가</h3><p>세대가 바뀌어도 같은 글자 모양이 유지되는 비율</p></div>
+        <div class="cd"><span class="n">3</span><h3>새로운가</h3><p>만든 글자를 기존 문자 수천 자와 이미지로 비교해, 가장 닮은 글자와의 유사도를 잰다</p></div>
+        <div class="cond"><div>비교</div><div><b>기존 문자 섬 3곳</b> (지금처럼 계속 운영) — 기준</div><div><b>선과 점 섬 × 3</b> — 같은 조건으로 따로 3번, 우연인지 확인</div></div>
       </div>
-      <p class="hyp"><b>가설:</b> 처음엔 아는 글자(ㄱ, L, X)를 그리다가, 소통을 거치며 단순해진 고유 기호로 굳을 것. 틀려도 결과다 — 그러면 “AI는 결국 아는 모양으로 돌아간다”가 결론.</p>
+      <p class="hyp"><b>가설:</b> 처음엔 아는 글자(ㄱ, L, X)를 그리다가, 소통을 거치며 단순한 고유 기호로 굳을 것. 가설이 틀려도 결과가 된다 — “AI는 결국 아는 모양으로 돌아간다.”</p>
     </div>
   </div>
   <span class="pg">08</span>
 </section>
 
-<!-- 9 기말 결과물·일정 -->
-<section class="sl" aria-label="결과물과 일정">
-  <p class="kk">08 · 기말 기획 ② 결과물과 일정</p>
-  <h2 class="tt">실험은 웹에서 자라고, <span>결과는 문자로 남긴다.</span></h2>
+<!-- 9 기말 ② 결과물 -->
+<section class="sl" aria-label="기말 결과물과 일정">
+  <p class="kk">08 · 기말 계획 ② 12월에 보여 줄 것</p>
+  <h2 class="tt">12월에는 <em>AI가 만든 문자 한 벌</em>을 보여 준다.</h2>
   <div class="fill"><div class="out" style="margin-top:0">
-    <div class="cd"><span class="nb">01 · 웹</span><h3>실시간 사이트 확장</h3><div class="vis" id="o1"></div><p>지금 사이트(맞혀 보기·대화 보기·실험 노트)에 선과 점 섬과 두 조건 비교 화면 추가</p></div>
-    <div class="cd"><span class="nb">02 · 타이포그래피</span><h3>문자 표본</h3><div class="vis" id="o2"></div><p>AI가 만든 글자를 정리한 서체 견본 포스터 + 실제로 쓸 수 있는 폰트 파일</p></div>
-    <div class="cd"><span class="nb">03 · 기록</span><h3>말의 사전</h3><div class="vis" id="o3"></div><p>글자 하나하나가 언제 생겨서 어떻게 바뀌었는지, 세대별 계보로 엮은 사전</p></div>
+    <div class="cd" style="box-shadow:inset 0 0 0 2px var(--grid)"><span class="nb">01 · 타이포그래피</span><h3>문자 표본</h3><div class="vis" id="o2"></div><p>AI가 만든 글자를 정리한 서체 견본 포스터와, 실제로 쓸 수 있는 폰트 파일</p></div>
+    <div class="cd"><span class="nb">02 · 기록</span><h3>말의 사전</h3><div class="vis" id="o3"></div><p>글자마다 언제 생겨서 어떻게 바뀌었는지, 세대별 계보로 엮은 사전</p></div>
+    <div class="cd"><span class="nb">03 · 웹</span><h3>실시간 사이트</h3><div class="vis" id="o1"></div><p>지금 사이트에 선과 점 섬과 두 조건 비교 화면을 더해, 실험 과정을 계속 공개</p></div>
   </div>
   <div class="sch">
-    <div class="now"><b>~ 10/29</b><h3>중간 · 기획 확정</h3><p>기존 문자 섬 33세대 운영 중, 두 섬 만남 시작</p></div>
-    <div><b>11월 1–2주</b><h3>선과 점 섬 설계·시험</h3><p>표현 방식, 지시문, 닮음 측정 방법, 비용 계산</p></div>
+    <div class="now"><b>~ 10/29</b><h3>중간 · 기획 확정</h3><p id="schNow"></p></div>
+    <div><b>11월 1–2주</b><h3>선과 점 섬 설계·시험</h3><p>표현 방식, 지시문, 닮음 측정 방법, 비용</p></div>
     <div><b>11월 중순 – 12월 초</b><h3>본 운영</h3><p>하루 2세대 × 약 3주 ≈ 40세대, 3번 반복</p></div>
     <div><b>12월</b><h3>분석 · 결과물</h3><p>두 조건 비교, 문자 표본·사전 제작, 기말 발표</p></div>
   </div></div>
   <span class="pg">09</span>
 </section>
 
-<!-- 10 끝 -->
+<!-- 10 마무리 -->
 <section class="sl dark" aria-label="마무리">
-  <p class="kk">09 · 그래서</p>
-  <h2 class="tt">디자이너가 빠져도 뜻은 생겼다.<br><span>이제 모양까지 맡겨 본다.</span></h2>
-  <p class="sub" style="margin-top:20px">이 프로젝트의 목표: AI에게 맡긴 문자가 어디까지 새로울 수 있는지 확인하고, 그 과정을 누구나 볼 수 있게 만드는 것.</p>
+  <p class="kk">09 · 정리</p>
+  <h2 class="tt">디자이너가 빠져도 뜻은 생겼다.<br><span>이제 모양까지 맡겨, 세상에 없는 문자 한 벌을 만든다.</span></h2>
+  <p class="sub" style="margin-top:22px">중간 — 뜻이 생기는 것을 확인 &nbsp;→&nbsp; 기말 — 모양까지 AI가 만든 문자를 서체로 완성</p>
   <div class="end">
     <p class="live"><span class="dot"></span><span id="endLive"></span></p>
     <div class="go"><div class="qr"><img src="img/qr.png" alt="오늘의 숲 사이트 QR"></div><div><b>지금 이 순간의 말</b><span>QR로 직접 맞혀 보기</span></div></div>
