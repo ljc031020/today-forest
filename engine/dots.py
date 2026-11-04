@@ -57,6 +57,8 @@ def check(raw):
     for m in marks:
         if isinstance(m, str):
             m = re.findall(r'\d{2}', m)
+        elif isinstance(m, list) and any('.' in str(x) or len(re.sub(r'\D', '', str(x))) > 2 for x in m):
+            m = [y for x in m for y in re.findall(r'\d{2}', str(x))]  # ["25.46.57"]처럼 한 칸에 몰아 쓴 경우
         if not isinstance(m, list) or not m:
             return None, 'each mark is a list of strokes'
         bad = [s for s in m if norm_stroke(s) is None]

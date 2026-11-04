@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>점 섬 문자 표본 · 오늘의 숲</title>
+<meta name="description" content="디자이너 없이 태어난 문자 — 선과 점 섬 문자 표본 시안">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+KR:wght@500&display=swap">
+<style>
+/* 문자 표본 시안 01 — A2 세로(420×594mm) 포스터. 1190×1684px 한 장 */
+:root{--paper:#F3F4F0;--ink:#141A17;--t2:#3F4844;--t3:#5B6560;--line:#D3D8D0;--g:#0B8457;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--ui:"Pretendard Variable",Pretendard,system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:#D9DDD6}
+body{font-family:var(--ui);color:var(--ink);word-break:keep-all;-webkit-font-smoothing:antialiased}
+.ctl{position:fixed;top:12px;right:12px;display:flex;gap:6px;z-index:3;font-size:13px}
+.ctl button{font:inherit;font-weight:600;border:0;border-radius:9px;padding:7px 11px;background:#fff;cursor:pointer}
+.ctl button[aria-pressed=true]{background:var(--ink);color:#fff}
+.stage{width:1190px;height:1684px;margin:24px auto;transform-origin:top center}
+.poster{width:1190px;height:1684px;background:var(--paper);padding:64px 72px 56px;display:grid;grid-template-rows:auto auto 1fr auto;gap:0;position:relative;overflow:hidden}
+.hd{display:grid;grid-template-columns:1fr auto;border-bottom:2px solid var(--ink);padding-bottom:14px;font:500 15px/1.45 var(--mono);color:var(--t2)}
+.hd b{color:var(--ink);font-weight:700}
+.hero{display:grid;grid-template-columns:560px 1fr;gap:48px;padding:40px 0 36px;border-bottom:1px solid var(--line);align-items:end}
+.hero .big{width:560px;height:560px;position:relative}
+.hero h1{font-size:120px;line-height:1;letter-spacing:-.05em;margin:0}
+.hero h1 small{display:block;font-size:22px;letter-spacing:0;color:var(--t3);font-weight:600;margin-bottom:18px;font-family:var(--mono)}
+.hero dl{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;margin:30px 0 0;font-size:16px;color:var(--t2)}
+.hero dt{font:600 13px/1.6 var(--mono);color:var(--t3)}
+.hero dd{margin:0}
+.hero dd b{color:var(--ink)}
+.hero .stmt{margin-top:30px;font-size:24px;line-height:1.45;font-weight:700;letter-spacing:-.02em}
+.hero .stmt span{color:var(--g)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);border-left:1px solid var(--line)}
+.c{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 18px 16px;display:grid;grid-template-rows:auto 1fr auto;gap:6px;position:relative}
+.c .no{font:600 12px/1 var(--mono);color:var(--t3)}
+.c .gw{display:flex;align-items:center;justify-content:center;gap:4px}
+.c .nm{display:flex;align-items:baseline;gap:8px;font-size:20px;font-weight:700;letter-spacing:-.02em}
+.c .nm img{width:24px;height:24px;align-self:center}
+.c .cd{font:500 12px/1.4 var(--mono);color:var(--t3)}
+.c .lk{position:absolute;right:16px;top:14px;font:500 12px/1 var(--mono);color:var(--t3)}
+.c .lk.hi{color:#B4471F}
+.ft{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;padding-top:22px;font-size:14px;color:var(--t2);line-height:1.6}
+.ft b{color:var(--ink)}
+.ft .m{font:500 12px/1.5 var(--mono);color:var(--t3);text-align:right}
+body.print{background:var(--paper)}
+body.print .ctl{display:none}
+body.print .stage{margin:0;transform:none!important}
+@page{size:420mm 594mm;margin:0}
+</style>
+</head>
+<body>
+<div class="ctl" id="ctl"></div>
+<div class="stage" id="stage"><div class="poster" id="poster"></div></div>
+<script src="glyph.js"></script>
+<script>
+(async function(){
+const q = new URLSearchParams(location.search), D = q.get('d') || 'data/dots/', print = q.has('print');
+const get = u => fetch(D + u, {cache: 'no-store'}).then(r => r.ok ? r.json() : null).catch(() => null);
+const [S, L] = await Promise.all([get('summary.json'), get('likeness.json')]);
+const P = document.getElementById('poster');
+if (!S || !S.gens.length) { P.innerHTML = '<p>아직 실행 결과가 없어요.</p>'; return; }
+const G = S.gens, last = G[G.length - 1], NOW = last.gen, K = Object.keys(S.meta.islands);
+const SC = S.meta.scenes, NAME = {}; for (const [en, id] of Object.entries(SC)) NAME[id] = GL.KO[en] || en;
+const best = K.slice().sort((a, b) => last.islands[b].ok - last.islands[a].ok)[0];
+let k = q.get('k') && K.includes(q.get('k')) ? q.get('k') : best;
+const LK = L ? L.gens.find(g => g.gen === NOW) : null;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const since = (sid) => { let g = NOW; while (g > 1 && G[g - 2] && G[g - 2].islands[k].words[sid] === last.islands[k].words[sid]) g--; return g; };
+const order = ['forest', 'tree', 'water', 'sea', 'fire', 'big fire', 'volcano', 'mountain', 'person', 'crowd', 'house', 'village'].map(e => SC[e]).filter(Boolean);
+function render(){
+  const W = last.islands[k].words, F = SC.forest, fw = W[F] || '';
+  const lk = sid => ((LK && LK.islands[k].words[sid]) || []);
+  const ok = last.islands[k].ok, tk = last.islands[k].talks;
+  const heroMarks = fw.split(' ');
+  const hs = heroMarks.length === 1 ? 560 : heroMarks.length === 2 ? 280 : 186;
+  P.innerHTML = `
+  <div class="hd"><span><b>오늘의 숲 — 점 섬 문자 표본</b> · 시안 01</span><span>${S.meta.islands[k]} · ${NOW}세대 · ${new Date(last.at).toLocaleDateString('ko-KR')}</span></div>
+  <div class="hero">
+    <div class="big" style="display:flex;align-items:center;justify-content:center;gap:0">${heroMarks.map(m => GL.mark(m, hs, {color: '#141A17', w: hs * .075, dotColor: '#C4CAC2', pad: .16})).join('')}</div>
+    <div>
+      <h1><small>Figure 01 · 숲</small>숲</h1>
+      <dl>
+        <dt>획</dt><dd><b>${esc(fw.replace(/\./g, '·'))}</b></dd>
+        <dt>태어남</dt><dd>${since(F)}세대부터 같은 모양</dd>
+        <dt>닮은 글자</dt><dd>${lk(F).map(x => `${esc(x.char)} (${x.script}) ${x.sim.toFixed(2)}`).join(' · ') || '-'}</dd>
+        <dt>소통</dt><dd>${NOW}세대 ${tk}판 중 ${ok}판 통함</dd>
+      </dl>
+      <p class="stmt">아무도 모양을 정하지 않았다.<br><span>점 아홉 개와 선, 그리고 그림 맞히기만으로.</span></p>
+    </div>
+  </div>
+  <div class="grid">${order.map((sid, i) => { const w = W[sid] || '', ms = w ? w.split(' ') : [], s = ms.length <= 1 ? 150 : ms.length === 2 ? 96 : 70, l = lk(sid), hi = l.some(x => x.sim >= .8);
+    return `<div class="c"><span class="no">${String(i + 1).padStart(2, '0')}</span>${l.length ? `<span class="lk${hi ? ' hi' : ''}">≈ ${l.map(x => esc(x.char)).join(' ')}</span>` : ''}
+      <div class="gw">${ms.map(m => GL.mark(m, s, {color: '#141A17', w: s * .085, dotColor: '#CDD2CA'})).join('') || '<span class="cd">아직 없음</span>'}</div>
+      <div><div class="nm"><img src="img/${sid}.png" alt="">${NAME[sid]}</div><div class="cd">${esc(w.replace(/\./g, '·'))} · ${w ? since(sid) + '세대~' : ''}</div></div></div>`; }).join('')}</div>
+  <div class="ft"><p><b>만드는 법</b> — 기존 문자는 주지 않았다. AI 4명이 사는 섬에서, 말하는 AI만 그림을 보고 3×3 점 위에 선을 그어 글자를 만든다. 듣는 AI가 4장 중 맞히면 둘 다 기억한다. 하루 두 번 AI가 바뀌어도 기억은 이어진다. 오른쪽 위 ≈ 는 기존 문자 중 가장 닮은 글자, <b style="color:#B4471F">주황</b>은 거의 같음(0.8 이상).</p>
+  <p class="m">이정찬 · 2026-2 디지털 스페이스<br>시안 01 — 시험 운영 ${NOW}세대 결과</p></div>`;
+  document.getElementById('ctl').innerHTML = K.map(x => `<button aria-pressed="${x === k}" data-k="${x}">${S.meta.islands[x]}</button>`).join('');
+}
+document.getElementById('ctl').onclick = e => { const b = e.target.closest('button'); if (b) { k = b.dataset.k; render(); } };
+render();
+if (print) document.body.classList.add('print');
+else { const fit = () => { const z = Math.min(1, (innerWidth - 24) / 1190); document.getElementById('stage').style.transform = `scale(${z})`; document.getElementById('stage').style.height = 1684 * z + 'px'; }; addEventListener('resize', fit); fit(); }
+window.__ready = true;
+})();
+</script>
+</body>
+</html>

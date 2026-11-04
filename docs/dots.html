@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>선과 점 섬 · 오늘의 숲</title>
+<meta name="description" content="기존 문자 없이, 점과 선만으로 AI가 모양부터 만든 글자 — 기말 실험 시험판">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--paper:#F3F4F0;--surface:#FFFFFF;--ink:#141A17;--t2:#3F4844;--t3:#5B6560;--line:#D9DED7;--fill:#E8EBE5;--miss:#6E7671;--grid:#0B8457;
+  --d1:#0B8457;--d2:#2450D8;--d3:#8A3F9E;--f-ui:"Pretendard Variable",Pretendard,-apple-system,system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--f-ui);word-break:keep-all;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+.wrap{width:min(1120px,100%);margin:0 auto;padding:0 20px}
+.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;height:56px}
+.logo{font-weight:700;text-decoration:none}
+.top nav{display:flex;gap:4px;font-size:14px;font-weight:600;color:var(--t3)}
+.top nav a{text-decoration:none;padding:6px 10px;border-radius:9px}
+.top nav a[aria-current]{background:var(--fill);color:var(--ink)}
+.top .st{margin-left:auto;font-size:13px;color:var(--t3)}
+.kk{font:500 13px/1 var(--mono);color:var(--t3);letter-spacing:.02em}
+.hero{padding:56px 0 28px;display:grid;gap:14px}
+.hero h1{font-size:48px;line-height:1.2;letter-spacing:-.03em}
+.hero h1 span{color:var(--t3)}
+.hero p{font-size:18px;color:var(--t2);max-width:760px}
+.rule{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;background:var(--surface);border-radius:24px;padding:24px 28px;margin-top:6px}
+.rule ul{margin:0;padding-left:18px;color:var(--t2);font-size:15px;line-height:1.75}
+.rule ul b{color:var(--ink)}
+.sec{padding:40px 0 8px;display:grid;gap:16px}
+.sec h2{font-size:26px;letter-spacing:-.02em;line-height:1.35}
+.sec h2 span{color:var(--t3);font-weight:600}
+.cap{font-size:13px;color:var(--t3);line-height:1.5}
+.cd{background:var(--surface);border-radius:20px;padding:20px}
+.isl3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ih{display:flex;align-items:center;gap:8px;font-weight:700}
+.ih i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.ih span{margin-left:auto;font-weight:600;color:var(--c);font-size:22px;letter-spacing:-.02em}
+.spark{width:100%;height:90px;display:block;margin-top:10px}
+table{width:100%;border-collapse:separate;border-spacing:0;background:var(--surface);border-radius:20px;overflow:hidden}
+th,td{padding:10px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--t3);font-weight:600;background:#FAFBF8}
+tr:last-child td{border-bottom:0}
+td.sc{white-space:nowrap;font-weight:600}
+td.sc img{width:30px;height:30px;vertical-align:middle;margin-right:6px}
+.gl{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
+.gl svg{display:block}
+.lk{display:block;font-size:12px;color:var(--t3);margin-top:4px}
+.lk b{font-weight:700;color:var(--ink)}
+.lk.hi b{color:#B4471F}
+.pick{display:flex;flex-wrap:wrap;gap:6px}
+.pick button{font:inherit;font-size:14px;font-weight:600;border:0;border-radius:10px;padding:6px 10px;background:var(--fill);cursor:pointer;display:flex;align-items:center;gap:6px}
+.pick button img{width:22px;height:22px}
+.pick button[aria-pressed=true]{background:var(--ink);color:#fff}
+.lin{display:grid;gap:10px}
+.lin .row{display:grid;grid-template-columns:90px 1fr;gap:12px;align-items:center}
+.lin .row b{font-size:14px;color:var(--c)}
+.lin .cells{display:flex;gap:4px;overflow-x:auto;padding-bottom:4px}
+.lin .cell{display:grid;justify-items:center;gap:3px;padding:6px;border-radius:10px;background:var(--paper);min-width:58px}
+.lin .cell.ch{box-shadow:inset 0 0 0 2px var(--c);background:#fff}
+.lin .cell small{font:600 11px/1 var(--mono);color:var(--t3)}
+.two{display:grid;grid-template-columns:1.2fr 1fr;gap:14px}
+.chart{width:100%;height:240px;display:block}
+.lgd{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--t2);margin-top:8px}
+.lgd i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px;background:var(--c)}
+.top5{display:grid;gap:8px}
+.top5 .it{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--paper)}
+.top5 .it .ref{font:500 26px/1 "Noto Sans","Noto Sans KR","Noto Sans Runic",var(--f-ui);width:40px;text-align:center}
+.top5 .it span{font-size:13px;color:var(--t2)}
+.top5 .it b{font-size:14px}
+.note{font-size:13px;color:var(--t3);line-height:1.7;background:var(--surface);border-radius:16px;padding:16px 18px}
+.foot{padding:40px 0 60px;font-size:13px;color:var(--t3);display:flex;gap:16px;flex-wrap:wrap}
+@media (max-width:820px){.hero h1{font-size:32px}.isl3,.two{grid-template-columns:1fr}.rule{grid-template-columns:1fr}th:nth-child(n+3),td:nth-child(n+3){display:none}}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&family=Noto+Sans+Runic&family=Noto+Sans+KR:wght@500&display=swap">
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="logo" href="index.html">오늘의 숲</a><nav><a href="index.html">기존 섬</a><a href="dots.html" aria-current="page">선과 점 섬</a><a href="specimen.html">문자 표본</a></nav><span class="st" id="st"></span></div></header>
+<main class="wrap">
+  <section class="hero">
+    <p class="kk">기말 실험 · 시험판</p>
+    <h1>점과 선만 주고, <span>모양부터 맡겼다.</span></h1>
+    <p id="heroP">기존 문자는 하나도 주지 않았다. AI들은 3×3 점 위에 선을 그어 글자를 만들고, 그림 맞히기로 뜻을 붙인다. 같은 조건의 섬 3개를 따로 돌려 결과가 우연인지 본다.</p>
+    <div class="rule">
+      <span id="ruleSvg"></span>
+      <ul>
+        <li><b>획</b> = 점 두 개를 잇는 선 (예: 1–5)</li>
+        <li><b>글자</b> = 획 1~4개, <b>말</b> = 글자 1~3개</li>
+        <li>그림 맞히기 · 메모 30줄 · 하루 두 번 세대 교체 · 옮겨 적기 실수 5% — 기존 섬과 같음</li>
+        <li>지시문: 사람의 글자·숫자·기호나 사물 그림을 그리지 말 것</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec"><h2>서로 알아듣는 비율. <span>세대마다 32판 중 몇 판이 통했나.</span></h2>
+    <div class="isl3" id="isls"></div><p class="cap">점선 = 그냥 찍어도 맞히는 25%</p></section>
+
+  <section class="sec"><h2>그림마다 지금의 글자. <span>섬 3개가 같은 그림을 어떻게 그렸나.</span></h2>
+    <table id="words"></table>
+    <p class="cap">글자 아래 = 기존 문자 중 가장 닮은 글자와 닮음(0–1). <b style="color:#B4471F">0.8 이상</b>은 사람 글자를 거의 그대로 그린 것.</p></section>
+
+  <section class="sec"><h2>한 그림의 글자가 바뀌어 온 길. <span>테두리 = 그 세대에 바뀜.</span></h2>
+    <div class="pick" id="pick"></div>
+    <div class="cd lin" id="lin"></div></section>
+
+  <section class="sec"><h2>새로운가? <span>기존 문자 약 200자와 모양을 비교했다.</span></h2>
+    <div class="two">
+      <div class="cd"><svg class="chart" id="lchart"></svg><div class="lgd" id="lgd"></div></div>
+      <div class="cd"><h3 style="font-size:16px;margin-bottom:10px">사람 글자를 가장 닮은 글자 <span class="cap">(획 2개 이상)</span></h3><div class="top5" id="top5"></div><h3 style="font-size:16px;margin:16px 0 10px">가장 낯선 글자</h3><div class="top5" id="low5"></div></div>
+    </div>
+    <p class="note" id="method"></p></section>
+
+  <div class="foot"><span id="model"></span><a href="index.html">← 기존 세 섬</a><a href="specimen.html">문자 표본 시안 →</a></div>
+</main>
+<script src="glyph.js"></script>
+<script src="dots.js"></script>
+</body>
+</html>
