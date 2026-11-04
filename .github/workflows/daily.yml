@@ -18,6 +18,9 @@ on:
       control:
         description: '메모를 지운 AI 비교 실험 (yes 입력 시, 결과만 control.json에 저장)'
         default: 'no'
+      dots:
+        description: '선과 점 섬(기말 실험)만 돌릴 세대 수 (0이면 안 돌림, 기존 섬은 건드리지 않음)'
+        default: '0'
 
 concurrency:
   group: world
@@ -41,6 +44,7 @@ jobs:
         run: |
           if [ "${{ github.event.inputs.probe }}" = "yes" ]; then python engine/probe.py; exit 0; fi
           if [ "${{ github.event.inputs.control }}" = "yes" ]; then python engine/control.py; exit 0; fi
+          if [ -n "${{ github.event.inputs.dots }}" ] && [ "${{ github.event.inputs.dots }}" != "0" ]; then python engine/dots.py --gens "${{ github.event.inputs.dots }}"; exit 0; fi
           ARGS="--gens ${{ github.event.inputs.gens || '1' }}"
           if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="--auto"; fi
           if [ "${{ github.event.inputs.reset }}" = "yes" ]; then ARGS="$ARGS --reset"; fi
