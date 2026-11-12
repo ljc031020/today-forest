@@ -19,7 +19,7 @@ on:
         description: '메모를 지운 AI 비교 실험 (yes 입력 시, 결과만 control.json에 저장)'
         default: 'no'
       dots:
-        description: '선과 점 섬(기말 실험)만 돌릴 세대 수 (0이면 안 돌림, 기존 섬은 건드리지 않음)'
+        description: '선과 점 섬(점 섬 3)만 돌릴 세대 수 (0이면 안 돌림, 기존 섬은 건드리지 않음)'
         default: '0'
 
 concurrency:
@@ -44,17 +44,33 @@ jobs:
         run: |
           if [ "${{ github.event.inputs.probe }}" = "yes" ]; then python engine/probe.py; exit 0; fi
           if [ "${{ github.event.inputs.control }}" = "yes" ]; then python engine/control.py; exit 0; fi
-          if [ -n "${{ github.event.inputs.dots }}" ] && [ "${{ github.event.inputs.dots }}" != "0" ]; then python engine/dots.py --gens "${{ github.event.inputs.dots }}"; exit 0; fi
+          if [ -n "${{ github.event.inputs.dots }}" ] && [ "${{ github.event.inputs.dots }}" != "0" ]; then python engine/dots.py --gens "${{ github.event.inputs.dots }}"; echo "DOTS_RAN=1" >> "$GITHUB_ENV"; exit 0; fi
           ARGS="--gens ${{ github.event.inputs.gens || '1' }}"
           if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="--auto"; fi
           if [ "${{ github.event.inputs.reset }}" = "yes" ]; then ARGS="$ARGS --reset"; fi
           python engine/run.py $ARGS
           python engine/memlog.py || echo '기억 재현 실패 (화면의 기억 선반만 영향)'
+      - name: 점 섬 3 (기말 본 운영, 07시·19시)
+        if: always() && github.event_name == 'schedule'
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          before=$(python -c "import json;print(json.load(open('docs/data/dots/state.json'))['gen'])")
+          python engine/dots.py --auto
+          after=$(python -c "import json;print(json.load(open('docs/data/dots/state.json'))['gen'])")
+          if [ "$before" != "$after" ]; then echo "DOTS_RAN=1" >> "$GITHUB_ENV"; fi
+      - name: 점 섬 닮음 측정 (새로운가)
+        if: always() && env.DOTS_RAN == '1'
+        continue-on-error: true
+        run: |
+          pip install -q numpy pillow scipy scikit-image
+          python tools/likeness.py docs/data/dots
       - name: 기록 저장
         if: always()
         run: |
           git config user.name "today-forest-bot"
           git config user.email "today-forest-bot@users.noreply.github.com"
           git add docs/data
-          git diff --cached --quiet || git commit -m "세대 $(python -c "import json;print(json.load(open('docs/data/state.json'))['gen'])")"
+          git diff --cached --quiet || git commit -m "세대 $(python -c "import json;print(json.load(open('docs/data/state.json'))['gen'])") · 점 섬 $(python -c "import json;print(json.load(open('docs/data/dots/state.json'))['gen'])")"
           git pull --rebase && git push

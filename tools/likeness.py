@@ -5,7 +5,7 @@
 2. 둘 다 잉크가 있는 영역만 잘라 같은 크기 상자에 비율을 지켜 넣고, 뼈대(1px 선)만 남긴다. → 굵기·크기 차이를 없앤다.
 3. 뼈대끼리 서로 가장 가까운 점까지의 평균 거리(대칭 챔퍼 거리)를 잰다. 닮음 = exp(-거리/τ), 1이면 똑같음.
 4. 기존 문자 중 가장 닮은 글자와 그 닮음 값을 기록한다.
-사용: python tools/likeness.py <dots 데이터 폴더> [--fonts 폴더]
+사용: python tools/likeness.py <dots 데이터 폴더>   (글꼴은 tools/fonts 에 들어 있음)
 """
 import json, math, os, sys
 import numpy as np
@@ -27,11 +27,13 @@ REF = [
     ('한자', '一二三十人入八工土王山口日中大小上下木川丁七乂文'),
     ('기호', '+−×=<>/\\|^∧∨△▽□◇#※⊥∠'),
 ]
+HERE = os.path.dirname(os.path.abspath(__file__))
+FONT_DIR = os.path.join(HERE, 'fonts')   # 필요한 글자만 잘라 넣은 글꼴 (OFL) — 어느 컴퓨터에서 돌려도 같은 값
 FONTS = {
-    'default': '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
-    '한글 자모': ('/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc', 1),
-    '한자': ('/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc', 1),
-    '룬': None,  # --fonts 폴더의 runic.ttf
+    'default': ('dejavu-sub.ttf', 0),     # DejaVu Sans 부분집합
+    '한글 자모': ('cjk-sub.otf', 0),       # Noto Sans CJK Medium 부분집합
+    '한자': ('cjk-sub.otf', 0),
+    '룬': ('runic.ttf', 0),               # Noto Sans Runic
 }
 
 
@@ -74,19 +76,14 @@ def chamfer(a, b):
     return (db[a].mean() + da[b].mean()) / 2
 
 
-def load_refs(font_dir):
+def load_refs(font_dir=None):
     refs = []
     for script, chars in REF:
-        spec = FONTS.get(script, FONTS['default'])
-        if script == '룬':
-            path = os.path.join(font_dir or '', 'runic.ttf')
-            if not os.path.exists(path):
-                continue
-            font = ImageFont.truetype(path, 200)
-        elif isinstance(spec, tuple):
-            font = ImageFont.truetype(spec[0], 200, index=spec[1])
-        else:
-            font = ImageFont.truetype(spec, 200)
+        name, idx = FONTS.get(script, FONTS['default'])
+        path = os.path.join(font_dir or FONT_DIR, name)
+        if not os.path.exists(path):
+            continue
+        font = ImageFont.truetype(path, 200, index=idx)
         for ch in chars:
             n = normalize(char_img(ch, font))
             if n is not None:

@@ -2,7 +2,8 @@
 
 기존 문자를 주지 않는다. 3×3 점 격자에서 두 점을 이은 '획'으로 글자 모양부터 AI가 만든다.
 규칙(그림 맞히기·메모 30줄·세대 교체·옮겨 적기 실수 5%)은 기존 섬과 같다.
-같은 조건의 섬 3개(점1·점2·점3)를 따로 돌려, 결과가 우연인지 본다.
+시험 운영(1~10세대)은 같은 조건의 섬 3개(점1·점2·점3)를 따로 돌렸다.
+본 운영(11세대~, 11/12 컨펌)은 점 섬 3 하나만 이어서 돌린다. 점 섬 1·2는 10세대 기록으로 남긴다.
 
 점 번호       획 = 두 점 (예: 15 = 1번과 5번을 잇는 선)
  1 2 3       글자 = 획 1~4개 (예: 15.59)
@@ -11,6 +12,8 @@
 
 사용법:
   python engine/dots.py --gens 10        # 실제 API (ANTHROPIC_API_KEY 필요)
+  python engine/dots.py --auto           # 07시·19시(KST) 차례가 지났으면 한 세대
+  python engine/dots.py --islands d1,d2,d3 --gens 1   # 섬 고르기 (기본: 점 섬 3)
   DRY=1 python engine/dots.py --gens 5   # 가짜 응답으로 흐름만 시험
 결과: docs/data/dots/ (state.json, summary.json, gens/g001.json …) — 기존 섬 데이터와 섞이지 않는다.
 """
@@ -24,7 +27,10 @@ STATE = os.path.join(DATA, 'state.json')
 SUMMARY = os.path.join(DATA, 'summary.json')
 DRY = os.environ.get('DRY') == '1'
 
-ISLANDS = {'d1': {'ko': '점 섬 1'}, 'd2': {'ko': '점 섬 2'}, 'd3': {'ko': '점 섬 3'}}
+ALL_ISLANDS = {'d1': {'ko': '점 섬 1'}, 'd2': {'ko': '점 섬 2'}, 'd3': {'ko': '점 섬 3'}}
+ACTIVE = os.environ.get('DOTS_ISLANDS', 'd3')   # 본 운영: 점 섬 3만
+ISLANDS = {k: ALL_ISLANDS[k] for k in ACTIVE.split(',')}
+TRIAL_GENS = 10      # 시험 운영 세대 (섬 3곳)
 MAX_STROKES = 4      # 글자 하나의 획 수
 MAX_MARKS = 3        # 말 하나의 글자 수
 DOTS = '123456789'
@@ -233,7 +239,7 @@ def inherit(isl, gen, rnd):
 
 def new_state():
     st = {'gen': 0, 'started': None, 'islands': {}}
-    for k in ISLANDS:
+    for k in ALL_ISLANDS:
         st['islands'][k] = {'agents': [{'id': i + 1, 'born': 0, 'memory': []} for i in range(R.AGENTS)],
                             'next_id': R.AGENTS, 'recent': [], 'words': {}}
     return st
@@ -267,21 +273,43 @@ def one_gen(st, summary):
     summary['gens'].append(row)
     st['gen'] = gen
     R.save_json(STATE, st)
-    summary['meta'] = {'islands': {k: v['ko'] for k, v in ISLANDS.items()}, 'scenes': R.SCENES, 'tier': R.TIER,
-                       'talks_per_gen': R.TALKS, 'max_strokes': MAX_STROKES, 'max_marks': MAX_MARKS, 'model': R.MODEL}
+    write_meta(summary)
     R.save_json(SUMMARY, summary)
     forest = R.SCENES['forest']
     print(f'점 섬 gen {gen}: ' + ', '.join(f"{ISLANDS[k]['ko']} {row['islands'][k]['ok']}/{R.TALKS} 통함, 숲={row['islands'][k]['words'].get(forest, '-')}" for k in ISLANDS), flush=True)
+
+
+def write_meta(summary):
+    """화면이 쓰는 정보. islands = 지금 도는 섬, paused = 멈춘 섬과 마지막 세대."""
+    last = {}
+    for row in summary['gens']:
+        for k in row['islands']:
+            last[k] = row['gen']
+    summary['meta'] = {'islands': {k: v['ko'] for k, v in ISLANDS.items()},
+                       'paused': {k: {'ko': v['ko'], 'last': last[k]} for k, v in ALL_ISLANDS.items() if k not in ISLANDS and k in last},
+                       'trial_gens': TRIAL_GENS, 'scenes': R.SCENES, 'tier': R.TIER,
+                       'talks_per_gen': R.TALKS, 'max_strokes': MAX_STROKES, 'max_marks': MAX_MARKS, 'model': R.MODEL}
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--gens', type=int, default=1)
     ap.add_argument('--reset', action='store_true')
+    ap.add_argument('--auto', action='store_true', help='07시·19시(KST) 차례가 지났는데 아직 안 돌았으면 한 세대만')
+    ap.add_argument('--islands', help='돌릴 섬 (쉼표로, 기본 d3)')
+    ap.add_argument('--meta', action='store_true', help='세대는 안 돌리고 화면 정보만 다시 씀')
     a = ap.parse_args()
+    global ISLANDS
+    if a.islands:
+        ISLANDS = {k: ALL_ISLANDS[k] for k in a.islands.split(',')}
     os.makedirs(DATA, exist_ok=True)
     st = new_state() if a.reset else R.load_json(STATE, new_state())
     summary = {'gens': []} if a.reset else R.load_json(SUMMARY, {'gens': []})
+    if a.meta:
+        write_meta(summary); R.save_json(SUMMARY, summary); return
+    if a.auto:
+        a.gens = 1 if R.slot_due(summary) else 0
+        print('점 섬: 차례가 됨, 한 세대 돌림' if a.gens else '점 섬: 아직 차례가 아님', flush=True)
     for _ in range(a.gens):
         one_gen(st, summary)
 
